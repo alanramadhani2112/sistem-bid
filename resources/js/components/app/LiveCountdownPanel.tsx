@@ -55,6 +55,14 @@ function toneClass(timeLeft: TimeLeft, status: AuctionStatus): string {
     return 'border-primary/40 bg-primary/5 text-primary';
 }
 
+function urgencyLabel(timeLeft: TimeLeft, status: AuctionStatus): string {
+    if (status === 'closed' || timeLeft.total === 0) return 'Auction selesai';
+    if (timeLeft.total <= 60_000) return 'Kurang dari 1 menit';
+    if (timeLeft.total <= 300_000) return 'Kurang dari 5 menit';
+
+    return 'Waktu auction berjalan';
+}
+
 export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'hero', className }: LiveCountdownPanelProps) {
     const targetDate = useMemo(() => new Date(target), [target]);
     const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calcTimeLeft(targetDate));
@@ -68,18 +76,36 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
     const label = mode === 'starts' ? 'Mulai dalam' : 'Berakhir dalam';
     const isDone = status === 'closed' || timeLeft.total === 0;
     const value = isDone ? 'Auction selesai' : formatClock(timeLeft);
+    const progress = isDone ? 100 : Math.max(8, Math.min(100, Math.round((timeLeft.minutes * 60 + timeLeft.seconds) / 36)));
 
     return (
         <Card className={cn('border', toneClass(timeLeft, status), className)}>
             <CardContent className={cn('p-4', variant === 'hero' && 'p-5 md:p-6')}>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
-                <p
-                    aria-live="polite"
-                    className={cn('mt-2 font-mono font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-6xl' : 'text-2xl')}
-                >
-                    {value}
-                </p>
-                {!isDone && <p className="mt-2 text-xs opacity-80">Countdown realtime. Monitor bid sebelum waktu habis.</p>}
+                <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_1fr] md:items-center')}>
+                    {variant === 'hero' && (
+                        <div
+                            aria-hidden="true"
+                            className="grid size-24 place-items-center rounded-full border bg-background/70 shadow-sm md:size-28"
+                            style={{
+                                background: `conic-gradient(currentColor ${progress}%, transparent ${progress}% 100%)`,
+                            }}
+                        >
+                            <div className="grid size-[4.75rem] place-items-center rounded-full bg-card text-xs font-semibold uppercase tracking-[0.16em] md:size-[5.5rem]">
+                                Live
+                            </div>
+                        </div>
+                    )}
+                    <div>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
+                        <p
+                            aria-live="polite"
+                            className={cn('mt-2 font-mono font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-6xl' : 'text-2xl')}
+                        >
+                            {value}
+                        </p>
+                        <p className="mt-2 text-xs font-medium opacity-80">{urgencyLabel(timeLeft, status)}</p>
+                    </div>
+                </div>
             </CardContent>
         </Card>
     );
