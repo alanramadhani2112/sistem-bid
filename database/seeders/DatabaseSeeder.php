@@ -23,43 +23,54 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->admin()->create([
-            'name' => 'Jawara Admin',
-            'email' => 'admin@jawara.test',
-            'google_id' => 'seed-admin-google-id',
-            'password' => Hash::make('password'),
-        ]);
+        $admin = User::query()->updateOrCreate(
+            ['email' => 'admin@jawara.test'],
+            [
+                'name' => 'Jawara Admin',
+                'google_id' => 'seed-admin-google-id',
+                'password' => Hash::make('password'),
+                'role' => UserRole::Admin,
+                'email_verified_at' => now(),
+            ],
+        );
 
-        $bidder = User::factory()->create([
-            'name' => 'Jawara Bidder',
-            'email' => 'bidder@jawara.test',
-            'google_id' => 'seed-bidder-google-id',
-            'password' => Hash::make('password'),
-            'role' => UserRole::Bidder,
-        ]);
+        $bidder = User::query()->updateOrCreate(
+            ['email' => 'bidder@jawara.test'],
+            [
+                'name' => 'Jawara Bidder',
+                'google_id' => 'seed-bidder-google-id',
+                'password' => Hash::make('password'),
+                'role' => UserRole::Bidder,
+                'email_verified_at' => now(),
+            ],
+        );
 
-        Wallet::factory()->create([
+        Wallet::query()->firstOrCreate([
             'user_id' => $admin->id,
+        ], [
             'balance' => 0,
         ]);
 
-        $bidderWallet = Wallet::factory()->create([
+        $bidderWallet = Wallet::query()->firstOrCreate([
             'user_id' => $bidder->id,
+        ], [
             'balance' => 5_000_000,
         ]);
 
-        WalletTransaction::factory()->create([
+        WalletTransaction::query()->firstOrCreate([
+            'reference' => 'seed-topup',
+        ], [
             'wallet_id' => $bidderWallet->id,
             'type' => TransactionType::TopUp,
             'amount' => 5_000_000,
             'balance_before' => 0,
             'balance_after' => 5_000_000,
-            'reference' => 'seed-topup',
             'notes' => 'Initial demo balance',
         ]);
 
-        $greenBean = GreenBean::factory()->create([
+        $greenBean = GreenBean::query()->firstOrCreate([
             'name' => 'Gayo Wine Natural Lot A',
+        ], [
             'origin' => 'Aceh Gayo',
             'process' => 'Natural',
             'weight_gram' => 10_000,
@@ -67,9 +78,10 @@ class DatabaseSeeder extends Seeder
             'bid_increment' => 100_000,
         ]);
 
-        Auction::factory()->create([
-            'green_bean_id' => $greenBean->id,
+        Auction::query()->firstOrCreate([
             'title' => 'Live Bid Gayo Wine Natural',
+        ], [
+            'green_bean_id' => $greenBean->id,
             'status' => AuctionStatus::Published,
             'current_price' => $greenBean->starting_price,
             'starts_at' => now()->addHour(),
