@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../js/**/*.tsx';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@utility pb-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility field-input {
+    min-height: 3rem;
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid color-mix(in oklab, white 10%, transparent);
+    background: color-mix(in oklab, var(--color-stone-900) 90%, black);
+    padding-inline: 1rem;
+    font-size: 1rem;
+    color: white;
+    outline: none;
+}
+
+@utility field-input {
+    &:focus {
+        border-color: var(--color-lime-300);
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior: contain;
+}
+
+a,
+button,
+input,
+select,
+textarea {
+    touch-action: manipulation;
+}
+
+:focus-visible {
+    outline: 2px solid #bef264;
+    outline-offset: 3px;
+}
