@@ -57,7 +57,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
 
     return (
         <AppShell>
-            <Head title={`Monitor ${auction.title}`} />
+            <Head title={`Monitor ${initial.title}`} />
 
             <section className="space-y-5">
                 <PageHeader
