@@ -1,9 +1,12 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { PageHeader } from '@/components/app/PageHeader';
 import { SectionCard } from '@/components/app/SectionCard';
+import { StatusBadge } from '@/components/app/StatusBadge';
+import { useAuctionRoom } from '@/Hooks/useAuctionRoom';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type BidRow = {
@@ -34,10 +37,24 @@ type MonitorProps = {
     bidHistory: BidRow[];
 };
 
+const serverToHookRow = (r: BidRow) => ({ id: r.id, amount: r.amount, bidder_name: r.user.name });
+
 const formatRupiah = (value: number) =>
     new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
-export default function AuctionMonitor({ auction, leaderboard, bidHistory }: MonitorProps) {
+export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidHistory: bh }: MonitorProps) {
+    const { currentPrice, leaderboard, bidHistory } = useAuctionRoom(
+        initial.id,
+        initial.current_price,
+        lb.map(serverToHookRow),
+        bh.map(serverToHookRow),
+    );
+
+    const handleClose = () => {
+        if (!window.confirm('Close this auction now and determine the winner?')) return;
+        router.post(`/admin/auctions/${initial.id}/close`, {}, { preserveScroll: true });
+    };
+
     return (
         <AppShell>
             <Head title={`Monitor ${auction.title}`} />
@@ -45,28 +62,36 @@ export default function AuctionMonitor({ auction, leaderboard, bidHistory }: Mon
             <section className="space-y-5">
                 <PageHeader
                     accent="Monitor"
-                    subtitle={`${auction.green_bean.name} · ${auction.green_bean.origin} · ${auction.green_bean.process}`}
-                    title={auction.title}
+                    subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
+                    title={initial.title}
                 />
 
                 <Card className="bg-primary/5">
                     <CardContent className="p-5">
-                        <p className="text-sm text-muted-foreground">Current price</p>
-                        <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(auction.current_price)}</p>
-                        <p className="mt-2 text-sm text-muted-foreground">
-                            {auction.status} · ends {auction.ends_at}
-                        </p>
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <p className="text-sm text-muted-foreground">Current price</p>
+                                <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(currentPrice)}</p>
+                                <div className="mt-2 flex items-center gap-2">
+                                    <StatusBadge status={initial.status} />
+                                    <p className="text-sm text-muted-foreground">ends {initial.ends_at}</p>
+                                </div>
+                            </div>
+                            {initial.status === 'live' && (
+                                <Button onClick={handleClose} variant="destructive">Close Now</Button>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
 
                 <div className="grid gap-4 lg:grid-cols-2">
                     <SectionCard title="Leaderboard">
                         <div className="space-y-3">
-                            {leaderboard.map((bid) => (
-                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={bid.id}>
+                            {leaderboard.map((bid, i) => (
+                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={`${bid.id}-${i}`}>
                                     <div>
-                                        <p className="font-semibold text-foreground">{bid.user.name}</p>
-                                        <p className="text-xs text-muted-foreground">{bid.created_at}</p>
+                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
+                                        <p className="text-xs text-muted-foreground">#{i + 1}</p>
                                     </div>
                                     <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
                                 </div>
@@ -77,11 +102,10 @@ export default function AuctionMonitor({ auction, leaderboard, bidHistory }: Mon
 
                     <SectionCard title="Bid history">
                         <div className="space-y-3">
-                            {bidHistory.map((bid) => (
-                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={bid.id}>
+                            {bidHistory.map((bid, i) => (
+                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={`${bid.id}-${i}`}>
                                     <div>
-                                        <p className="font-semibold text-foreground">{bid.user.name}</p>
-                                        <p className="text-xs text-muted-foreground">{bid.created_at}</p>
+                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
                                     </div>
                                     <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
                                 </div>

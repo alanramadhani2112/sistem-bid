@@ -24,13 +24,76 @@ type Auction = {
 
 type AuctionsIndexProps = {
     auctions: Auction[];
-    statuses: string[];
 };
 
 const formatRupiah = (value: number) =>
     new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
-export default function AuctionsIndex({ auctions, statuses }: AuctionsIndexProps) {
+function ActionButtons({ auction }: { auction: Auction }) {
+    function patchStatus(status: string) {
+        if (window.confirm(`Change status to "${status}"?`)) {
+            router.patch(
+                `/admin/auctions/${auction.id}/status`,
+                { status },
+                { preserveScroll: true },
+            );
+        }
+    }
+
+    return (
+        <div className="grid gap-2 sm:grid-cols-4">
+            {auction.status === 'draft' && (
+                <>
+                    <Button className="w-full" onClick={() => patchStatus('published')} size="sm">
+                        Publish
+                    </Button>
+                    <Link href={`/admin/auctions/${auction.id}/edit`}>
+                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
+                    </Link>
+                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
+                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
+                    </Link>
+                </>
+            )}
+
+            {auction.status === 'published' && (
+                <>
+                    <Button className="w-full" onClick={() => patchStatus('live')} size="sm">
+                        Start Live
+                    </Button>
+                    <Button className="w-full" onClick={() => patchStatus('draft')} size="sm" variant="outline">
+                        Revert Draft
+                    </Button>
+                    <Link href={`/admin/auctions/${auction.id}/edit`}>
+                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
+                    </Link>
+                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
+                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
+                    </Link>
+                </>
+            )}
+
+            {auction.status === 'live' && (
+                <>
+                    <Button className="w-full" onClick={() => patchStatus('closed')} size="sm" variant="destructive">
+                        Close
+                    </Button>
+                    <Link href={`/admin/auctions/${auction.id}/monitor`}>
+                        <Button className="w-full" size="sm" variant="outline">Monitor</Button>
+                    </Link>
+                </>
+            )}
+
+            {auction.status === 'closed' && (
+                <Link href={`/admin/auctions/${auction.id}/monitor`}>
+                    <Button className="w-full" size="sm" variant="outline">Monitor</Button>
+                </Link>
+            )}
+        </div>
+    );
+}
+
+export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
     return (
         <AppShell>
             <Head title="Admin Auctions" />
@@ -65,39 +128,7 @@ export default function AuctionsIndex({ auctions, statuses }: AuctionsIndexProps
                                     {auction.starts_at} — {auction.ends_at}
                                 </p>
 
-                                <div className="grid gap-2 sm:grid-cols-4">
-                                    <Link href={`/admin/auctions/${auction.id}/edit`}>
-                                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
-                                    </Link>
-                                    <Link href={`/admin/auctions/${auction.id}/monitor`}>
-                                        <Button className="w-full" size="sm" variant="outline">Monitor</Button>
-                                    </Link>
-                                    <select
-                                        className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                        onChange={(event) =>
-                                            router.patch(
-                                                `/admin/auctions/${auction.id}/status`,
-                                                { status: event.target.value },
-                                                { preserveScroll: true },
-                                            )
-                                        }
-                                        value={auction.status}
-                                    >
-                                        {statuses.map((status) => (
-                                            <option key={status} value={status}>
-                                                {status}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    <Link
-                                        as="button"
-                                        href={`/admin/auctions/${auction.id}`}
-                                        method="delete"
-                                        preserveScroll
-                                    >
-                                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
-                                    </Link>
-                                </div>
+                                <ActionButtons auction={auction} />
                             </CardContent>
                         </Card>
                     ))}

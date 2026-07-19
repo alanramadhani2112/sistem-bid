@@ -24,7 +24,6 @@ final class AuctionController
                 ->with('greenBean:id,name,origin')
                 ->latest()
                 ->get(['id', 'green_bean_id', 'title', 'status', 'current_price', 'starts_at', 'ends_at']),
-            'statuses' => array_map(fn (AuctionStatus $status) => $status->value, AuctionStatus::cases()),
         ]);
     }
 
