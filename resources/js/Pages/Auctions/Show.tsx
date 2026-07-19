@@ -1,13 +1,15 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-
-import { Countdown } from '@/components/app/Countdown';
-import { FormField } from '@/components/app/FormField';
+import { AuctionHeroMedia } from '@/components/app/AuctionHeroMedia';
+import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
+import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { buttonVariants } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { formatRupiah } from '@/lib/format';
+import { cn } from '@/lib/utils';
 import { AppShell } from '../../Layouts/AppShell';
 
 type AuctionShowProps = {
@@ -24,6 +26,7 @@ type AuctionShowProps = {
             process: string;
             weight_gram: number;
             description: string | null;
+            image_path?: string | null;
             starting_price: number;
             bid_increment: number;
         };
@@ -32,85 +35,96 @@ type AuctionShowProps = {
 
 export default function AuctionShow({ auction }: AuctionShowProps) {
     const canEnterRoom = auction.status === 'live';
-    const { data, errors, post, processing, setData } = useForm({
-        amount: auction.current_price + auction.green_bean.bid_increment,
-    });
-
-    const submitBid = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        post(`/auctions/${auction.id}/bids`, { preserveScroll: true });
-    };
+    const nextBid = auction.current_price + auction.green_bean.bid_increment;
 
     return (
         <AppShell>
             <Head title={auction.title} />
 
-            <section className="space-y-4">
+            <section className="space-y-5">
                 <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/auctions">
                     ← Kembali
                 </Link>
 
-                <Card className="bg-primary/5">
-                    <CardContent className="flex flex-col gap-3 p-6">
-                        <StatusBadge status={auction.status} />
-                        <h1 className="text-3xl font-bold text-foreground">{auction.title}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
-                        </p>
-                        <p className="text-4xl font-bold text-foreground">{formatRupiah(auction.current_price)}</p>
-                        {auction.status === 'published' && <Countdown mode="starts" target={auction.starts_at} />}
-                        {auction.status === 'live' && <Countdown className="text-primary" mode="ends" target={auction.ends_at} />}
-                    </CardContent>
-                </Card>
+                <AuctionHeroMedia
+                    alt={`${auction.green_bean.name} green beans`}
+                    eyebrow={`Lot preview · ${auction.green_bean.origin}`}
+                    imagePath={auction.green_bean.image_path}
+                    meta={`${auction.green_bean.name} · ${auction.green_bean.process} · ${auction.green_bean.weight_gram}g`}
+                    title={auction.title}
+                />
 
-                <Card>
-                    <CardContent className="space-y-1 p-5 text-sm text-muted-foreground">
-                        <p>Weight: {auction.green_bean.weight_gram}g</p>
-                        <p>Starting: {formatRupiah(auction.green_bean.starting_price)}</p>
-                        <p>Increment: {formatRupiah(auction.green_bean.bid_increment)}</p>
-                        <p>Start: {auction.starts_at}</p>
-                        <p>End: {auction.ends_at}</p>
-                        {auction.green_bean.description && <p className="mt-3">{auction.green_bean.description}</p>}
-                    </CardContent>
-                </Card>
+                <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={auction.status} />
 
-                {canEnterRoom ? (
-                    <Link href={`/auctions/${auction.id}/room`}>
-                        <Button className="min-h-11 w-full font-bold" size="lg" type="button">
-                            Masuk Live Room
-                        </Button>
-                    </Link>
-                ) : (
-                    <Card>
-                        <CardContent className="p-5 text-sm text-muted-foreground">
-                            Live room terbuka saat status auction menjadi live. Pantau countdown dan kembali saat waktunya mulai.
+                <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+                    <Card className="bg-primary/5">
+                        <CardContent className="space-y-4 p-6">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
+                                <StatusBadge status={auction.status} />
+                                <p className="text-sm font-medium text-muted-foreground">Minimum berikutnya {formatRupiah(nextBid)}</p>
+                            </div>
+                            <div>
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Harga saat ini</p>
+                                <p className="mt-2 font-mono text-4xl font-black tracking-tight text-foreground md:text-6xl">
+                                    {formatRupiah(auction.current_price)}
+                                </p>
+                            </div>
+                            {auction.status === 'published' && <LiveCountdownPanel mode="starts" status={auction.status} target={auction.starts_at} variant="compact" />}
+                            {auction.status === 'live' && <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />}
                         </CardContent>
                     </Card>
-                )}
 
-                {canEnterRoom && (
-                    <Card>
-                        <CardContent className="p-5">
-                            <form onSubmit={submitBid}>
-                                <FormField error={errors.amount} label="Bid sekarang" name="amount">
-                                    <Input
-                                        id="amount"
-                                        inputMode="numeric"
-                                        min={1}
-                                        name="amount"
-                                        onChange={(event) => setData('amount', Number(event.target.value))}
-                                        type="number"
-                                        value={data.amount}
-                                    />
-                                </FormField>
-                                <Button className="mt-4 min-h-11 w-full font-bold" disabled={processing} type="submit">
-                                    {processing ? 'Memasang bid...' : 'Pasang Bid'}
-                                </Button>
-                                <p className="mt-2 text-xs text-muted-foreground">Saldo hanya dicek. Belum ada hold/deduct di MVP core.</p>
-                            </form>
-                        </CardContent>
-                    </Card>
-                )}
+                    <div className="space-y-4">
+                        <ReadinessChecklist
+                            items={[
+                                { description: canEnterRoom ? 'Auction sedang live.' : 'Room aktif saat status live.', label: 'Status auction', ready: canEnterRoom },
+                                { description: `Bid berikutnya mulai ${formatRupiah(nextBid)}.`, label: 'Minimum bid jelas', ready: true },
+                                { description: 'Saldo dicek server saat bid dikirim.', label: 'Wallet validation', ready: true },
+                            ]}
+                        />
+                        {canEnterRoom ? (
+                            <Link className={cn(buttonVariants({ size: 'lg' }), 'w-full min-h-11')} href={`/auctions/${auction.id}/room`}>
+                                Masuk live room
+                            </Link>
+                        ) : (
+                            <Card>
+                                <CardContent className="p-5 text-sm text-muted-foreground">
+                                    Live room dibuka saat auction live. Pantau countdown dan siapkan wallet sebelum mulai.
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
+                </div>
+
+                <SectionCard title="Lot specifications">
+                    <dl className="grid gap-3 text-sm sm:grid-cols-2">
+                        <div>
+                            <dt className="text-muted-foreground">Origin</dt>
+                            <dd className="font-medium text-foreground">{auction.green_bean.origin}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-muted-foreground">Process</dt>
+                            <dd className="font-medium text-foreground">{auction.green_bean.process}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-muted-foreground">Weight</dt>
+                            <dd className="font-medium text-foreground">{auction.green_bean.weight_gram}g</dd>
+                        </div>
+                        <div>
+                            <dt className="text-muted-foreground">Increment</dt>
+                            <dd className="font-medium text-foreground">{formatRupiah(auction.green_bean.bid_increment)}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-muted-foreground">Starting price</dt>
+                            <dd className="font-medium text-foreground">{formatRupiah(auction.green_bean.starting_price)}</dd>
+                        </div>
+                        <div>
+                            <dt className="text-muted-foreground">Auction window</dt>
+                            <dd className="font-medium text-foreground">{auction.starts_at} → {auction.ends_at}</dd>
+                        </div>
+                    </dl>
+                    {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}
+                </SectionCard>
             </section>
         </AppShell>
     );

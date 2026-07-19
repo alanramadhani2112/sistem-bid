@@ -14,12 +14,13 @@ type AuctionCardProps = {
         current_price: number;
         starts_at: string;
         ends_at: string;
-        green_bean: {
-            name: string;
-            origin: string;
-            process: string;
-            weight_gram?: number;
-        };
+            green_bean: {
+                name: string;
+                origin: string;
+                process: string;
+                weight_gram?: number;
+                image_path?: string | null;
+            };
     };
     formatPrice: (value: number) => string;
 };
@@ -38,6 +39,16 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                 isClosed && 'opacity-75',
             )}
         >
+            {auction.green_bean.image_path ? (
+                <img
+                    alt={`${auction.green_bean.name} green beans`}
+                    className="h-40 w-full rounded-t-xl object-cover"
+                    loading="lazy"
+                    src={`/storage/${auction.green_bean.image_path}`}
+                />
+            ) : (
+                <div className="h-40 rounded-t-xl bg-[radial-gradient(circle_at_30%_20%,rgba(233,195,73,0.32),transparent_35%),linear-gradient(135deg,var(--primary),var(--secondary))]" />
+            )}
             <CardContent className="flex flex-col gap-4 p-5">
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">

@@ -17,7 +17,7 @@ type LiveAuctionHeroProps = {
         ends_at: string;
         bid_count?: number;
         leader_name?: string | null;
-        green_bean: { name: string; origin: string; process?: string };
+        green_bean: { name: string; origin: string; process?: string; image_path?: string | null };
     } | null;
     formatPrice: (value: number) => string;
     title?: string;
@@ -41,14 +41,26 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
 
     return (
         <Card className="overflow-hidden border-primary/40 bg-primary/5">
-            <CardContent className="grid gap-5 p-5 lg:grid-cols-[1.1fr_0.9fr] lg:p-6">
+            <CardContent className="grid gap-5 p-0 lg:grid-cols-[0.9fr_1.1fr]">
+                <div className="relative min-h-[260px] overflow-hidden bg-primary lg:min-h-full">
+                    {auction.green_bean.image_path ? (
+                        <img alt={`${auction.green_bean.name} green beans`} className="absolute inset-0 size-full object-cover" src={`/storage/${auction.green_bean.image_path}`} />
+                    ) : (
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(233,195,73,0.35),transparent_35%),linear-gradient(135deg,var(--primary),var(--secondary))]" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/10" />
+                    <div className="relative flex min-h-[260px] flex-col justify-end p-5 text-white lg:p-6">
+                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">Today's Featured Auction</p>
+                        <h2 className="mt-2 text-3xl font-black leading-tight md:text-5xl">{auction.title}</h2>
+                    </div>
+                </div>
                 <div className="space-y-4">
+                    <div className="space-y-4 p-5 lg:p-6">
                     <div className="flex flex-wrap items-center gap-2">
                         <StatusBadge status={auction.status} />
                         <span className="text-sm font-medium text-primary">{title}</span>
                     </div>
                     <div>
-                        <h2 className="text-3xl font-black leading-tight text-foreground md:text-5xl">{auction.title}</h2>
                         <p className="mt-2 text-sm text-muted-foreground">
                             {auction.green_bean.name} · {auction.green_bean.origin} {auction.green_bean.process ? `· ${auction.green_bean.process}` : ''}
                         </p>
@@ -67,6 +79,7 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
                         price={auction.current_price}
                     />
                     <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />
+                    </div>
                 </div>
             </CardContent>
         </Card>

@@ -3,6 +3,7 @@ import { Head, Link } from '@inertiajs/react';
 import { AuctionBoard } from '@/components/app/AuctionBoard';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
+import { MarketStatusStrip } from '@/components/app/MarketStatusStrip';
 import { PageHeader } from '@/components/app/PageHeader';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -20,12 +21,13 @@ type LobbyAuction = {
     ends_at: string;
     bid_count?: number;
     leader_name?: string | null;
-    green_bean: {
-        name: string;
-        origin: string;
-        process: string;
-        weight_gram?: number;
-    };
+        green_bean: {
+            name: string;
+            origin: string;
+            process: string;
+            weight_gram?: number;
+            image_path?: string | null;
+        };
 };
 
 type LatestBid = {
@@ -43,6 +45,10 @@ type HomeProps = {
 };
 
 export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
+    const liveCount = auctions.filter((auction) => auction.status === 'live').length;
+    const upcomingCount = auctions.filter((auction) => auction.status === 'published').length;
+    const latestBid = latestBids[0] ? formatRupiah(latestBids[0].amount) : undefined;
+    const activeBids = auctions.reduce((sum, auction) => sum + (auction.bid_count ?? 0), 0);
     const actions = [
         {
             description: 'Lihat lot green beans yang sudah publish dan siap live bidding.',
@@ -73,6 +79,8 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                 />
 
                 <LiveAuctionHero auction={liveAuction} formatPrice={formatRupiah} />
+
+                <MarketStatusStrip activeBids={activeBids} latestBid={latestBid} liveCount={liveCount} upcomingCount={upcomingCount} />
 
                 <Card>
                     <CardContent className="p-6">

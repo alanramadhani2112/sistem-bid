@@ -12,9 +12,10 @@ type BoardAuction = {
     green_bean: {
         name: string;
         origin: string;
-        process: string;
-        weight_gram?: number;
-    };
+            process: string;
+            weight_gram?: number;
+            image_path?: string | null;
+        };
 };
 
 type AuctionBoardProps = {

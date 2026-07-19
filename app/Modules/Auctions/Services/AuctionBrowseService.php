@@ -70,6 +70,7 @@ final class AuctionBrowseService
                 'origin' => $auction->greenBean?->origin,
                 'process' => $auction->greenBean?->process,
                 'weight_gram' => $auction->greenBean?->weight_gram,
+                'image_path' => $auction->greenBean?->image_path,
             ],
         ];
     }

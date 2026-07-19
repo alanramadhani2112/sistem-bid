@@ -22,6 +22,7 @@ type Auction = {
         origin: string;
         process: string;
         weight_gram: number;
+        image_path?: string | null;
     };
 };
 
