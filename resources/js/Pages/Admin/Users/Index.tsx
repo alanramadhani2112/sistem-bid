@@ -1,4 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { ShieldCheck, User, Wallet } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -68,16 +69,22 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <h2 className="font-semibold text-foreground">{user.name}</h2>
+                                        <h2 className="inline-flex items-center gap-2 font-semibold text-foreground">
+                                            <User aria-hidden="true" className="size-4 text-primary" />
+                                            {user.name}
+                                        </h2>
                                         <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
                                     </div>
                                     <StatusBadge status={user.role} />
                                 </div>
-                                <p className="text-sm text-muted-foreground">Wallet {formatRupiah(user.wallet?.balance ?? 0)}</p>
+                                <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Wallet aria-hidden="true" className="size-4" />
+                                    Wallet {formatRupiah(user.wallet?.balance ?? 0)}
+                                </p>
 
                                 <div className="flex items-center gap-2">
                                     <Link href={`/admin/users/${user.id}/wallet`}>
-                                        <Button size="sm" variant="outline">View Wallet</Button>
+                                        <Button size="sm" variant="outline"><Wallet data-icon="inline-start" />View Wallet</Button>
                                     </Link>
                                     <Select
                                         defaultValue={user.role}
@@ -95,6 +102,7 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                         }}
                                     >
                                         <SelectTrigger className="h-9 w-32 text-xs">
+                                            <ShieldCheck aria-hidden="true" className="size-3.5 text-muted-foreground" />
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>

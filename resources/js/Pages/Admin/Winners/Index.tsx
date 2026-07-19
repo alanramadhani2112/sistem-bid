@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { Coffee, Radio, Trophy, User } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -46,19 +47,24 @@ export default function AdminWinners({ winners }: WinnersProps) {
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <h2 className="font-semibold text-foreground">{winner.auction.title}</h2>
+                                        <h2 className="inline-flex items-center gap-2 font-semibold text-foreground">
+                                            <Trophy aria-hidden="true" className="size-4 text-primary" />
+                                            {winner.auction.title}
+                                        </h2>
                                         <p className="mt-1 text-sm text-muted-foreground">
+                                            <Coffee aria-hidden="true" className="mr-1 inline size-4" />
                                             {winner.auction.green_bean.name} · {winner.auction.green_bean.origin}
                                         </p>
                                     </div>
                                     <p className="font-bold text-foreground">{formatRupiah(winner.winning_amount)}</p>
                                 </div>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                                    <User aria-hidden="true" className="size-4" />
                                     {winner.user.name} · {winner.user.email}
                                 </p>
                                 <p className="text-xs text-muted-foreground">Determined {winner.determined_at}</p>
                                 <Link href={`/admin/auctions/${winner.auction.id}/monitor`}>
-                                    <Button size="sm" variant="outline">Monitor auction</Button>
+                                    <Button size="sm" variant="outline"><Radio data-icon="inline-start" />Monitor auction</Button>
                                 </Link>
                             </CardContent>
                         </Card>

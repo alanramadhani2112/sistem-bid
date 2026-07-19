@@ -1,4 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { CircleStop, Edit, PlayCircle, Radio, RotateCcw, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { CategoryTab } from '@/components/app/CategoryTab';
@@ -46,13 +47,14 @@ function ActionButtons({ auction }: { auction: Auction }) {
             {auction.status === 'draft' && (
                 <>
                     <Button className="w-full" onClick={() => patchStatus('published')} size="sm">
+                        <PlayCircle data-icon="inline-start" />
                         Publish
                     </Button>
                     <Link href={`/admin/auctions/${auction.id}/edit`}>
-                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
+                        <Button className="w-full" size="sm" variant="outline"><Edit data-icon="inline-start" />Edit</Button>
                     </Link>
                     <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
-                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
+                        <Button className="w-full" size="sm" variant="destructive"><Trash2 data-icon="inline-start" />Hapus</Button>
                     </Link>
                 </>
             )}
@@ -60,16 +62,18 @@ function ActionButtons({ auction }: { auction: Auction }) {
             {auction.status === 'published' && (
                 <>
                     <Button className="w-full" onClick={() => patchStatus('live')} size="sm">
+                        <PlayCircle data-icon="inline-start" />
                         Start Live
                     </Button>
                     <Button className="w-full" onClick={() => patchStatus('draft')} size="sm" variant="outline">
+                        <RotateCcw data-icon="inline-start" />
                         Revert Draft
                     </Button>
                     <Link href={`/admin/auctions/${auction.id}/edit`}>
-                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
+                        <Button className="w-full" size="sm" variant="outline"><Edit data-icon="inline-start" />Edit</Button>
                     </Link>
                     <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
-                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
+                        <Button className="w-full" size="sm" variant="destructive"><Trash2 data-icon="inline-start" />Hapus</Button>
                     </Link>
                 </>
             )}
@@ -77,17 +81,18 @@ function ActionButtons({ auction }: { auction: Auction }) {
             {auction.status === 'live' && (
                 <>
                     <Button className="w-full" onClick={() => patchStatus('closed')} size="sm" variant="destructive">
+                        <CircleStop data-icon="inline-start" />
                         Close
                     </Button>
                     <Link href={`/admin/auctions/${auction.id}/monitor`}>
-                        <Button className="w-full" size="sm" variant="outline">Monitor</Button>
+                        <Button className="w-full" size="sm" variant="outline"><Radio data-icon="inline-start" />Monitor</Button>
                     </Link>
                 </>
             )}
 
             {auction.status === 'closed' && (
                 <Link href={`/admin/auctions/${auction.id}/monitor`}>
-                    <Button className="w-full" size="sm" variant="outline">Monitor</Button>
+                    <Button className="w-full" size="sm" variant="outline"><Radio data-icon="inline-start" />Monitor</Button>
                 </Link>
             )}
         </div>

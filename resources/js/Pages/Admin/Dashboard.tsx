@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { Gavel, LayoutDashboard, Package, Trophy, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,6 +50,14 @@ const metricRoutes: Record<string, string> = {
     winners: '/admin/winners',
 };
 
+const metricIcons = {
+    auctions: Gavel,
+    bids: LayoutDashboard,
+    greenBeans: Package,
+    users: Users,
+    winners: Trophy,
+} as const;
+
 export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentAuctions, recentBids, stats, upcomingAuctions }: DashboardProps) {
     return (
         <AppShell>
@@ -96,7 +105,7 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                     {Object.entries(stats).map(([label, value]) => (
                         <Link className="block transition-transform hover:-translate-y-0.5" href={metricRoutes[label] ?? '/admin/dashboard'} key={label}>
-                            <MetricCard label={label} value={value} />
+                            <MetricCard icon={metricIcons[label as keyof typeof metricIcons]} label={label} value={value} />
                         </Link>
                     ))}
                 </div>
