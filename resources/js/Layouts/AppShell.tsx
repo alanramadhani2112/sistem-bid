@@ -1,6 +1,10 @@
 import { Link, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
 type AppShellProps = {
     children: ReactNode;
 };
@@ -44,9 +48,9 @@ export function AppShell({ children }: AppShellProps) {
                     <Link className="font-semibold tracking-tight text-lime-300" href="/">
                         Jawara
                     </Link>
-                    <span className="rounded-full bg-lime-400/10 px-3 py-1 text-xs font-medium text-lime-200">
+                    <Badge className="border-lime-300/20 bg-lime-300/10 text-lime-100" variant="outline">
                         Live Bid
-                    </span>
+                    </Badge>
                 </div>
             </header>
 
@@ -54,11 +58,7 @@ export function AppShell({ children }: AppShellProps) {
                 <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-white/10 bg-stone-900/60 p-4 md:block">
                     <nav className="space-y-1">
                         {navItems.map((item) => (
-                            <Link
-                                className="block rounded-xl px-4 py-3 text-sm font-medium text-stone-300 hover:bg-white/10 hover:text-white"
-                                href={item.href}
-                                key={item.href}
-                            >
+                            <Link className={cn(buttonVariants({ size: 'lg', variant: 'ghost' }), 'w-full justify-start text-stone-300 hover:bg-white/10 hover:text-white')} href={item.href} key={item.href}>
                                 {item.label}
                             </Link>
                         ))}
@@ -72,11 +72,7 @@ export function AppShell({ children }: AppShellProps) {
 
             <nav className="fixed inset-x-0 bottom-0 z-30 grid h-16 grid-cols-5 border-t border-white/10 bg-stone-950/95 pb-safe-bottom backdrop-blur md:hidden">
                 {navItems.map((item) => (
-                    <Link
-                        className="flex min-h-11 items-center justify-center text-xs font-medium text-stone-300 hover:text-lime-200"
-                        href={item.href}
-                        key={item.href}
-                    >
+                    <Link className={cn(buttonVariants({ size: 'lg', variant: 'ghost' }), 'min-h-11 rounded-none text-xs text-stone-300 hover:bg-white/5 hover:text-lime-200')} href={item.href} key={item.href}>
                         {item.label}
                     </Link>
                 ))}

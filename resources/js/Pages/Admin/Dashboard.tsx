@@ -1,5 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
 import { AppShell } from '../../Layouts/AppShell';
 
 type Auction = {
@@ -38,31 +43,35 @@ export default function AdminDashboard({ stats, auctionsByStatus, recentAuctions
 
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                     {Object.entries(stats).map(([label, value]) => (
-                        <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" key={label}>
-                            <p className="text-xs uppercase tracking-[0.2em] text-stone-400">{label}</p>
-                            <p className="mt-2 text-3xl font-bold text-white">{value}</p>
-                        </article>
+                        <Card className="border-white/10 bg-white/[0.04] text-white" key={label}>
+                            <CardContent className="p-5">
+                                <p className="text-xs uppercase tracking-[0.2em] text-stone-400">{label}</p>
+                                <p className="mt-2 text-3xl font-bold text-white">{value}</p>
+                            </CardContent>
+                        </Card>
                     ))}
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-4">
                     {Object.entries(auctionsByStatus).map(([status, count]) => (
-                        <article className="rounded-3xl border border-lime-300/20 bg-lime-300/5 p-5" key={status}>
-                            <p className="text-sm font-semibold text-lime-200">{status}</p>
-                            <p className="mt-2 text-2xl font-bold text-white">{count}</p>
-                        </article>
+                        <Card className="border-lime-300/20 bg-lime-300/5 text-white" key={status}>
+                            <CardContent className="p-5">
+                                <Badge className="border-lime-300/30 bg-lime-300/10 text-lime-100" variant="outline">{status}</Badge>
+                                <p className="mt-2 text-2xl font-bold text-white">{count}</p>
+                            </CardContent>
+                        </Card>
                     ))}
                 </div>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-                    <div className="flex items-center justify-between gap-3">
-                        <h2 className="text-xl font-bold text-white">Auction terbaru</h2>
-                        <Link className="text-sm font-semibold text-lime-200" href="/admin/auctions">
+                <Card className="border-white/10 bg-white/[0.04] text-white">
+                    <CardHeader className="flex-row items-center justify-between gap-3">
+                        <CardTitle>Auction terbaru</CardTitle>
+                        <Link className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), 'border-white/15 bg-transparent text-lime-100 hover:bg-white/10')} href="/admin/auctions">
                             Kelola
                         </Link>
-                    </div>
+                    </CardHeader>
 
-                    <div className="mt-4 space-y-3">
+                    <CardContent className="space-y-3">
                         {recentAuctions.map((auction) => (
                             <Link className="block rounded-2xl border border-white/10 p-4" href={`/admin/auctions/${auction.id}/monitor`} key={auction.id}>
                                 <div className="flex items-start justify-between gap-3">
@@ -72,13 +81,13 @@ export default function AdminDashboard({ stats, auctionsByStatus, recentAuctions
                                             {auction.green_bean.name} · {auction.green_bean.origin}
                                         </p>
                                     </div>
-                                    <span className="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">{auction.status}</span>
+                                    <Badge className="border-lime-300/30 bg-lime-300/10 text-lime-100" variant="outline">{auction.status}</Badge>
                                 </div>
                                 <p className="mt-2 text-sm text-stone-300">{formatRupiah(auction.current_price)}</p>
                             </Link>
                         ))}
-                    </div>
-                </div>
+                    </CardContent>
+                </Card>
             </section>
         </AppShell>
     );

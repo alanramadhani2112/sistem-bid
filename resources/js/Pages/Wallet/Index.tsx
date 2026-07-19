@@ -1,6 +1,12 @@
 import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+
 import { AppShell } from '../../Layouts/AppShell';
 
 type WalletTransaction = {
@@ -40,18 +46,22 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
             <Head title="Wallet" />
 
             <section className="space-y-4">
-                <div className="rounded-3xl border border-lime-300/20 bg-lime-300/10 p-6">
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Wallet</p>
+                <Card className="border-lime-300/20 bg-lime-300/10 text-white">
+                    <CardContent className="p-6">
+                    <Badge className="border-lime-300/30 bg-lime-300/10 text-lime-100" variant="outline">Wallet</Badge>
                     <h1 className="mt-3 text-4xl font-bold text-white">{formatRupiah(wallet.balance)}</h1>
                     <p className="mt-2 text-sm text-stone-300">Saldo internal untuk validasi bid. Payment gateway belum aktif.</p>
-                </div>
+                    </CardContent>
+                </Card>
 
-                <form className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" onSubmit={submit}>
-                    <label className="block text-sm font-medium text-stone-200" htmlFor="amount">
+                <Card className="border-white/10 bg-white/[0.04] text-white">
+                    <CardContent className="p-5">
+                <form onSubmit={submit}>
+                    <Label className="text-stone-200" htmlFor="amount">
                         Tambah saldo manual
-                    </label>
-                    <input
-                        className="mt-3 h-12 w-full rounded-2xl border border-white/10 bg-stone-900 px-4 text-base text-white outline-none focus:border-lime-300"
+                    </Label>
+                    <Input
+                        className="mt-3 h-12 rounded-2xl border-white/10 bg-stone-900 text-base text-white"
                         id="amount"
                         inputMode="numeric"
                         min="10000"
@@ -61,17 +71,18 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                         value={data.amount}
                     />
                     {errors.amount ? <p className="mt-2 text-sm text-red-300">{errors.amount}</p> : null}
-                    <button
-                        className="mt-4 min-h-11 w-full rounded-2xl bg-lime-300 px-4 py-3 text-sm font-bold text-stone-950 disabled:opacity-50"
-                        disabled={processing}
-                        type="submit"
-                    >
+                    <Button className="mt-4 min-h-11 w-full rounded-2xl bg-lime-300 font-bold text-stone-950 hover:bg-lime-200" disabled={processing} type="submit">
                         Tambah saldo
-                    </button>
+                    </Button>
                 </form>
+                    </CardContent>
+                </Card>
 
-                <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-                    <h2 className="text-lg font-semibold text-white">Transaksi terakhir</h2>
+                <Card className="border-white/10 bg-white/[0.04] text-white">
+                    <CardHeader>
+                        <CardTitle>Transaksi terakhir</CardTitle>
+                    </CardHeader>
+                    <CardContent>
                     <div className="mt-4 space-y-3">
                         {wallet.transactions.length === 0 ? (
                             <p className="text-sm text-stone-400">Belum ada transaksi.</p>
@@ -90,7 +101,8 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                             ))
                         )}
                     </div>
-                </div>
+                    </CardContent>
+                </Card>
             </section>
         </AppShell>
     );
