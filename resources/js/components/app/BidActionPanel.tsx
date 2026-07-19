@@ -1,3 +1,5 @@
+import { Gavel, WalletCards } from 'lucide-react';
+
 import { BidConfirmationDialog } from '@/components/app/BidConfirmationDialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -39,8 +41,14 @@ export function BidActionPanel({
                 <div className="space-y-3">
                     <div className="flex items-center justify-between gap-3">
                         <div>
-                            <p className="text-sm font-semibold text-foreground">Place bid</p>
-                            <p className="text-xs text-muted-foreground">Minimal berikutnya: {formatPrice(nextBid)}</p>
+                            <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
+                                <Gavel aria-hidden="true" className="size-4 text-primary" />
+                                Place bid
+                            </p>
+                            <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <WalletCards aria-hidden="true" className="size-3.5" />
+                                Minimal berikutnya: {formatPrice(nextBid)}
+                            </p>
                         </div>
                         <Button disabled={disabled || processing} onClick={() => onAmountChange(nextBid)} type="button" variant="outline">
                             Pakai minimum

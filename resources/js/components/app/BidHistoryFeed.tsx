@@ -1,3 +1,5 @@
+import { History, Radio } from 'lucide-react';
+
 import { EmptyState } from '@/components/app/EmptyState';
 import { SectionCard } from '@/components/app/SectionCard';
 
@@ -17,7 +19,7 @@ type BidHistoryFeedProps = {
 
 export function BidHistoryFeed({ rows, formatPrice, title = 'Bid History', className }: BidHistoryFeedProps) {
     return (
-        <SectionCard className={className} title={title}>
+        <SectionCard className={className} title={<span className="inline-flex items-center gap-2"><History aria-hidden="true" className="size-4 text-primary" />{title}</span>}>
             <div aria-live="polite" className="space-y-3">
                 {rows.length === 0 ? (
                     <EmptyState description="Bid terbaru tampil realtime di sini." title="Belum ada bid" />
@@ -32,7 +34,10 @@ export function BidHistoryFeed({ rows, formatPrice, title = 'Bid History', class
                             key={`${row.id}-${index}`}
                         >
                             <div className="flex items-center justify-between gap-3">
-                                <p className="font-semibold text-foreground">{row.bidder_name}</p>
+                                <p className="inline-flex items-center gap-2 font-semibold text-foreground">
+                                    {index === 0 && <Radio aria-hidden="true" className="size-4 text-primary" />}
+                                    {row.bidder_name}
+                                </p>
                                 <p className="font-bold tabular-nums text-foreground">{formatPrice(row.amount)}</p>
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">{index === 0 ? 'Bid terbaru' : row.placed_at ?? 'Realtime bid'}</p>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 type SectionCardProps = {
-    title?: string;
+    title?: ReactNode;
     action?: ReactNode;
     children: ReactNode;
     className?: string;

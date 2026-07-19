@@ -1,3 +1,5 @@
+import { Trophy, Users } from 'lucide-react';
+
 import { EmptyState } from '@/components/app/EmptyState';
 import { SectionCard } from '@/components/app/SectionCard';
 import { cn } from '@/lib/utils';
@@ -17,7 +19,7 @@ type LeaderboardPanelProps = {
 
 export function LeaderboardPanel({ rows, formatPrice, title = 'Leaderboard', className }: LeaderboardPanelProps) {
     return (
-        <SectionCard className={className} title={title}>
+        <SectionCard className={className} title={<span className="inline-flex items-center gap-2"><Trophy aria-hidden="true" className="size-4 text-primary" />{title}</span>}>
             {rows.length === 0 ? (
                 <EmptyState description="Ranking muncul setelah bid pertama masuk." title="Belum ada leader" />
             ) : (
@@ -32,7 +34,7 @@ export function LeaderboardPanel({ rows, formatPrice, title = 'Leaderboard', cla
                         >
                             <div className="flex items-center gap-3">
                                 <span className="flex size-9 items-center justify-center rounded-full bg-muted text-sm font-bold text-foreground">
-                                    #{index + 1}
+                                    {index === 0 ? <Trophy aria-hidden="true" className="size-4 text-primary" /> : <Users aria-hidden="true" className="size-4" />}
                                 </span>
                                 <div>
                                     <p className="font-semibold text-foreground">{row.bidder_name}</p>

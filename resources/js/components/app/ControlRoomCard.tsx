@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { Activity, Radio, Trophy, TrendingUp, Users } from 'lucide-react';
 
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -36,19 +37,20 @@ export function ControlRoomCard({ auction, formatPrice }: ControlRoomCardProps) 
                     <h3 className="text-xl font-bold text-foreground">{auction.title}</h3>
                     <div className="grid gap-3 text-sm sm:grid-cols-3">
                         <div>
-                            <p className="text-muted-foreground">Harga</p>
+                            <p className="flex items-center gap-1 text-muted-foreground"><TrendingUp aria-hidden="true" className="size-3.5" /> Harga</p>
                             <p className="font-bold tabular-nums text-foreground">{formatPrice(auction.current_price)}</p>
                         </div>
                         <div>
-                            <p className="text-muted-foreground">Leader</p>
+                            <p className="flex items-center gap-1 text-muted-foreground"><Trophy aria-hidden="true" className="size-3.5" /> Leader</p>
                             <p className="font-semibold text-foreground">{auction.leader_name ?? 'Belum ada'}</p>
                         </div>
                         <div>
-                            <p className="text-muted-foreground">Bid</p>
+                            <p className="flex items-center gap-1 text-muted-foreground"><Users aria-hidden="true" className="size-3.5" /> Bid</p>
                             <p className="font-semibold text-foreground">{auction.bid_count ?? 0}</p>
                         </div>
                     </div>
                     <Link className={cn(buttonVariants({ variant: 'outline' }), 'min-h-11')} href={`/admin/auctions/${auction.id}/monitor`}>
+                        {auction.status === 'live' ? <Radio data-icon="inline-start" /> : <Activity data-icon="inline-start" />}
                         Buka monitor
                     </Link>
                 </div>

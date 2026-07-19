@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import { Bell, Coffee, Gavel, History, LayoutDashboard, Package, Radio, Trophy, User, Users, Wallet } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { ActiveLink } from '@/components/app/ActiveLink';
@@ -21,19 +22,19 @@ type SharedProps = {
 };
 
 const bidderNavItems = [
-    { href: '/', label: 'Home' },
-    { href: '/auctions', label: 'Auctions' },
-    { href: '/wallet', label: 'Wallet' },
-    { href: '/history', label: 'History' },
-    { href: '/profile', label: 'Profile' },
+    { href: '/', icon: Coffee, label: 'Lobby' },
+    { href: '/auctions', icon: Gavel, label: 'Auctions' },
+    { href: '/wallet', icon: Wallet, label: 'Wallet' },
+    { href: '/history', icon: History, label: 'History' },
+    { href: '/profile', icon: User, label: 'Profile' },
 ];
 
 const adminNavItems = [
-    { href: '/admin/dashboard', label: 'Dashboard' },
-    { href: '/admin/green-beans', label: 'Beans' },
-    { href: '/admin/auctions', label: 'Auctions' },
-    { href: '/admin/users', label: 'Users' },
-    { href: '/admin/winners', label: 'Winners' },
+    { href: '/admin/dashboard', icon: LayoutDashboard, label: 'Control' },
+    { href: '/admin/auctions', icon: Radio, label: 'Auctions' },
+    { href: '/admin/green-beans', icon: Package, label: 'Beans' },
+    { href: '/admin/users', icon: Users, label: 'Users' },
+    { href: '/admin/winners', icon: Trophy, label: 'More' },
 ];
 
 export function AppShell({ children }: AppShellProps) {
@@ -51,15 +52,27 @@ export function AppShell({ children }: AppShellProps) {
                 Skip ke konten
             </a>
 
-            <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75">
                 <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-4">
                     <div className="flex items-center gap-3">
-                        <Link className="font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
-                            Jawara
+                        <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
+                            <span className="flex size-8 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+                                {isAdmin ? <LayoutDashboard aria-hidden="true" className="size-4" /> : <Coffee aria-hidden="true" className="size-4" />}
+                            </span>
+                            <span className="hidden sm:inline">Jawara</span>
                         </Link>
                         <Badge variant={isAdmin ? 'secondary' : 'default'}>{isAdmin ? 'Admin Console' : 'Live Auction'}</Badge>
                     </div>
                     <div className="flex items-center gap-2">
+                        {!isAdmin && (
+                            <Link
+                                aria-label="Notifikasi live auction"
+                                className={cn(buttonVariants({ size: 'icon', variant: 'ghost' }), 'min-h-9')}
+                                href="/history"
+                            >
+                                <Bell aria-hidden="true" className="size-4" />
+                            </Link>
+                        )}
                         <DarkModeToggle />
                         {user && (
                             <Link
@@ -79,7 +92,8 @@ export function AppShell({ children }: AppShellProps) {
                 <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-border bg-muted/30 p-4 md:block">
                     <nav className="space-y-1">
                         {navItems.map((item) => (
-                            <ActiveLink exact={item.href === '/'} href={item.href} key={item.href}>
+                            <ActiveLink exact={item.href === '/'} href={item.href} key={`${item.label}-${item.href}`}>
+                                <item.icon data-icon="inline-start" />
                                 {item.label}
                             </ActiveLink>
                         ))}
@@ -105,29 +119,38 @@ export function AppShell({ children }: AppShellProps) {
             </div>
 
             <nav className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
-                {navItems.map((item) => (
+                {navItems.map((item) => {
+                    const active = url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`));
+                    const Icon = item.icon;
+
+                    return (
                     <Link
-                        aria-current={url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`)) ? 'page' : undefined}
+                        aria-current={active ? 'page' : undefined}
                         className={cn(
-                            'flex min-h-16 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors hover:text-foreground',
-                            url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`))
-                                ? 'text-foreground'
-                                : 'text-muted-foreground',
+                            'relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 py-2 text-[10px] font-semibold transition-colors hover:text-foreground',
+                            active ? 'text-foreground' : 'text-muted-foreground',
                         )}
                         href={item.href}
-                        key={item.href}
+                        key={`${item.label}-${item.href}`}
                     >
                         <span
                             className={cn(
-                                'mb-1 h-1 w-6 rounded-full transition-colors',
-                                url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`))
-                                    ? 'bg-primary'
-                                    : 'bg-transparent',
+                                'absolute top-0 h-1 w-7 rounded-b-full transition-colors',
+                                active ? 'bg-primary' : 'bg-transparent',
                             )}
                         />
+                        <span
+                            className={cn(
+                                'flex size-8 items-center justify-center rounded-2xl transition-colors',
+                                active ? 'bg-primary/10 text-primary' : 'text-muted-foreground',
+                            )}
+                        >
+                            <Icon aria-hidden="true" className="size-4" />
+                        </span>
                         <span>{item.label}</span>
                     </Link>
-                ))}
+                    );
+                })}
             </nav>
 
             <div className="h-16 md:hidden" />
