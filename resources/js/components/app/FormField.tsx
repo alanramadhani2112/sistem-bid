@@ -1,22 +1,15 @@
-import type { ReactNode } from 'react';
+import type { ComponentProps, ReactNode } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
-type FormFieldProps = {
+type FormFieldProps = Omit<ComponentProps<typeof Input>, 'id' | 'name'> & {
     label: string;
     name: string;
     error?: string;
     required?: boolean;
     children?: ReactNode;
-    type?: string;
-    defaultValue?: string | number;
-    placeholder?: string;
-    min?: number;
-    max?: number;
-    step?: number;
-    accept?: string;
     className?: string;
 };
 
@@ -27,13 +20,8 @@ export function FormField({
     required,
     children,
     type = 'text',
-    defaultValue,
-    placeholder,
-    min,
-    max,
-    step,
-    accept,
     className,
+    ...inputProps
 }: FormFieldProps) {
     return (
         <div className={cn('space-y-1.5', className)}>
@@ -43,15 +31,10 @@ export function FormField({
             </Label>
             {children ?? (
                 <Input
-                    accept={accept}
-                    defaultValue={defaultValue}
                     id={name}
-                    max={max}
-                    min={min}
                     name={name}
-                    placeholder={placeholder}
-                    step={step}
                     type={type}
+                    {...inputProps}
                 />
             )}
             {error && <p className="text-xs text-destructive">{error}</p>}
