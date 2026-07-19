@@ -1,13 +1,14 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
+import { useEffect } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-
-import { Countdown } from '@/components/app/Countdown';
-import { FormField } from '@/components/app/FormField';
-import { SectionCard } from '@/components/app/SectionCard';
+import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { BidActionPanel } from '@/components/app/BidActionPanel';
+import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
+import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
+import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
+import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { formatRupiah } from '@/lib/format';
 import { useAuctionRoom } from '../../Hooks/useAuctionRoom';
@@ -32,8 +33,10 @@ type AuctionRoomProps = {
 
 export default function AuctionRoom({ auction, bidHistory, leaderboard }: AuctionRoomProps) {
     const room = useAuctionRoom(auction.id, auction.current_price, leaderboard, bidHistory);
+    const nextBid = room.currentPrice + auction.green_bean.bid_increment;
+    const leader = room.leaderboard[0]?.bidder_name ?? null;
     const { data, errors, post, processing, setData } = useForm({
-        amount: auction.current_price + auction.green_bean.bid_increment,
+        amount: nextBid,
     });
 
     const submitBid = (event: FormEvent<HTMLFormElement>) => {
@@ -41,78 +44,68 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
         post(`/auctions/${auction.id}/bids`, { preserveScroll: true });
     };
 
+    useEffect(() => {
+        if (data.amount < nextBid) setData('amount', nextBid);
+    }, [data.amount, nextBid, setData]);
+
     return (
         <AppShell>
             <Head title={`Live Room · ${auction.title}`} />
 
-            <section className="space-y-4">
+            <section className="space-y-4 pb-28 lg:pb-0">
                 <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href={`/auctions/${auction.id}`}>
                     ← Kembali
                 </Link>
 
-                <Card className="bg-primary/5">
-                    <CardContent className="flex flex-col gap-3 p-6">
-                        <StatusBadge status="live" />
-                        <h1 className="text-2xl font-bold text-foreground">{auction.title}</h1>
-                        <p className="text-sm text-muted-foreground">
-                            {auction.green_bean.name} · {auction.green_bean.origin}
-                        </p>
-                        <p className="text-4xl font-bold text-foreground">{formatRupiah(room.currentPrice)}</p>
-                        <Countdown className="text-primary" mode="ends" target={auction.ends_at} />
+                <AuctionStateBanner endsAt={auction.ends_at} status="live" />
+
+                <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                    <div className="space-y-4">
+                        <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
+                            <StatusBadge status="live" />
+                            <h1 className="mt-3 text-3xl font-black leading-tight text-foreground md:text-5xl">{auction.title}</h1>
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                {auction.green_bean.name} · {auction.green_bean.origin}
+                            </p>
+                        </div>
+                        <CurrentPriceCard
+                            bidCount={room.bidHistory.length}
+                            formatPrice={formatRupiah}
+                            leader={leader}
+                            nextBid={nextBid}
+                            price={room.currentPrice}
+                        />
                         <p aria-live="polite" className="sr-only">
                             Harga saat ini {formatRupiah(room.currentPrice)}
                         </p>
-                    </CardContent>
-                </Card>
+                    </div>
 
-                <Card>
-                    <CardContent className="p-5">
-                        <form onSubmit={submitBid}>
-                            <FormField error={errors.amount} label="Bid berikutnya" name="amount">
-                                <Input
-                                    id="amount"
-                                    inputMode="numeric"
-                                    min={1}
-                                    name="amount"
-                                    onChange={(event) => setData('amount', Number(event.target.value))}
-                                    type="number"
-                                    value={data.amount}
-                                />
-                            </FormField>
-                            <Button className="mt-4 min-h-11 w-full font-bold" disabled={processing} type="submit">
-                                {processing ? 'Memasang bid...' : 'Pasang Bid'}
-                            </Button>
-                        </form>
-                    </CardContent>
-                </Card>
+                    <div className="space-y-4">
+                        <LiveCountdownPanel mode="ends" status="live" target={auction.ends_at} />
+                        <BidActionPanel
+                            amount={data.amount}
+                            className="sticky bottom-20 z-10 lg:static"
+                            error={errors.amount}
+                            formatPrice={formatRupiah}
+                            helper="Bid hanya diterima kalau saldo cukup dan increment valid."
+                            nextBid={nextBid}
+                            onAmountChange={(value) => setData('amount', value)}
+                            onSubmit={submitBid}
+                            processing={processing}
+                        />
+                        <ReadinessChecklist
+                            items={[
+                                { description: 'Auction sedang live.', label: 'Status live', ready: true },
+                                { description: `Minimal bid berikutnya ${formatRupiah(nextBid)}.`, label: 'Bid berikutnya jelas', ready: true },
+                                { description: 'Sistem validasi saldo saat submit bid.', label: 'Wallet dicek otomatis', ready: true },
+                            ]}
+                        />
+                    </div>
+                </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                    <SectionCard title="Leaderboard">
-                        <div className="space-y-3">
-                            {room.leaderboard.map((bid, index) => (
-                                <div className="flex items-center justify-between rounded-lg bg-muted/50 p-3 text-sm" key={bid.id}>
-                                    <span className="text-foreground">#{index + 1} {bid.bidder_name}</span>
-                                    <span className="font-bold text-foreground">{formatRupiah(bid.amount)}</span>
-                                </div>
-                            ))}
-                            {room.leaderboard.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
-                        </div>
-                    </SectionCard>
-
-                    <SectionCard title="Bid History">
-                        <div className="space-y-3">
-                            {room.bidHistory.map((bid) => (
-                                <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/50 p-4" key={bid.id}>
-                                    <div>
-                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
-                                        <p className="text-xs text-muted-foreground">{bid.placed_at}</p>
-                                    </div>
-                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
-                                </div>
-                            ))}
-                            {room.bidHistory.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
-                        </div>
-                    </SectionCard>
+                    <LeaderboardPanel formatPrice={formatRupiah} rows={room.leaderboard} />
+                    <BidHistoryFeed formatPrice={formatRupiah} rows={room.bidHistory} />
                 </div>
             </section>
         </AppShell>

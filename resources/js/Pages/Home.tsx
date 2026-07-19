@@ -1,14 +1,48 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { AuctionBoard } from '@/components/app/AuctionBoard';
+import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
+import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
 import { PageHeader } from '@/components/app/PageHeader';
-import { Badge } from '@/components/ui/badge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { formatRupiah } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 import { AppShell } from '../Layouts/AppShell';
 
-export default function Home() {
+type LobbyAuction = {
+    id: number;
+    title: string;
+    status: string;
+    current_price: number;
+    starts_at: string;
+    ends_at: string;
+    bid_count?: number;
+    leader_name?: string | null;
+    green_bean: {
+        name: string;
+        origin: string;
+        process: string;
+        weight_gram?: number;
+    };
+};
+
+type LatestBid = {
+    id: number;
+    amount: number;
+    bidder_name?: string | null;
+    auction_title?: string | null;
+    placed_at?: string | null;
+};
+
+type HomeProps = {
+    auctions: LobbyAuction[];
+    liveAuction: LobbyAuction | null;
+    latestBids: LatestBid[];
+};
+
+export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
     const actions = [
         {
             description: 'Lihat lot green beans yang sudah publish dan siap live bidding.',
@@ -32,25 +66,47 @@ export default function Home() {
             <Head title="Home" />
 
             <section className="space-y-6">
-                <PageHeader accent="Jawara Green Beans" title="Live auction kopi hijau" />
+                <PageHeader
+                    accent="Jawara Green Beans"
+                    subtitle="Auction lobby untuk green beans. Lihat live lot, cek harga, lalu masuk room saat siap bid."
+                    title="Live auction kopi hijau"
+                />
 
-                <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
+                <LiveAuctionHero auction={liveAuction} formatPrice={formatRupiah} />
+
+                <Card>
                     <CardContent className="p-6">
-                        <Badge variant="default">Bidder View</Badge>
-                        <h1 className="mt-3 text-3xl font-bold leading-tight md:text-5xl">Temukan lot, cek saldo, masuk room.</h1>
-                        <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
-                            Fokus utama: pilih auction green beans, pastikan wallet cukup, lalu ikut live bid realtime dari HP.
-                        </p>
-                        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <div className="grid gap-5 lg:grid-cols-[1fr_320px] lg:items-center">
+                            <div>
+                                <h2 className="text-2xl font-bold text-foreground">Cara ikut live bid</h2>
+                                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                                    Pilih lot, pastikan saldo cukup, masuk live room, lalu bid sebelum countdown habis.
+                                </p>
+                            </div>
+                            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
                             <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
-                                Lihat Auctions
+                                Buka Auction Board
                             </Link>
                             <Link className={cn(buttonVariants({ size: 'lg', variant: 'outline' }), 'min-h-11')} href="/wallet">
                                 Cek Wallet
                             </Link>
+                            </div>
                         </div>
                     </CardContent>
                 </Card>
+
+                <AuctionBoard auctions={auctions} formatPrice={formatRupiah} />
+
+                <BidHistoryFeed
+                    formatPrice={formatRupiah}
+                    rows={latestBids.map((bid) => ({
+                        amount: bid.amount,
+                        bidder_name: `${bid.bidder_name ?? 'Bidder'} · ${bid.auction_title ?? 'Auction'}`,
+                        id: bid.id,
+                        placed_at: bid.placed_at,
+                    }))}
+                    title="Recent bid activity"
+                />
 
                 <div className="grid gap-3 md:grid-cols-3">
                     {actions.map((item) => (
