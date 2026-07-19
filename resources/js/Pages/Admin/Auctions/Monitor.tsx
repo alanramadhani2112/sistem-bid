@@ -1,10 +1,12 @@
 import { Head, router } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
-import { Countdown } from '@/components/app/Countdown';
-import { EmptyState } from '@/components/app/EmptyState';
+import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
+import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
+import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
+import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { PageHeader } from '@/components/app/PageHeader';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -50,6 +52,8 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
         bh.map(serverToHookRow),
     );
     const latestBid = bidHistory[0];
+    const leader = leaderboard[0]?.bidder_name ?? null;
+    const nextBid = currentPrice + 100_000;
 
     const handleClose = () => {
         if (!window.confirm('Close this auction now and determine the winner?')) return;
@@ -62,68 +66,66 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
 
             <section className="space-y-5">
                 <PageHeader
-                    accent="Monitor"
+                    accent="Auction Command Center"
                     subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
                     title={initial.title}
+                    action={
+                        initial.status === 'live' ? (
+                            <Button className="min-h-11" onClick={handleClose} variant="destructive">
+                                Close Now
+                            </Button>
+                        ) : null
+                    }
                 />
 
-                <Card className="bg-primary/5">
-                    <CardContent className="p-5">
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-sm text-muted-foreground">Current price</p>
-                                <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(currentPrice)}</p>
-                                <div className="mt-2 flex items-center gap-2">
-                                    <StatusBadge status={initial.status} />
-                                    {initial.status === 'live' ? (
-                                        <Countdown className="text-primary" mode="ends" target={initial.ends_at} />
-                                    ) : (
-                                        <p className="text-sm text-muted-foreground">ends {initial.ends_at}</p>
-                                    )}
-                                </div>
-                                {latestBid && (
-                                    <p aria-live="polite" className="mt-3 text-sm text-muted-foreground">
-                                        Bid terbaru: {latestBid.bidder_name} · {formatRupiah(latestBid.amount)}
-                                    </p>
-                                )}
-                            </div>
-                            {initial.status === 'live' && (
-                                <Button onClick={handleClose} variant="destructive">Close Now</Button>
-                            )}
-                        </div>
-                    </CardContent>
-                </Card>
+                <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={initial.status} />
+
+                <div className="sticky top-16 z-10 grid gap-3 rounded-2xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[1.2fr_0.8fr]">
+                    <CurrentPriceCard
+                        bidCount={bidHistory.length}
+                        formatPrice={formatRupiah}
+                        leader={leader}
+                        nextBid={nextBid}
+                        price={currentPrice}
+                    />
+                    <LiveCountdownPanel
+                        mode={initial.status === 'published' ? 'starts' : 'ends'}
+                        status={initial.status}
+                        target={initial.status === 'published' ? initial.starts_at : initial.ends_at}
+                    />
+                </div>
+
+                {latestBid && (
+                    <p aria-live="polite" className="rounded-xl border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+                        Bid terbaru: <span className="font-semibold text-foreground">{latestBid.bidder_name}</span> · {formatRupiah(latestBid.amount)}
+                    </p>
+                )}
 
                 <div className="grid gap-4 lg:grid-cols-2">
-                    <SectionCard title="Leaderboard">
-                        <div className="space-y-3">
-                            {leaderboard.map((bid, i) => (
-                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={`${bid.id}-${i}`}>
-                                    <div>
-                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
-                                        <p className="text-xs text-muted-foreground">#{i + 1}</p>
-                                    </div>
-                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
-                                </div>
-                            ))}
-                            {leaderboard.length === 0 && <EmptyState description="Leaderboard akan terisi saat bid pertama masuk." title="Belum ada bid" />}
-                        </div>
-                    </SectionCard>
-
-                    <SectionCard title="Bid history">
-                        <div className="space-y-3">
-                            {bidHistory.map((bid, i) => (
-                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={`${bid.id}-${i}`}>
-                                    <div>
-                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
-                                    </div>
-                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
-                                </div>
-                            ))}
-                            {bidHistory.length === 0 && <EmptyState description="Bid realtime akan muncul di sini." title="Belum ada bid" />}
-                        </div>
-                    </SectionCard>
+                    <BidHistoryFeed formatPrice={formatRupiah} rows={bidHistory} title="Realtime bid feed" />
+                    <LeaderboardPanel formatPrice={formatRupiah} rows={leaderboard} />
                 </div>
+
+                <SectionCard title="Lot information">
+                    <div className="grid gap-3 text-sm sm:grid-cols-4">
+                        <div>
+                            <p className="text-muted-foreground">Green bean</p>
+                            <p className="font-semibold text-foreground">{initial.green_bean.name}</p>
+                        </div>
+                        <div>
+                            <p className="text-muted-foreground">Origin</p>
+                            <p className="font-semibold text-foreground">{initial.green_bean.origin}</p>
+                        </div>
+                        <div>
+                            <p className="text-muted-foreground">Process</p>
+                            <p className="font-semibold text-foreground">{initial.green_bean.process}</p>
+                        </div>
+                        <div>
+                            <p className="text-muted-foreground">Weight</p>
+                            <p className="font-semibold text-foreground">{initial.green_bean.weight_gram} gram</p>
+                        </div>
+                    </div>
+                </SectionCard>
             </section>
         </AppShell>
     );
