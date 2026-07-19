@@ -1,5 +1,4 @@
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
-import type { FormEvent } from 'react';
 import { useEffect } from 'react';
 
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
@@ -52,8 +51,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
         amount: nextBid,
     });
 
-    const submitBid = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const submitBid = () => {
         post(`/auctions/${auction.id}/bids`, { preserveScroll: true });
     };
 
@@ -107,13 +105,15 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         <LiveCountdownPanel mode="ends" status="live" target={auction.ends_at} />
                         <BidActionPanel
                             amount={data.amount}
+                            auctionTitle={auction.title}
                             className="sticky bottom-20 z-10 lg:static"
+                            currentPrice={room.currentPrice}
                             error={errors.amount}
                             formatPrice={formatRupiah}
                             helper="Bid hanya diterima kalau saldo cukup dan increment valid."
                             nextBid={nextBid}
                             onAmountChange={(value) => setData('amount', value)}
-                            onSubmit={submitBid}
+                            onConfirm={submitBid}
                             processing={processing}
                         />
                         <ReadinessChecklist
