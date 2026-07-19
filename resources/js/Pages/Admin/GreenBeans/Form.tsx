@@ -1,6 +1,13 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import type { FormEvent, ReactNode } from 'react';
+import type { FormEvent } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+
+import { FormField } from '@/components/app/FormField';
+import { PageHeader } from '@/components/app/PageHeader';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBeanForm = {
@@ -41,7 +48,6 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
 
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
         post(isEdit ? `/admin/green-beans/${greenBean.id}?_method=PUT` : '/admin/green-beans', {
             forceFormData: true,
         });
@@ -52,89 +58,50 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
             <Head title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'} />
 
             <section className="space-y-4">
-                <Link className="text-sm font-semibold text-lime-200" href="/admin/green-beans">
-                    Kembali
+                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/admin/green-beans">
+                    ← Kembali
                 </Link>
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Admin</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">{isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}</h1>
-                </div>
 
-                <form className="space-y-4 rounded-3xl border border-white/10 bg-white/[0.04] p-5" onSubmit={submit}>
-                    <Field error={errors.name} label="Nama">
-                        <input className="field-input" onChange={(event) => setData('name', event.target.value)} value={data.name} />
-                    </Field>
-                    <Field error={errors.origin} label="Origin">
-                        <input className="field-input" onChange={(event) => setData('origin', event.target.value)} value={data.origin} />
-                    </Field>
-                    <Field error={errors.process} label="Process">
-                        <input className="field-input" onChange={(event) => setData('process', event.target.value)} value={data.process} />
-                    </Field>
-                    <Field error={errors.weight_gram} label="Weight gram">
-                        <input
-                            className="field-input"
-                            inputMode="numeric"
-                            min="1"
-                            onChange={(event) => setData('weight_gram', event.target.value)}
-                            type="number"
-                            value={data.weight_gram}
-                        />
-                    </Field>
-                    <Field error={errors.starting_price} label="Starting price">
-                        <input
-                            className="field-input"
-                            inputMode="numeric"
-                            min="1000"
-                            onChange={(event) => setData('starting_price', event.target.value)}
-                            type="number"
-                            value={data.starting_price}
-                        />
-                    </Field>
-                    <Field error={errors.bid_increment} label="Bid increment">
-                        <input
-                            className="field-input"
-                            inputMode="numeric"
-                            min="1000"
-                            onChange={(event) => setData('bid_increment', event.target.value)}
-                            type="number"
-                            value={data.bid_increment}
-                        />
-                    </Field>
-                    <Field error={errors.description} label="Description">
-                        <textarea
-                            className="field-input min-h-28 py-3"
-                            onChange={(event) => setData('description', event.target.value)}
-                            value={data.description}
-                        />
-                    </Field>
-                    <Field error={errors.image} label="Image">
-                        <input
-                            accept="image/*"
-                            className="field-input py-3"
-                            onChange={(event) => setData('image', event.target.files?.[0] ?? null)}
-                            type="file"
-                        />
-                    </Field>
+                <PageHeader
+                    accent="Admin"
+                    title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}
+                />
 
-                    <button
-                        className="min-h-11 w-full rounded-2xl bg-lime-300 px-4 py-3 text-sm font-bold text-stone-950 disabled:opacity-50"
-                        disabled={processing}
-                        type="submit"
-                    >
-                        Simpan
-                    </button>
-                </form>
+                <Card>
+                    <CardContent className="p-5">
+                        <form className="space-y-4" onSubmit={submit}>
+                            <FormField error={errors.name} label="Nama" name="name">
+                                <Input id="name" name="name" onChange={(e) => setData('name', e.target.value)} value={data.name} />
+                            </FormField>
+                            <FormField error={errors.origin} label="Origin" name="origin">
+                                <Input id="origin" name="origin" onChange={(e) => setData('origin', e.target.value)} value={data.origin} />
+                            </FormField>
+                            <FormField error={errors.process} label="Process" name="process">
+                                <Input id="process" name="process" onChange={(e) => setData('process', e.target.value)} value={data.process} />
+                            </FormField>
+                            <FormField error={errors.weight_gram} label="Weight gram" name="weight_gram">
+                                <Input id="weight_gram" inputMode="numeric" min="1" name="weight_gram" onChange={(e) => setData('weight_gram', e.target.value)} type="number" value={data.weight_gram} />
+                            </FormField>
+                            <FormField error={errors.starting_price} label="Starting price" name="starting_price">
+                                <Input id="starting_price" inputMode="numeric" min="1000" name="starting_price" onChange={(e) => setData('starting_price', e.target.value)} type="number" value={data.starting_price} />
+                            </FormField>
+                            <FormField error={errors.bid_increment} label="Bid increment" name="bid_increment">
+                                <Input id="bid_increment" inputMode="numeric" min="1000" name="bid_increment" onChange={(e) => setData('bid_increment', e.target.value)} type="number" value={data.bid_increment} />
+                            </FormField>
+                            <FormField error={errors.description} label="Description" name="description">
+                                <Textarea id="description" name="description" onChange={(e) => setData('description', e.target.value)} rows={4} value={data.description} />
+                            </FormField>
+                            <FormField error={errors.image} label="Image" name="image">
+                                <Input accept="image/*" id="image" name="image" onChange={(e) => setData('image', e.target.files?.[0] ?? null)} type="file" />
+                            </FormField>
+
+                            <Button className="w-full min-h-11 font-bold" disabled={processing} type="submit">
+                                Simpan
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
             </section>
         </AppShell>
-    );
-}
-
-function Field({ children, error, label }: { children: ReactNode; error?: string; label: string }) {
-    return (
-        <label className="block text-sm font-medium text-stone-200">
-            {label}
-            <div className="mt-2">{children}</div>
-            {error ? <p className="mt-2 text-sm text-red-300">{error}</p> : null}
-        </label>
     );
 }

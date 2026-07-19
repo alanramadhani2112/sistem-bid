@@ -1,6 +1,12 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import type { FormEvent, ReactNode } from 'react';
+import type { FormEvent } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+
+import { FormField } from '@/components/app/FormField';
+import { PageHeader } from '@/components/app/PageHeader';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBeanOption = {
@@ -55,62 +61,65 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
             <Head title={isEdit ? 'Edit Auction' : 'Tambah Auction'} />
 
             <section className="space-y-4">
-                <Link className="text-sm font-semibold text-lime-200" href="/admin/auctions">
-                    Kembali
+                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/admin/auctions">
+                    ← Kembali
                 </Link>
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Admin</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">{isEdit ? 'Edit Auction' : 'Tambah Auction'}</h1>
-                </div>
 
-                <form className="space-y-4 rounded-3xl border border-white/10 bg-white/[0.04] p-5" onSubmit={submit}>
-                    <Field error={errors.green_bean_id} label="Green Bean">
-                        <select className="field-input" onChange={(event) => setData('green_bean_id', event.target.value)} value={data.green_bean_id}>
-                            {greenBeans.map((greenBean) => (
-                                <option key={greenBean.id} value={greenBean.id}>
-                                    {greenBean.name} · {greenBean.origin}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
-                    <Field error={errors.title} label="Title">
-                        <input className="field-input" onChange={(event) => setData('title', event.target.value)} value={data.title} />
-                    </Field>
-                    <Field error={errors.status} label="Status">
-                        <select className="field-input" onChange={(event) => setData('status', event.target.value)} value={data.status}>
-                            {statuses.map((status) => (
-                                <option key={status} value={status}>
-                                    {status}
-                                </option>
-                            ))}
-                        </select>
-                    </Field>
-                    <Field error={errors.starts_at} label="Starts at">
-                        <input className="field-input" onChange={(event) => setData('starts_at', event.target.value)} type="datetime-local" value={data.starts_at} />
-                    </Field>
-                    <Field error={errors.ends_at} label="Ends at">
-                        <input className="field-input" onChange={(event) => setData('ends_at', event.target.value)} type="datetime-local" value={data.ends_at} />
-                    </Field>
+                <PageHeader
+                    accent="Admin"
+                    title={isEdit ? 'Edit Auction' : 'Tambah Auction'}
+                />
 
-                    <button
-                        className="min-h-11 w-full rounded-2xl bg-lime-300 px-4 py-3 text-sm font-bold text-stone-950 disabled:opacity-50"
-                        disabled={processing || greenBeans.length === 0}
-                        type="submit"
-                    >
-                        Simpan
-                    </button>
-                </form>
+                <Card>
+                    <CardContent className="p-5">
+                        <form className="space-y-4" onSubmit={submit}>
+                            <FormField error={errors.green_bean_id} label="Green Bean" name="green_bean_id">
+                                <select
+                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                    id="green_bean_id"
+                                    name="green_bean_id"
+                                    onChange={(e) => setData('green_bean_id', e.target.value)}
+                                    value={data.green_bean_id}
+                                >
+                                    {greenBeans.map((gb) => (
+                                        <option key={gb.id} value={gb.id}>
+                                            {gb.name} · {gb.origin}
+                                        </option>
+                                    ))}
+                                </select>
+                            </FormField>
+                            <FormField error={errors.title} label="Title" name="title">
+                                <Input id="title" name="title" onChange={(e) => setData('title', e.target.value)} value={data.title} />
+                            </FormField>
+                            <FormField error={errors.status} label="Status" name="status">
+                                <select
+                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                    id="status"
+                                    name="status"
+                                    onChange={(e) => setData('status', e.target.value)}
+                                    value={data.status}
+                                >
+                                    {statuses.map((s) => (
+                                        <option key={s} value={s}>
+                                            {s}
+                                        </option>
+                                    ))}
+                                </select>
+                            </FormField>
+                            <FormField error={errors.starts_at} label="Starts at" name="starts_at">
+                                <Input id="starts_at" name="starts_at" onChange={(e) => setData('starts_at', e.target.value)} type="datetime-local" value={data.starts_at} />
+                            </FormField>
+                            <FormField error={errors.ends_at} label="Ends at" name="ends_at">
+                                <Input id="ends_at" name="ends_at" onChange={(e) => setData('ends_at', e.target.value)} type="datetime-local" value={data.ends_at} />
+                            </FormField>
+
+                            <Button className="w-full min-h-11 font-bold" disabled={processing || greenBeans.length === 0} type="submit">
+                                Simpan
+                            </Button>
+                        </form>
+                    </CardContent>
+                </Card>
             </section>
         </AppShell>
-    );
-}
-
-function Field({ children, error, label }: { children: ReactNode; error?: string; label: string }) {
-    return (
-        <label className="block text-sm font-medium text-stone-200">
-            {label}
-            <div className="mt-2">{children}</div>
-            {error ? <p className="mt-2 text-sm text-red-300">{error}</p> : null}
-        </label>
     );
 }

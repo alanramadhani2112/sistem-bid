@@ -1,5 +1,9 @@
 import { Head } from '@inertiajs/react';
 
+import { Card, CardContent } from '@/components/ui/card';
+
+import { PageHeader } from '@/components/app/PageHeader';
+import { SectionCard } from '@/components/app/SectionCard';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type BidRow = {
@@ -31,11 +35,7 @@ type MonitorProps = {
 };
 
 const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', {
-        currency: 'IDR',
-        maximumFractionDigits: 0,
-        style: 'currency',
-    }).format(value);
+    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AuctionMonitor({ auction, leaderboard, bidHistory }: MonitorProps) {
     return (
@@ -43,48 +43,54 @@ export default function AuctionMonitor({ auction, leaderboard, bidHistory }: Mon
             <Head title={`Monitor ${auction.title}`} />
 
             <section className="space-y-5">
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Monitor</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">{auction.title}</h1>
-                    <p className="mt-2 text-sm text-stone-300">
-                        {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
-                    </p>
-                </div>
+                <PageHeader
+                    accent="Monitor"
+                    subtitle={`${auction.green_bean.name} · ${auction.green_bean.origin} · ${auction.green_bean.process}`}
+                    title={auction.title}
+                />
 
-                <div className="rounded-3xl border border-lime-300/20 bg-lime-300/5 p-5">
-                    <p className="text-sm text-lime-100">Current price</p>
-                    <p className="mt-2 text-4xl font-black text-white">{formatRupiah(auction.current_price)}</p>
-                    <p className="mt-2 text-sm text-stone-300">
-                        {auction.status} · ends {auction.ends_at}
-                    </p>
-                </div>
+                <Card className="bg-primary/5">
+                    <CardContent className="p-5">
+                        <p className="text-sm text-muted-foreground">Current price</p>
+                        <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(auction.current_price)}</p>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                            {auction.status} · ends {auction.ends_at}
+                        </p>
+                    </CardContent>
+                </Card>
 
                 <div className="grid gap-4 lg:grid-cols-2">
-                    <Panel rows={leaderboard} title="Leaderboard" />
-                    <Panel rows={bidHistory} title="Bid history" />
+                    <SectionCard title="Leaderboard">
+                        <div className="space-y-3">
+                            {leaderboard.map((bid) => (
+                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={bid.id}>
+                                    <div>
+                                        <p className="font-semibold text-foreground">{bid.user.name}</p>
+                                        <p className="text-xs text-muted-foreground">{bid.created_at}</p>
+                                    </div>
+                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
+                                </div>
+                            ))}
+                            {leaderboard.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                        </div>
+                    </SectionCard>
+
+                    <SectionCard title="Bid history">
+                        <div className="space-y-3">
+                            {bidHistory.map((bid) => (
+                                <div className="flex items-center justify-between gap-3 rounded-lg border border-border p-4" key={bid.id}>
+                                    <div>
+                                        <p className="font-semibold text-foreground">{bid.user.name}</p>
+                                        <p className="text-xs text-muted-foreground">{bid.created_at}</p>
+                                    </div>
+                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
+                                </div>
+                            ))}
+                            {bidHistory.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                        </div>
+                    </SectionCard>
                 </div>
             </section>
         </AppShell>
-    );
-}
-
-function Panel({ rows, title }: { rows: BidRow[]; title: string }) {
-    return (
-        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
-            <h2 className="text-xl font-bold text-white">{title}</h2>
-            <div className="mt-4 space-y-3">
-                {rows.map((bid) => (
-                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 p-4" key={bid.id}>
-                        <div>
-                            <p className="font-semibold text-white">{bid.user.name}</p>
-                            <p className="text-xs text-stone-400">{bid.created_at}</p>
-                        </div>
-                        <p className="font-bold text-lime-200">{formatRupiah(bid.amount)}</p>
-                    </div>
-                ))}
-
-                {rows.length === 0 ? <p className="text-sm text-stone-400">Belum ada bid.</p> : null}
-            </div>
-        </div>
     );
 }

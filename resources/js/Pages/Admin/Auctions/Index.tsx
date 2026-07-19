@@ -1,5 +1,11 @@
 import { Head, Link, router } from '@inertiajs/react';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+
+import { EmptyState } from '@/components/app/EmptyState';
+import { PageHeader } from '@/components/app/PageHeader';
+import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Auction = {
@@ -22,96 +28,83 @@ type AuctionsIndexProps = {
 };
 
 const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', {
-        currency: 'IDR',
-        maximumFractionDigits: 0,
-        style: 'currency',
-    }).format(value);
+    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AuctionsIndex({ auctions, statuses }: AuctionsIndexProps) {
-    const destroy = (auction: Auction) => {
-        if (confirm(`Hapus ${auction.title}?`)) {
-            router.delete(`/admin/auctions/${auction.id}`, { preserveScroll: true });
-        }
-    };
-
     return (
         <AppShell>
             <Head title="Admin Auctions" />
 
-            <section className="space-y-4">
-                <div className="flex items-center justify-between gap-3">
-                    <div>
-                        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Admin</p>
-                        <h1 className="mt-1 text-3xl font-bold text-white">Auctions</h1>
-                    </div>
-                    <Link className="min-h-11 rounded-2xl bg-lime-300 px-4 py-3 text-sm font-bold text-stone-950" href="/admin/auctions/create">
-                        Tambah
-                    </Link>
-                </div>
+            <section className="space-y-5">
+                <PageHeader
+                    accent="Admin"
+                    action={
+                        <Link href="/admin/auctions/create">
+                            <Button size="sm">Tambah</Button>
+                        </Link>
+                    }
+                    title="Auctions"
+                />
 
                 <div className="space-y-3">
                     {auctions.map((auction) => (
-                        <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" key={auction.id}>
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h2 className="text-lg font-semibold text-white">{auction.title}</h2>
-                                    <p className="mt-1 text-sm text-stone-300">
-                                        {auction.green_bean.name} · {auction.green_bean.origin}
-                                    </p>
+                        <Card key={auction.id}>
+                            <CardContent className="flex flex-col gap-3 p-5">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-foreground">{auction.title}</h2>
+                                        <p className="mt-1 text-sm text-muted-foreground">
+                                            {auction.green_bean.name} · {auction.green_bean.origin}
+                                        </p>
+                                    </div>
+                                    <StatusBadge status={auction.status} />
                                 </div>
-                                <span className="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">{auction.status}</span>
-                            </div>
 
-                            <p className="mt-3 text-sm text-stone-300">Current {formatRupiah(auction.current_price)}</p>
-                            <p className="mt-1 text-xs text-stone-400">
-                                {auction.starts_at} — {auction.ends_at}
-                            </p>
+                                <p className="text-sm text-muted-foreground">Current {formatRupiah(auction.current_price)}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {auction.starts_at} — {auction.ends_at}
+                                </p>
 
-                            <div className="mt-4 grid gap-2 sm:grid-cols-4">
-                                <Link
-                                    className="min-h-11 rounded-2xl border border-white/10 px-4 py-3 text-center text-sm font-semibold text-stone-100"
-                                    href={`/admin/auctions/${auction.id}/edit`}
-                                >
-                                    Edit
-                                </Link>
-                                <Link
-                                    className="min-h-11 rounded-2xl border border-lime-300/30 px-4 py-3 text-center text-sm font-semibold text-lime-200"
-                                    href={`/admin/auctions/${auction.id}/monitor`}
-                                >
-                                    Monitor
-                                </Link>
-                                <select
-                                    className="field-input"
-                                    onChange={(event) =>
-                                        router.patch(
-                                            `/admin/auctions/${auction.id}/status`,
-                                            { status: event.target.value },
-                                            { preserveScroll: true },
-                                        )
-                                    }
-                                    value={auction.status}
-                                >
-                                    {statuses.map((status) => (
-                                        <option key={status} value={status}>
-                                            {status}
-                                        </option>
-                                    ))}
-                                </select>
-                                <button
-                                    className="min-h-11 rounded-2xl border border-red-300/30 px-4 py-3 text-sm font-semibold text-red-200"
-                                    onClick={() => destroy(auction)}
-                                    type="button"
-                                >
-                                    Hapus
-                                </button>
-                            </div>
-                        </article>
+                                <div className="grid gap-2 sm:grid-cols-4">
+                                    <Link href={`/admin/auctions/${auction.id}/edit`}>
+                                        <Button className="w-full" size="sm" variant="outline">Edit</Button>
+                                    </Link>
+                                    <Link href={`/admin/auctions/${auction.id}/monitor`}>
+                                        <Button className="w-full" size="sm" variant="outline">Monitor</Button>
+                                    </Link>
+                                    <select
+                                        className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                        onChange={(event) =>
+                                            router.patch(
+                                                `/admin/auctions/${auction.id}/status`,
+                                                { status: event.target.value },
+                                                { preserveScroll: true },
+                                            )
+                                        }
+                                        value={auction.status}
+                                    >
+                                        {statuses.map((status) => (
+                                            <option key={status} value={status}>
+                                                {status}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <Link
+                                        as="button"
+                                        href={`/admin/auctions/${auction.id}`}
+                                        method="delete"
+                                        preserveScroll
+                                    >
+                                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
+                                    </Link>
+                                </div>
+                            </CardContent>
+                        </Card>
                     ))}
 
-                    {auctions.length === 0 ? (
-                        <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-sm text-stone-300">Belum ada auction.</div>
-                    ) : null}
+                    {auctions.length === 0 && (
+                        <EmptyState description="Belum ada auction." title="Tidak ada auction" />
+                    )}
                 </div>
             </section>
         </AppShell>

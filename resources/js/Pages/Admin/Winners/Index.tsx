@@ -1,5 +1,11 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+
+import { MetricCard } from '@/components/app/MetricCard';
+import { PageHeader } from '@/components/app/PageHeader';
+import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Winner = {
@@ -20,11 +26,7 @@ type WinnersProps = {
 };
 
 const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', {
-        currency: 'IDR',
-        maximumFractionDigits: 0,
-        style: 'currency',
-    }).format(value);
+    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AdminWinners({ winners }: WinnersProps) {
     return (
@@ -32,34 +34,37 @@ export default function AdminWinners({ winners }: WinnersProps) {
             <Head title="Admin Winners" />
 
             <section className="space-y-5">
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Admin</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">Winners</h1>
-                </div>
+                <PageHeader accent="Admin" title="Winners" />
 
                 <div className="space-y-3">
                     {winners.map((winner) => (
-                        <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" key={winner.id}>
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h2 className="font-semibold text-white">{winner.auction.title}</h2>
-                                    <p className="mt-1 text-sm text-stone-300">
-                                        {winner.auction.green_bean.name} · {winner.auction.green_bean.origin}
-                                    </p>
+                        <Card key={winner.id}>
+                            <CardContent className="flex flex-col gap-3 p-5">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <h2 className="font-semibold text-foreground">{winner.auction.title}</h2>
+                                        <p className="mt-1 text-sm text-muted-foreground">
+                                            {winner.auction.green_bean.name} · {winner.auction.green_bean.origin}
+                                        </p>
+                                    </div>
+                                    <p className="font-bold text-foreground">{formatRupiah(winner.winning_amount)}</p>
                                 </div>
-                                <p className="font-bold text-lime-200">{formatRupiah(winner.winning_amount)}</p>
-                            </div>
-                            <p className="mt-3 text-sm text-stone-300">
-                                {winner.user.name} · {winner.user.email}
-                            </p>
-                            <p className="mt-1 text-xs text-stone-400">Determined {winner.determined_at}</p>
-                            <Link className="mt-4 inline-flex min-h-11 items-center rounded-2xl border border-lime-300/30 px-4 text-sm font-semibold text-lime-200" href={`/admin/auctions/${winner.auction.id}/monitor`}>
-                                Monitor auction
-                            </Link>
-                        </article>
+                                <p className="text-sm text-muted-foreground">
+                                    {winner.user.name} · {winner.user.email}
+                                </p>
+                                <p className="text-xs text-muted-foreground">Determined {winner.determined_at}</p>
+                                <Link href={`/admin/auctions/${winner.auction.id}/monitor`}>
+                                    <Button size="sm" variant="outline">Monitor auction</Button>
+                                </Link>
+                            </CardContent>
+                        </Card>
                     ))}
 
-                    {winners.length === 0 ? <p className="rounded-3xl border border-white/10 p-5 text-sm text-stone-400">Belum ada winner.</p> : null}
+                    {winners.length === 0 && (
+                        <p className="rounded-xl border border-dashed border-border bg-muted/20 py-16 text-center text-sm text-muted-foreground">
+                            Belum ada winner.
+                        </p>
+                    )}
                 </div>
             </section>
         </AppShell>

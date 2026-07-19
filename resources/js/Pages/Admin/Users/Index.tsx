@@ -1,5 +1,10 @@
 import { Head } from '@inertiajs/react';
 
+import { Card, CardContent } from '@/components/ui/card';
+
+import { MetricCard } from '@/components/app/MetricCard';
+import { PageHeader } from '@/components/app/PageHeader';
+import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type UserRow = {
@@ -17,11 +22,7 @@ type UsersProps = {
 };
 
 const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', {
-        currency: 'IDR',
-        maximumFractionDigits: 0,
-        style: 'currency',
-    }).format(value);
+    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AdminUsers({ stats, users }: UsersProps) {
     return (
@@ -29,32 +30,28 @@ export default function AdminUsers({ stats, users }: UsersProps) {
             <Head title="Admin Users" />
 
             <section className="space-y-5">
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Admin</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">Users</h1>
-                </div>
+                <PageHeader accent="Admin" title="Users" />
 
                 <div className="grid gap-3 sm:grid-cols-2">
                     {Object.entries(stats).map(([label, value]) => (
-                        <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" key={label}>
-                            <p className="text-sm text-stone-400">{label}</p>
-                            <p className="mt-2 text-3xl font-bold text-white">{value}</p>
-                        </article>
+                        <MetricCard key={label} label={label} value={value} />
                     ))}
                 </div>
 
                 <div className="space-y-3">
                     {users.map((user) => (
-                        <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5" key={user.id}>
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h2 className="font-semibold text-white">{user.name}</h2>
-                                    <p className="mt-1 text-sm text-stone-300">{user.email}</p>
+                        <Card key={user.id}>
+                            <CardContent className="flex flex-col gap-3 p-5">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div>
+                                        <h2 className="font-semibold text-foreground">{user.name}</h2>
+                                        <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
+                                    </div>
+                                    <StatusBadge status={user.role} />
                                 </div>
-                                <span className="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">{user.role}</span>
-                            </div>
-                            <p className="mt-3 text-sm text-stone-300">Wallet {formatRupiah(user.wallet?.balance ?? 0)}</p>
-                        </article>
+                                <p className="text-sm text-muted-foreground">Wallet {formatRupiah(user.wallet?.balance ?? 0)}</p>
+                            </CardContent>
+                        </Card>
                     ))}
                 </div>
             </section>
