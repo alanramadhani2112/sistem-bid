@@ -37,6 +37,11 @@ export default function AdminWinners({ winners }: WinnersProps) {
                 <PageHeader accent="Admin" title="Winners" />
 
                 <div className="space-y-3">
+                    {winners.length === 0 && (
+                        <p className="rounded-lg border border-dashed border-border bg-muted/20 px-5 py-8 text-center text-sm text-muted-foreground">
+                            No winners yet. Winners are determined automatically when an auction ends.
+                        </p>
+                    )}
                     {winners.map((winner) => (
                         <Card key={winner.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
