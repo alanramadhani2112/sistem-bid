@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { CalendarClock, Coffee, Gavel, MapPin, Scale, Sprout, TrendingUp } from 'lucide-react';
 
 import { AuctionHeroMedia } from '@/components/app/AuctionHeroMedia';
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
@@ -64,7 +65,10 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                                 <p className="text-sm font-medium text-muted-foreground">Minimum berikutnya {formatRupiah(nextBid)}</p>
                             </div>
                             <div>
-                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Harga saat ini</p>
+                                <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                                    <TrendingUp aria-hidden="true" className="size-4" />
+                                    Harga saat ini
+                                </p>
                                 <p className="mt-2 font-mono text-4xl font-black tracking-tight text-foreground md:text-6xl">
                                     {formatRupiah(auction.current_price)}
                                 </p>
@@ -84,6 +88,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                         />
                         {canEnterRoom ? (
                             <Link className={cn(buttonVariants({ size: 'lg' }), 'w-full min-h-11')} href={`/auctions/${auction.id}/room`}>
+                                <Gavel data-icon="inline-start" />
                                 Masuk live room
                             </Link>
                         ) : (
@@ -98,29 +103,29 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
 
                 <SectionCard title="Lot specifications">
                     <dl className="grid gap-3 text-sm sm:grid-cols-2">
-                        <div>
-                            <dt className="text-muted-foreground">Origin</dt>
-                            <dd className="font-medium text-foreground">{auction.green_bean.origin}</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><MapPin aria-hidden="true" className="size-4" /> Origin</dt>
+                            <dd className="mt-1 font-medium text-foreground">{auction.green_bean.origin}</dd>
                         </div>
-                        <div>
-                            <dt className="text-muted-foreground">Process</dt>
-                            <dd className="font-medium text-foreground">{auction.green_bean.process}</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><Sprout aria-hidden="true" className="size-4" /> Process</dt>
+                            <dd className="mt-1 font-medium text-foreground">{auction.green_bean.process}</dd>
                         </div>
-                        <div>
-                            <dt className="text-muted-foreground">Weight</dt>
-                            <dd className="font-medium text-foreground">{auction.green_bean.weight_gram}g</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><Scale aria-hidden="true" className="size-4" /> Weight</dt>
+                            <dd className="mt-1 font-medium text-foreground">{auction.green_bean.weight_gram}g</dd>
                         </div>
-                        <div>
-                            <dt className="text-muted-foreground">Increment</dt>
-                            <dd className="font-medium text-foreground">{formatRupiah(auction.green_bean.bid_increment)}</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><Gavel aria-hidden="true" className="size-4" /> Increment</dt>
+                            <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.bid_increment)}</dd>
                         </div>
-                        <div>
-                            <dt className="text-muted-foreground">Starting price</dt>
-                            <dd className="font-medium text-foreground">{formatRupiah(auction.green_bean.starting_price)}</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><Coffee aria-hidden="true" className="size-4" /> Starting price</dt>
+                            <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.starting_price)}</dd>
                         </div>
-                        <div>
-                            <dt className="text-muted-foreground">Auction window</dt>
-                            <dd className="font-medium text-foreground">{auction.starts_at} → {auction.ends_at}</dd>
+                        <div className="rounded-2xl border border-border bg-card p-3">
+                            <dt className="flex items-center gap-2 text-muted-foreground"><CalendarClock aria-hidden="true" className="size-4" /> Auction window</dt>
+                            <dd className="mt-1 font-medium text-foreground">{auction.starts_at} → {auction.ends_at}</dd>
                         </div>
                     </dl>
                     {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}

@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { Coffee, Gavel, MapPin, Timer, TrendingUp } from 'lucide-react';
 
 import { Countdown } from '@/components/app/Countdown';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -53,15 +54,25 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                         <h2 className="line-clamp-2 text-lg font-semibold text-foreground">{auction.title}</h2>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                            {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
-                        </p>
+                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1">
+                                <Coffee aria-hidden="true" className="size-3.5" />
+                                {auction.green_bean.name}
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1">
+                                <MapPin aria-hidden="true" className="size-3.5" />
+                                {auction.green_bean.origin}
+                            </span>
+                        </div>
                     </div>
                     <StatusBadge className="shrink-0" status={auction.status} />
                 </div>
 
-                <div>
-                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Harga saat ini</p>
+                <div className="rounded-2xl border border-border bg-background/70 p-3 shadow-sm">
+                    <p className="inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <TrendingUp aria-hidden="true" className="size-3.5" />
+                        Harga saat ini
+                    </p>
                     <p className="text-2xl font-bold text-foreground">{formatPrice(auction.current_price)}</p>
                 </div>
 
@@ -77,6 +88,7 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                         )}
                         href={href}
                     >
+                        {isLive ? <Gavel data-icon="inline-start" /> : <Timer data-icon="inline-start" />}
                         {isLive ? 'Masuk room' : 'Lihat detail'}
                     </Link>
                 </div>

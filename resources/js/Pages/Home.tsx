@@ -1,5 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
+import { Gavel, History, Wallet } from 'lucide-react';
 
+import { ActionTile } from '@/components/app/ActionTile';
 import { AuctionBoard } from '@/components/app/AuctionBoard';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
@@ -21,13 +23,13 @@ type LobbyAuction = {
     ends_at: string;
     bid_count?: number;
     leader_name?: string | null;
-        green_bean: {
-            name: string;
-            origin: string;
-            process: string;
-            weight_gram?: number;
-            image_path?: string | null;
-        };
+    green_bean: {
+        name: string;
+        origin: string;
+        process: string;
+        weight_gram?: number;
+        image_path?: string | null;
+    };
 };
 
 type LatestBid = {
@@ -53,16 +55,19 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
         {
             description: 'Lihat lot green beans yang sudah publish dan siap live bidding.',
             href: '/auctions',
+            icon: Gavel,
             title: 'Cari auction',
         },
         {
             description: 'Cek saldo sebelum masuk room. Bid hanya diterima jika saldo cukup.',
             href: '/wallet',
+            icon: Wallet,
             title: 'Siapkan wallet',
         },
         {
             description: 'Pantau riwayat bid dan hasil auction dari akun bidder.',
             href: '/history',
+            icon: History,
             title: 'Lihat aktivitas',
         },
     ];
@@ -92,12 +97,14 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                                 </p>
                             </div>
                             <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
-                            <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
-                                Buka Auction Board
-                            </Link>
-                            <Link className={cn(buttonVariants({ size: 'lg', variant: 'outline' }), 'min-h-11')} href="/wallet">
-                                Cek Wallet
-                            </Link>
+                                <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
+                                    <Gavel data-icon="inline-start" />
+                                    Buka Auction Board
+                                </Link>
+                                <Link className={cn(buttonVariants({ size: 'lg', variant: 'outline' }), 'min-h-11')} href="/wallet">
+                                    <Wallet data-icon="inline-start" />
+                                    Cek Wallet
+                                </Link>
                             </div>
                         </div>
                     </CardContent>
@@ -118,15 +125,7 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
 
                 <div className="grid gap-3 md:grid-cols-3">
                     {actions.map((item) => (
-                        <Card key={item.href}>
-                            <CardContent className="p-4">
-                                <p className="text-sm font-semibold text-foreground">{item.title}</p>
-                                <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.description}</p>
-                                <Link className="mt-4 inline-flex text-sm font-medium text-primary hover:underline" href={item.href}>
-                                    Buka
-                                </Link>
-                            </CardContent>
-                        </Card>
+                        <ActionTile description={item.description} href={item.href} icon={item.icon} key={item.href} title={item.title} />
                     ))}
                 </div>
             </section>
