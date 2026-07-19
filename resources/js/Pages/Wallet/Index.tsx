@@ -85,7 +85,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                     <CardContent>
                         <div className="space-y-3">
                             {wallet.transactions.length === 0 ? (
-                                <EmptyState description="Top up manual akan muncul di sini." title="Belum ada transaksi" />
+                                <EmptyState description="Penambahan bid power akan muncul di sini." title="Belum ada transaksi" />
                             ) : (
                                 wallet.transactions.map((transaction) => (
                                     <div className="rounded-lg bg-muted/50 p-4" key={`${transaction.reference}-${transaction.created_at}`}>
@@ -93,10 +93,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                                             <p className="text-sm font-semibold text-foreground">{transaction.type}</p>
                                             <p className="text-sm font-bold text-foreground">{formatRupiah(transaction.amount)}</p>
                                         </div>
-                                        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                                            <span>{transaction.notes}</span>
-                                            <span>{transaction.reference}</span>
-                                        </div>
+                                        <p className="mt-2 text-xs text-muted-foreground">Penambahan bid power untuk ikut live auction.</p>
                                     </div>
                                 ))
                             )}
