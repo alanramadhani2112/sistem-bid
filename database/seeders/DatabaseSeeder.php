@@ -68,23 +68,24 @@ class DatabaseSeeder extends Seeder
             'notes' => 'Initial demo balance',
         ]);
 
-        $greenBean = GreenBean::query()->firstOrCreate([
+        $greenBean = GreenBean::query()->updateOrCreate([
             'name' => 'Gayo Wine Natural Lot A',
         ], [
             'origin' => 'Aceh Gayo',
             'process' => 'Natural',
             'weight_gram' => 10_000,
+            'description' => 'Lot green beans natural process dari Aceh Gayo untuk demo live auction Jawara.',
             'starting_price' => 1_000_000,
             'bid_increment' => 100_000,
         ]);
 
-        Auction::query()->firstOrCreate([
+        Auction::query()->updateOrCreate([
             'title' => 'Live Bid Gayo Wine Natural',
         ], [
             'green_bean_id' => $greenBean->id,
-            'status' => AuctionStatus::Published,
+            'status' => AuctionStatus::Live,
             'current_price' => $greenBean->starting_price,
-            'starts_at' => now()->addHour(),
+            'starts_at' => now()->subMinutes(10),
             'ends_at' => now()->addHours(2),
         ]);
     }
