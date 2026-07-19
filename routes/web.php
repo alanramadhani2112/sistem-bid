@@ -3,7 +3,7 @@
 use App\Modules\Admin\Controllers\AdminDashboardController;
 use App\Modules\Auctions\Controllers\AuctionBrowseController;
 use App\Modules\Auctions\Controllers\AuctionController;
-use App\Modules\Authentication\Controllers\GoogleAuthController;
+use App\Modules\Authentication\Controllers\AuthController;
 use App\Modules\Bidding\Controllers\BiddingController;
 use App\Modules\GreenBeans\Controllers\GreenBeanController;
 use App\Modules\Users\Controllers\HistoryController;
@@ -20,9 +20,8 @@ Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login');
 
-Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->middleware('guest')->name('auth.google.redirect');
-Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->middleware('guest')->name('auth.google.callback');
-Route::post('/logout', [GoogleAuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::post('/login', [AuthController::class, 'login'])->middleware('guest')->name('login.store');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
