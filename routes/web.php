@@ -3,6 +3,7 @@
 use App\Modules\Admin\Controllers\AdminDashboardController;
 use App\Modules\Auctions\Controllers\AuctionBrowseController;
 use App\Modules\Auctions\Controllers\AuctionController;
+use App\Modules\Auctions\Services\AuctionBrowseService;
 use App\Modules\Authentication\Controllers\AuthController;
 use App\Modules\Bidding\Controllers\BiddingController;
 use App\Modules\GreenBeans\Controllers\GreenBeanController;
@@ -12,8 +13,8 @@ use App\Modules\Wallet\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Home');
+Route::get('/', function (AuctionBrowseService $auctionBrowseService) {
+    return Inertia::render('Home', $auctionBrowseService->liveAuctionLobby());
 })->name('home');
 
 Route::get('/login', function () {

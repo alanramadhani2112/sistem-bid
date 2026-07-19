@@ -34,6 +34,59 @@ final class AdminDashboardService
                 ->latest()
                 ->limit(5)
                 ->get(['id', 'green_bean_id', 'title', 'status', 'current_price', 'starts_at', 'ends_at']),
+            'liveAuctions' => Auction::query()
+                ->with('greenBean:id,name,origin')
+                ->where('status', AuctionStatus::Live)
+                ->orderBy('ends_at')
+                ->limit(6)
+                ->get(['id', 'green_bean_id', 'title', 'status', 'current_price', 'starts_at', 'ends_at'])
+                ->map(fn (Auction $auction): array => $this->controlAuctionData($auction))
+                ->values(),
+            'upcomingAuctions' => Auction::query()
+                ->with('greenBean:id,name,origin')
+                ->where('status', AuctionStatus::Published)
+                ->orderBy('starts_at')
+                ->limit(6)
+                ->get(['id', 'green_bean_id', 'title', 'status', 'current_price', 'starts_at', 'ends_at'])
+                ->map(fn (Auction $auction): array => $this->controlAuctionData($auction))
+                ->values(),
+            'recentBids' => Bid::query()
+                ->with(['auction:id,title', 'user:id,name'])
+                ->latest()
+                ->limit(8)
+                ->get(['id', 'auction_id', 'user_id', 'amount', 'created_at'])
+                ->map(fn (Bid $bid): array => [
+                    'id' => $bid->id,
+                    'amount' => $bid->amount,
+                    'bidder_name' => trim(($bid->user?->name ?? 'Bidder').' · '.($bid->auction?->title ?? 'Auction')),
+                    'placed_at' => $bid->created_at?->toISOString(),
+                ])
+                ->values(),
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function controlAuctionData(Auction $auction): array
+    {
+        $leader = $auction->bids()
+            ->with('user:id,name')
+            ->orderByDesc('amount')
+            ->orderBy('created_at')
+            ->first();
+
+        return [
+            'id' => $auction->id,
+            'title' => $auction->title,
+            'status' => $auction->status,
+            'current_price' => $auction->current_price,
+            'starts_at' => $auction->starts_at?->toISOString(),
+            'ends_at' => $auction->ends_at?->toISOString(),
+            'bid_count' => $auction->bids()->count(),
+            'leader_name' => $leader?->user?->name,
+            'green_bean' => [
+                'name' => $auction->greenBean?->name,
+                'origin' => $auction->greenBean?->origin,
+            ],
         ];
     }
 
