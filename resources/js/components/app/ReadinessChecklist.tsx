@@ -19,7 +19,7 @@ export function ReadinessChecklist({ items, className }: ReadinessChecklistProps
                 <p className="text-sm font-semibold text-foreground">Bid readiness</p>
                 <div className="space-y-2">
                     {items.map((item) => (
-                        <div className="flex items-start gap-3 rounded-xl border border-border bg-muted/30 p-3" key={item.label}>
+                        <div className="flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-3" key={item.label}>
                             <span
                                 aria-hidden="true"
                                 className={cn('mt-0.5 size-2.5 rounded-full', item.ready ? 'bg-primary' : 'bg-destructive')}

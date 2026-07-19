@@ -103,7 +103,7 @@ textarea {
     --chart-3: oklch(0.76 0.12 85);
     --chart-4: oklch(0.55 0.09 142);
     --chart-5: oklch(0.62 0.08 38);
-    --radius: 0.75rem;
+    --radius: 0.5rem;
     --sidebar: oklch(0.96 0.011 82);
     --sidebar-foreground: oklch(0.17 0.012 82);
     --sidebar-primary: oklch(0.23 0.064 158);

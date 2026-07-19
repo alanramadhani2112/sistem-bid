@@ -72,7 +72,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
 
                 <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
                     <div className="space-y-4">
-                        <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
+                <div className="rounded-xl border border-primary/40 bg-primary/5 p-4">
                             <StatusBadge status="live" />
                             <h1 className="mt-3 text-3xl font-black leading-tight text-foreground md:text-5xl">{auction.title}</h1>
                             <p className="mt-2 text-sm text-muted-foreground">

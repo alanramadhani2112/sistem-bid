@@ -15,14 +15,14 @@ type CurrentPriceCardProps = {
 
 export function CurrentPriceCard({ price, formatPrice, nextBid, leader, bidCount, label = 'Current Price', className }: CurrentPriceCardProps) {
     return (
-        <Card className={cn('border-primary/40 bg-primary/5', className)}>
-            <CardContent className="p-5 md:p-6">
+        <Card className={cn('rounded-lg border-primary/35 bg-primary/5', className)}>
+            <CardContent className="p-4 md:p-5">
                 <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                     <TrendingUp aria-hidden="true" className="size-4" />
                     {label}
                 </p>
-                <p className="mt-3 text-4xl font-black leading-none tracking-tight text-foreground md:text-6xl">{formatPrice(price)}</p>
-                <div className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
+                <p className="mt-3 text-4xl font-black leading-none tracking-tight text-foreground md:text-5xl">{formatPrice(price)}</p>
+                <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
                     <div>
                         <p className="flex items-center gap-1 text-muted-foreground"><WalletCards aria-hidden="true" className="size-3.5" /> Next bid</p>
                         <p className="font-semibold text-foreground">{nextBid ? formatPrice(nextBid) : 'Belum tersedia'}</p>

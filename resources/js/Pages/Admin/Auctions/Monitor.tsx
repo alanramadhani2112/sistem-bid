@@ -86,7 +86,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
 
                 <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={initial.status} />
 
-                <div className="sticky top-16 z-10 grid gap-3 rounded-2xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="sticky top-16 z-10 grid gap-3 rounded-xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[1.2fr_0.8fr]">
                     <CurrentPriceCard
                         bidCount={bidHistory.length}
                         formatPrice={formatRupiah}

@@ -55,13 +55,13 @@ export function AppShell({ children }: AppShellProps) {
             <header
                 className={cn(
                     'fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75',
-                    !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-3xl md:border-x md:shadow-md',
+                    !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-xl md:border-x md:shadow-md',
                 )}
             >
                 <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
                     <div className="flex items-center gap-3">
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
-                            <span className="flex size-8 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+                            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
                                 {isAdmin ? <LayoutDashboard aria-hidden="true" className="size-4" /> : <Coffee aria-hidden="true" className="size-4" />}
                             </span>
                             <span className="hidden sm:inline">Jawara</span>
@@ -128,7 +128,7 @@ export function AppShell({ children }: AppShellProps) {
             <nav
                 className={cn(
                     'fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
-                    isAdmin ? 'md:hidden' : 'max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-3xl md:border-x md:shadow-md',
+                    isAdmin ? 'md:hidden' : 'max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-xl md:border-x md:shadow-md',
                 )}
             >
                 {navItems.map((item) => {
@@ -153,7 +153,7 @@ export function AppShell({ children }: AppShellProps) {
                             />
                             <span
                                 className={cn(
-                                    'flex size-8 items-center justify-center rounded-2xl transition-colors',
+                                    'flex size-8 items-center justify-center rounded-lg transition-colors',
                                     active ? 'bg-primary/10 text-primary' : 'text-muted-foreground',
                                 )}
                             >

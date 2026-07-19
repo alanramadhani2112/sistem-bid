@@ -60,7 +60,7 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                     <StatusBadge className="shrink-0" status={auction.status} />
                 </div>
 
-                <div className="rounded-2xl border border-border bg-background/70 p-3 shadow-sm">
+                        <div className="rounded-lg border border-border bg-background/70 p-3 shadow-sm">
                     <p className="inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                         <TrendingUp aria-hidden="true" className="size-3.5" />
                         Harga saat ini

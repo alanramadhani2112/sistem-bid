@@ -80,17 +80,17 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
 
     return (
         <Card className={cn('border', toneClass(timeLeft, status), className)}>
-            <CardContent className={cn('p-4', variant === 'hero' && 'p-5 md:p-6')}>
+            <CardContent className={cn('p-4', variant === 'hero' && 'md:p-5')}>
                 <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_1fr] md:items-center')}>
                     {variant === 'hero' && (
                         <div
                             aria-hidden="true"
-                            className="grid size-24 place-items-center rounded-full border bg-background/70 shadow-sm md:size-28"
+                            className="grid size-20 place-items-center rounded-full border bg-background/70 shadow-sm md:size-24"
                             style={{
                                 background: `conic-gradient(currentColor ${progress}%, transparent ${progress}% 100%)`,
                             }}
                         >
-                            <div className="grid size-[4.75rem] place-items-center rounded-full bg-card text-xs font-semibold uppercase tracking-[0.16em] md:size-[5.5rem]">
+                            <div className="grid size-16 place-items-center rounded-full bg-card text-xs font-semibold uppercase tracking-[0.16em] md:size-20">
                                 Live
                             </div>
                         </div>
@@ -99,7 +99,7 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
                         <p
                             aria-live="polite"
-                            className={cn('mt-2 font-mono font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-6xl' : 'text-2xl')}
+                            className={cn('mt-2 font-mono font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-5xl' : 'text-2xl')}
                         >
                             {value}
                         </p>
