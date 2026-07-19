@@ -1,6 +1,8 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { MetricCard } from '@/components/app/MetricCard';
 import { PageHeader } from '@/components/app/PageHeader';
@@ -24,6 +26,8 @@ type UsersProps = {
 const formatRupiah = (value: number) =>
     new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
+const roles = ['admin', 'bidder'] as const;
+
 export default function AdminUsers({ stats, users }: UsersProps) {
     return (
         <AppShell>
@@ -39,6 +43,11 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                 </div>
 
                 <div className="space-y-3">
+                    {users.length === 0 && (
+                        <p className="rounded-lg border border-dashed border-border bg-muted/20 px-5 py-8 text-center text-sm text-muted-foreground">
+                            No users registered yet.
+                        </p>
+                    )}
                     {users.map((user) => (
                         <Card key={user.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
@@ -50,6 +59,38 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                     <StatusBadge status={user.role} />
                                 </div>
                                 <p className="text-sm text-muted-foreground">Wallet {formatRupiah(user.wallet?.balance ?? 0)}</p>
+
+                                <div className="flex items-center gap-2">
+                                    <Link href={`/admin/users/${user.id}/wallet`}>
+                                        <Button size="sm" variant="outline">View Wallet</Button>
+                                    </Link>
+                                    <Select
+                                        defaultValue={user.role}
+                                        onValueChange={(role) => {
+                                            if (
+                                                role !== user.role
+                                                && window.confirm(`Change ${user.name} role to ${role}?`)
+                                            ) {
+                                                router.patch(
+                                                    `/admin/users/${user.id}/role`,
+                                                    { role },
+                                                    { preserveScroll: true },
+                                                );
+                                            }
+                                        }}
+                                    >
+                                        <SelectTrigger className="h-9 w-32 text-xs">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {roles.map((r) => (
+                                                <SelectItem key={r} value={r}>
+                                                    {r.charAt(0).toUpperCase() + r.slice(1)}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                             </CardContent>
                         </Card>
                     ))}

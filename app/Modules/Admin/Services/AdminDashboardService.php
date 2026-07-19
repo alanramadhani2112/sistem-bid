@@ -92,4 +92,22 @@ final class AdminDashboardService
                 ->get(['id', 'auction_id', 'user_id', 'bid_id', 'winning_amount', 'determined_at']),
         ];
     }
+
+    /** @return array<string, mixed> */
+    public function userWallet(User $user): array
+    {
+        $wallet = $user->wallet()
+            ->with(['transactions' => fn ($q) => $q->latest('created_at')->limit(50)])
+            ->first();
+
+        return [
+            'user' => $user->only(['id', 'name', 'email', 'role']),
+            'wallet' => $wallet
+                ? $wallet->only(['id', 'balance'])
+                : ['id' => null, 'balance' => 0],
+            'transactions' => $wallet
+                ? $wallet->transactions->map(fn ($tx) => $tx->only(['id', 'type', 'amount', 'balance_before', 'balance_after', 'reference', 'notes', 'created_at']))
+                : [],
+        ];
+    }
 }

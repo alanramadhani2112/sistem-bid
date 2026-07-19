@@ -40,7 +40,10 @@ Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth')->
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/dashboard', [AdminDashboardController::class, 'dashboard'])->name('dashboard');
     Route::get('/auctions/{auction}/monitor', [AdminDashboardController::class, 'monitor'])->name('auctions.monitor');
+    Route::post('/auctions/{auction}/close', [AdminDashboardController::class, 'closeAuction'])->name('auctions.close');
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('users.index');
+    Route::get('/users/{user}/wallet', [AdminDashboardController::class, 'userWallet'])->name('users.wallet');
+    Route::patch('/users/{user}/role', [AdminDashboardController::class, 'updateRole'])->name('users.role');
     Route::get('/winners', [AdminDashboardController::class, 'winners'])->name('winners.index');
     Route::resource('green-beans', GreenBeanController::class)->except('show');
     Route::patch('auctions/{auction}/status', [AuctionController::class, 'status'])->name('auctions.status');
