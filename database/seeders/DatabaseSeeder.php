@@ -12,6 +12,7 @@ use App\Modules\Shared\Enums\TransactionType;
 use App\Modules\Shared\Enums\UserRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,12 +27,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Jawara Admin',
             'email' => 'admin@jawara.test',
             'google_id' => 'seed-admin-google-id',
+            'password' => Hash::make('password'),
         ]);
 
         $bidder = User::factory()->create([
             'name' => 'Jawara Bidder',
             'email' => 'bidder@jawara.test',
             'google_id' => 'seed-bidder-google-id',
+            'password' => Hash::make('password'),
             'role' => UserRole::Bidder,
         ]);
 
