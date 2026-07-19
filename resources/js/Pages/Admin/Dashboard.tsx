@@ -2,13 +2,13 @@ import { Head, Link } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 
+import { EmptyState } from '@/components/app/EmptyState';
 import { MetricCard } from '@/components/app/MetricCard';
 import { PageHeader } from '@/components/app/PageHeader';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type Auction = {
@@ -27,8 +27,13 @@ type DashboardProps = {
     recentAuctions: Auction[];
 };
 
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
+const metricRoutes: Record<string, string> = {
+    auctions: '/admin/auctions',
+    bids: '/admin/auctions',
+    greenBeans: '/admin/green-beans',
+    users: '/admin/users',
+    winners: '/admin/winners',
+};
 
 export default function AdminDashboard({ stats, auctionsByStatus, recentAuctions }: DashboardProps) {
     return (
@@ -36,22 +41,30 @@ export default function AdminDashboard({ stats, auctionsByStatus, recentAuctions
             <Head title="Admin Dashboard" />
 
             <section className="space-y-5">
-                <PageHeader accent="Admin" title="Dashboard" />
+                <PageHeader
+                    accent="Admin"
+                    subtitle="Ringkasan operasional auction. Klik metrik untuk masuk ke modul terkait."
+                    title="Dashboard"
+                />
 
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                     {Object.entries(stats).map(([label, value]) => (
-                        <MetricCard key={label} label={label} value={value} />
+                        <Link className="block transition-transform hover:-translate-y-0.5" href={metricRoutes[label] ?? '/admin/dashboard'} key={label}>
+                            <MetricCard label={label} value={value} />
+                        </Link>
                     ))}
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-4">
                     {Object.entries(auctionsByStatus).map(([status, count]) => (
-                        <Card key={status}>
+                        <Link href="/admin/auctions" key={status}>
+                        <Card className="transition-colors hover:bg-accent/30">
                             <CardContent className="flex flex-col gap-2 p-5">
                                 <StatusBadge status={status} />
                                 <p className="text-2xl font-bold text-foreground">{count}</p>
                             </CardContent>
                         </Card>
+                        </Link>
                     ))}
                 </div>
 
@@ -78,6 +91,9 @@ export default function AdminDashboard({ stats, auctionsByStatus, recentAuctions
                                 <p className="mt-2 text-sm text-muted-foreground">{formatRupiah(auction.current_price)}</p>
                             </Link>
                         ))}
+                        {recentAuctions.length === 0 && (
+                            <EmptyState description="Buat auction dari menu Auctions setelah green bean tersedia." title="Belum ada auction" />
+                        )}
                     </div>
                 </SectionCard>
             </section>

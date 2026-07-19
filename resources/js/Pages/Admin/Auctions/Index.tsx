@@ -1,11 +1,15 @@
 import { Head, Link, router } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 
+import { CategoryTab } from '@/components/app/CategoryTab';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Auction = {
@@ -25,9 +29,6 @@ type Auction = {
 type AuctionsIndexProps = {
     auctions: Auction[];
 };
-
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 function ActionButtons({ auction }: { auction: Auction }) {
     function patchStatus(status: string) {
@@ -94,6 +95,22 @@ function ActionButtons({ auction }: { auction: Auction }) {
 }
 
 export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
+    const [status, setStatus] = useState('all');
+    const [query, setQuery] = useState('');
+    const filteredAuctions = useMemo(() => {
+        const q = query.toLowerCase();
+
+        return auctions.filter((auction) => {
+            const matchesStatus = status === 'all' || auction.status === status;
+            const matchesQuery = [auction.title, auction.green_bean.name, auction.green_bean.origin]
+                .join(' ')
+                .toLowerCase()
+                .includes(q);
+
+            return matchesStatus && matchesQuery;
+        });
+    }, [auctions, query, status]);
+
     return (
         <AppShell>
             <Head title="Admin Auctions" />
@@ -106,11 +123,34 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                             <Button size="sm">Tambah</Button>
                         </Link>
                     }
+                    subtitle="Kelola lifecycle auction: draft, published, live, closed."
                     title="Auctions"
                 />
 
                 <div className="space-y-3">
-                    {auctions.map((auction) => (
+                    <Input
+                        aria-label="Cari auction admin"
+                        className="min-h-11"
+                        onChange={(event) => setQuery(event.target.value)}
+                        placeholder="Cari auction, green bean, origin..."
+                        type="search"
+                        value={query}
+                    />
+                    <CategoryTab
+                        onChange={setStatus}
+                        options={[
+                            { label: 'Semua', value: 'all' },
+                            { label: 'Draft', value: 'draft' },
+                            { label: 'Published', value: 'published' },
+                            { label: 'Live', value: 'live' },
+                            { label: 'Closed', value: 'closed' },
+                        ]}
+                        value={status}
+                    />
+                </div>
+
+                <div className="space-y-3">
+                    {filteredAuctions.map((auction) => (
                         <Card key={auction.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-3">
@@ -133,8 +173,8 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                         </Card>
                     ))}
 
-                    {auctions.length === 0 && (
-                        <EmptyState description="Belum ada auction." title="Tidak ada auction" />
+                    {filteredAuctions.length === 0 && (
+                        <EmptyState description="Coba ubah filter status atau pencarian." title="Auction tidak ditemukan" />
                     )}
                 </div>
             </section>

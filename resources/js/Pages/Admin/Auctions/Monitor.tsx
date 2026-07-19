@@ -3,10 +3,13 @@ import { Head, router } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
+import { Countdown } from '@/components/app/Countdown';
+import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { useAuctionRoom } from '@/Hooks/useAuctionRoom';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type BidRow = {
@@ -39,9 +42,6 @@ type MonitorProps = {
 
 const serverToHookRow = (r: BidRow) => ({ id: r.id, amount: r.amount, bidder_name: r.user.name });
 
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
-
 export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidHistory: bh }: MonitorProps) {
     const { currentPrice, leaderboard, bidHistory } = useAuctionRoom(
         initial.id,
@@ -49,6 +49,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
         lb.map(serverToHookRow),
         bh.map(serverToHookRow),
     );
+    const latestBid = bidHistory[0];
 
     const handleClose = () => {
         if (!window.confirm('Close this auction now and determine the winner?')) return;
@@ -74,8 +75,17 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                                 <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(currentPrice)}</p>
                                 <div className="mt-2 flex items-center gap-2">
                                     <StatusBadge status={initial.status} />
-                                    <p className="text-sm text-muted-foreground">ends {initial.ends_at}</p>
+                                    {initial.status === 'live' ? (
+                                        <Countdown className="text-primary" mode="ends" target={initial.ends_at} />
+                                    ) : (
+                                        <p className="text-sm text-muted-foreground">ends {initial.ends_at}</p>
+                                    )}
                                 </div>
+                                {latestBid && (
+                                    <p aria-live="polite" className="mt-3 text-sm text-muted-foreground">
+                                        Bid terbaru: {latestBid.bidder_name} · {formatRupiah(latestBid.amount)}
+                                    </p>
+                                )}
                             </div>
                             {initial.status === 'live' && (
                                 <Button onClick={handleClose} variant="destructive">Close Now</Button>
@@ -96,7 +106,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                                     <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
                                 </div>
                             ))}
-                            {leaderboard.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                            {leaderboard.length === 0 && <EmptyState description="Leaderboard akan terisi saat bid pertama masuk." title="Belum ada bid" />}
                         </div>
                     </SectionCard>
 
@@ -110,7 +120,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                                     <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
                                 </div>
                             ))}
-                            {bidHistory.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                            {bidHistory.length === 0 && <EmptyState description="Bid realtime akan muncul di sini." title="Belum ada bid" />}
                         </div>
                     </SectionCard>
                 </div>

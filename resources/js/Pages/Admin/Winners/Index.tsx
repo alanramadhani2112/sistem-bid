@@ -3,9 +3,9 @@ import { Head, Link } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { MetricCard } from '@/components/app/MetricCard';
+import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
-import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Winner = {
@@ -25,22 +25,21 @@ type WinnersProps = {
     winners: Winner[];
 };
 
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
-
 export default function AdminWinners({ winners }: WinnersProps) {
     return (
         <AppShell>
             <Head title="Admin Winners" />
 
             <section className="space-y-5">
-                <PageHeader accent="Admin" title="Winners" />
+                <PageHeader
+                    accent="Admin"
+                    subtitle="Winner dibuat otomatis ketika auction ditutup dan ada bid valid."
+                    title="Winners"
+                />
 
                 <div className="space-y-3">
                     {winners.length === 0 && (
-                        <p className="rounded-lg border border-dashed border-border bg-muted/20 px-5 py-8 text-center text-sm text-muted-foreground">
-                            No winners yet. Winners are determined automatically when an auction ends.
-                        </p>
+                        <EmptyState description="Winner akan muncul setelah auction live ditutup dan bid tertinggi ditemukan." title="Belum ada winner" />
                     )}
                     {winners.map((winner) => (
                         <Card key={winner.id}>
@@ -64,12 +63,6 @@ export default function AdminWinners({ winners }: WinnersProps) {
                             </CardContent>
                         </Card>
                     ))}
-
-                    {winners.length === 0 && (
-                        <p className="rounded-xl border border-dashed border-border bg-muted/20 py-16 text-center text-sm text-muted-foreground">
-                            Belum ada winner.
-                        </p>
-                    )}
                 </div>
             </section>
         </AppShell>

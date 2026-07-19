@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { PageHeader } from '@/components/app/PageHeader';
 import { SectionCard } from '@/components/app/SectionCard';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type TxRow = {
@@ -23,9 +24,6 @@ type WalletProps = {
     wallet: { id: number | null; balance: number };
     transactions: TxRow[];
 };
-
-const formatRupiah = (v: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(v);
 
 const txLabel: Record<string, string> = {
     topup: 'Top-up',

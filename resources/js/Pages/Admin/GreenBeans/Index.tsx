@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBean = {
@@ -22,9 +23,6 @@ type GreenBean = {
 type GreenBeansIndexProps = {
     greenBeans: GreenBean[];
 };
-
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
     return (
