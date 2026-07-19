@@ -38,45 +38,59 @@ export function AppShell({ children }: AppShellProps) {
     const navItems = auth?.user?.role === 'admin' ? adminNavItems : bidderNavItems;
 
     return (
-        <div className="min-h-dvh bg-stone-950 text-stone-50">
-            <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-2xl focus:bg-lime-300 focus:px-4 focus:py-3 focus:font-semibold focus:text-stone-950" href="#main-content">
+        <div className="min-h-dvh bg-background text-foreground">
+            <a
+                className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-3 focus:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                href="#main-content"
+            >
                 Skip ke konten
             </a>
 
-            <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-white/10 bg-stone-950/95 backdrop-blur">
+            <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-4">
-                    <Link className="font-semibold tracking-tight text-lime-300" href="/">
+                    <Link className="font-semibold tracking-tight text-primary" href="/">
                         Jawara
                     </Link>
-                    <Badge className="border-lime-300/20 bg-lime-300/10 text-lime-100" variant="outline">
-                        Live Bid
-                    </Badge>
+                    <Badge variant="default">Live Bid</Badge>
                 </div>
             </header>
 
             <div className="mx-auto flex max-w-6xl pt-14 md:pl-60">
-                <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-white/10 bg-stone-900/60 p-4 md:block">
+                <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-border bg-muted/30 p-4 md:block">
                     <nav className="space-y-1">
                         {navItems.map((item) => (
-                            <Link className={cn(buttonVariants({ size: 'lg', variant: 'ghost' }), 'w-full justify-start text-stone-300 hover:bg-white/10 hover:text-white')} href={item.href} key={item.href}>
+                            <Link
+                                className={cn(
+                                    buttonVariants({ size: 'lg', variant: 'ghost' }),
+                                    'w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground',
+                                )}
+                                href={item.href}
+                                key={item.href}
+                            >
                                 {item.label}
                             </Link>
                         ))}
                     </nav>
                 </aside>
 
-                <main className="w-full px-4 pb-24 pt-6 md:px-8 md:pb-10" id="main-content">
+                <main className="flex-1 px-4 py-6 md:px-6 md:py-8" id="main-content">
                     {children}
                 </main>
             </div>
 
-            <nav className="fixed inset-x-0 bottom-0 z-30 grid h-16 grid-cols-5 border-t border-white/10 bg-stone-950/95 pb-safe-bottom backdrop-blur md:hidden">
+            <nav className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
                 {navItems.map((item) => (
-                    <Link className={cn(buttonVariants({ size: 'lg', variant: 'ghost' }), 'min-h-11 rounded-none text-xs text-stone-300 hover:bg-white/5 hover:text-lime-200')} href={item.href} key={item.href}>
-                        {item.label}
+                    <Link
+                        className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-muted-foreground transition-colors hover:text-foreground min-h-16 justify-center"
+                        href={item.href}
+                        key={item.href}
+                    >
+                        <span>{item.label}</span>
                     </Link>
                 ))}
             </nav>
+
+            <div className="h-16 md:hidden" />
         </div>
     );
 }

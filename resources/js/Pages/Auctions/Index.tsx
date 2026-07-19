@@ -1,5 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { Card, CardContent } from '@/components/ui/card';
+
+import { EmptyState } from '@/components/app/EmptyState';
+import { PageHeader } from '@/components/app/PageHeader';
+import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../Layouts/AppShell';
 
 type Auction = {
@@ -29,30 +34,33 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
         <AppShell>
             <Head title="Auctions" />
 
-            <section className="space-y-4">
-                <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-lime-200">Live Bid</p>
-                    <h1 className="mt-1 text-3xl font-bold text-white">Auctions</h1>
-                </div>
+            <section className="space-y-5">
+                <PageHeader accent="Live Bid" title="Auctions" />
 
                 <div className="space-y-3">
                     {auctions.map((auction) => (
-                        <Link className="block rounded-3xl border border-white/10 bg-white/[0.04] p-5" href={`/auctions/${auction.id}`} key={auction.id}>
-                            <div className="flex items-start justify-between gap-3">
-                                <div>
-                                    <h2 className="text-lg font-semibold text-white">{auction.title}</h2>
-                                    <p className="mt-1 text-sm text-stone-300">
-                                        {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
-                                    </p>
-                                </div>
-                                <span className="rounded-full bg-lime-300/10 px-3 py-1 text-xs font-semibold text-lime-200">{auction.status}</span>
-                            </div>
-                            <p className="mt-4 text-2xl font-bold text-white">{formatRupiah(auction.current_price)}</p>
-                            <p className="mt-1 text-xs text-stone-400">Ends {auction.ends_at}</p>
+                        <Link href={`/auctions/${auction.id}`} key={auction.id}>
+                            <Card className="hover:bg-accent/30 transition-colors">
+                                <CardContent className="flex flex-col gap-3 p-5">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div>
+                                            <h2 className="text-lg font-semibold text-foreground">{auction.title}</h2>
+                                            <p className="mt-1 text-sm text-muted-foreground">
+                                                {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
+                                            </p>
+                                        </div>
+                                        <StatusBadge status={auction.status} />
+                                    </div>
+                                    <p className="text-2xl font-bold text-foreground">{formatRupiah(auction.current_price)}</p>
+                                    <p className="text-xs text-muted-foreground">Ends {auction.ends_at}</p>
+                                </CardContent>
+                            </Card>
                         </Link>
                     ))}
 
-                    {auctions.length === 0 ? <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 text-sm text-stone-300">Belum ada auction aktif.</div> : null}
+                    {auctions.length === 0 && (
+                        <EmptyState description="Belum ada auction aktif." title="Tidak ada auction" />
+                    )}
                 </div>
             </section>
         </AppShell>

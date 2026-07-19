@@ -1,12 +1,13 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
+import { FormField } from '@/components/app/FormField';
+import { SectionCard } from '@/components/app/SectionCard';
+import { StatusBadge } from '@/components/app/StatusBadge';
 import { useAuctionRoom } from '../../Hooks/useAuctionRoom';
 import type { BidRow } from '../../Hooks/useAuctionRoom';
 import { AppShell } from '../../Layouts/AppShell';
@@ -46,77 +47,70 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
             <Head title={`Live Room · ${auction.title}`} />
 
             <section className="space-y-4">
-                <Link className="text-sm font-semibold text-lime-200" href={`/auctions/${auction.id}`}>
-                    Kembali
+                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href={`/auctions/${auction.id}`}>
+                    ← Kembali
                 </Link>
 
-                <Card className="border-lime-300/30 bg-lime-300/10 text-white">
-                    <CardContent className="p-6">
-                    <Badge className="bg-red-500 text-white">LIVE</Badge>
-                    <h1 className="mt-4 text-2xl font-bold text-white">{auction.title}</h1>
-                    <p className="mt-1 text-sm text-stone-300">
-                        {auction.green_bean.name} · {auction.green_bean.origin}
-                    </p>
-                    <p className="mt-5 text-4xl font-bold text-white">{formatRupiah(room.currentPrice)}</p>
-                    <p className="mt-2 text-sm text-stone-300">End: {auction.ends_at}</p>
+                <Card className="bg-primary/5">
+                    <CardContent className="flex flex-col gap-3 p-6">
+                        <StatusBadge status="live" />
+                        <h1 className="text-2xl font-bold text-foreground">{auction.title}</h1>
+                        <p className="text-sm text-muted-foreground">
+                            {auction.green_bean.name} · {auction.green_bean.origin}
+                        </p>
+                        <p className="text-4xl font-bold text-foreground">{formatRupiah(room.currentPrice)}</p>
+                        <p className="text-sm text-muted-foreground">End: {auction.ends_at}</p>
                     </CardContent>
                 </Card>
 
-                <Card className="border-white/10 bg-white/[0.04] text-white">
+                <Card>
                     <CardContent className="p-5">
-                <form onSubmit={submitBid}>
-                    <Label className="text-stone-200" htmlFor="amount">
-                        Bid berikutnya
-                    </Label>
-                    <Input
-                        className="mt-2 h-12 rounded-2xl border-white/10 bg-stone-900 text-base text-white"
-                        id="amount"
-                        inputMode="numeric"
-                        min={1}
-                        name="amount"
-                        onChange={(event) => setData('amount', Number(event.target.value))}
-                        type="number"
-                        value={data.amount}
-                    />
-                    {errors.amount ? <p className="mt-2 text-sm text-red-300">{errors.amount}</p> : null}
-                    <Button className="mt-4 min-h-11 w-full rounded-2xl bg-lime-300 font-bold text-stone-950 hover:bg-lime-200" disabled={processing} type="submit">
-                        {processing ? 'Memasang bid...' : 'Pasang Bid'}
-                    </Button>
-                </form>
+                        <form onSubmit={submitBid}>
+                            <FormField error={errors.amount} label="Bid berikutnya" name="amount">
+                                <Input
+                                    id="amount"
+                                    inputMode="numeric"
+                                    min={1}
+                                    name="amount"
+                                    onChange={(event) => setData('amount', Number(event.target.value))}
+                                    type="number"
+                                    value={data.amount}
+                                />
+                            </FormField>
+                            <Button className="mt-4 min-h-11 w-full font-bold" disabled={processing} type="submit">
+                                {processing ? 'Memasang bid...' : 'Pasang Bid'}
+                            </Button>
+                        </form>
                     </CardContent>
                 </Card>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                    <Card className="border-white/10 bg-white/[0.04] text-white">
-                        <CardHeader>
-                            <CardTitle>Leaderboard</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
+                    <SectionCard title="Leaderboard">
+                        <div className="space-y-3">
                             {room.leaderboard.map((bid) => (
-                                <div className="flex items-center justify-between rounded-2xl bg-white/5 p-3 text-sm" key={bid.id}>
-                                    <span className="text-stone-200">{bid.bidder_name}</span>
-                                    <span className="font-bold text-lime-200">{formatRupiah(bid.amount)}</span>
+                                <div className="flex items-center justify-between rounded-lg bg-muted/50 p-3 text-sm" key={bid.id}>
+                                    <span className="text-foreground">{bid.bidder_name}</span>
+                                    <span className="font-bold text-foreground">{formatRupiah(bid.amount)}</span>
                                 </div>
                             ))}
-                        </CardContent>
-                    </Card>
+                            {room.leaderboard.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                        </div>
+                    </SectionCard>
 
-                    <Card className="border-white/10 bg-white/[0.04] text-white">
-                        <CardHeader>
-                            <CardTitle>Bid History</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
+                    <SectionCard title="Bid History">
+                        <div className="space-y-3">
                             {room.bidHistory.map((bid) => (
-                                <div className="rounded-2xl bg-white/5 p-3 text-sm" key={bid.id}>
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-stone-200">{bid.bidder_name}</span>
-                                        <span className="font-bold text-white">{formatRupiah(bid.amount)}</span>
+                                <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/50 p-4" key={bid.id}>
+                                    <div>
+                                        <p className="font-semibold text-foreground">{bid.bidder_name}</p>
+                                        <p className="text-xs text-muted-foreground">{bid.placed_at}</p>
                                     </div>
-                                    <p className="mt-1 text-xs text-stone-500">{bid.placed_at}</p>
+                                    <p className="font-bold text-foreground">{formatRupiah(bid.amount)}</p>
                                 </div>
                             ))}
-                        </CardContent>
-                    </Card>
+                            {room.bidHistory.length === 0 && <p className="text-sm text-muted-foreground">Belum ada bid.</p>}
+                        </div>
+                    </SectionCard>
                 </div>
             </section>
         </AppShell>
