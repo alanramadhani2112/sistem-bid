@@ -1,5 +1,6 @@
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { Card, CardContent } from '@/components/ui/card';
+import { formatDateTime } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 type AuctionStateBannerProps = {
@@ -26,7 +27,7 @@ export function AuctionStateBanner({ status, startsAt, endsAt, className }: Auct
                         <p className="text-sm font-semibold text-foreground">{copy[status] ?? 'Status auction terbaru.'}</p>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        {startsAt && `Mulai: ${startsAt}`} {endsAt && ` · Selesai: ${endsAt}`}
+                        {startsAt && `Mulai: ${formatDateTime(startsAt)}`} {endsAt && ` · Selesai: ${formatDateTime(endsAt)}`}
                     </p>
                 </div>
             </CardContent>

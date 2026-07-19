@@ -89,14 +89,14 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
 
                 <Card>
                     <CardContent className="p-6">
-                        <div className="grid gap-5 lg:grid-cols-[1fr_320px] lg:items-center">
+                        <div className="space-y-5">
                             <div>
                                 <h2 className="text-2xl font-bold text-foreground">Cara ikut live bid</h2>
                                 <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                                     Pilih lot, pastikan saldo cukup, masuk live room, lalu bid sebelum countdown habis.
                                 </p>
                             </div>
-                            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+                            <div className="grid gap-3 sm:grid-cols-2">
                                 <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
                                     <Gavel data-icon="inline-start" />
                                     Buka Auction Board

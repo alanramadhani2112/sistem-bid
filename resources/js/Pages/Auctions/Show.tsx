@@ -9,7 +9,7 @@ import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { formatRupiah } from '@/lib/format';
+import { formatDateTime, formatRupiah } from '@/lib/format';
 import { cn } from '@/lib/utils';
 import { AppShell } from '../../Layouts/AppShell';
 
@@ -57,7 +57,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
 
                 <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={auction.status} />
 
-                <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+                <div className="space-y-4">
                     <Card className="bg-primary/5">
                         <CardContent className="space-y-4 p-6">
                             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -125,7 +125,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                         </div>
                         <div className="rounded-2xl border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><CalendarClock aria-hidden="true" className="size-4" /> Auction window</dt>
-                            <dd className="mt-1 font-medium text-foreground">{auction.starts_at} → {auction.ends_at}</dd>
+                            <dd className="mt-1 font-medium text-foreground">{formatDateTime(auction.starts_at)} → {formatDateTime(auction.ends_at)}</dd>
                         </div>
                     </dl>
                     {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}
