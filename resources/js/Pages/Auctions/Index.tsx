@@ -1,10 +1,13 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
+import { useMemo, useState } from 'react';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { AuctionCard } from '@/components/app/AuctionCard';
+import { CategoryTab } from '@/components/app/CategoryTab';
+import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
-import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type Auction = {
@@ -26,40 +29,58 @@ type AuctionsIndexProps = {
     auctions: Auction[];
 };
 
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
-
 export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
+    const [status, setStatus] = useState('all');
+    const [query, setQuery] = useState('');
+    const filteredAuctions = useMemo(() => {
+        const q = query.toLowerCase();
+
+        return auctions.filter((auction) => {
+            const matchesStatus = status === 'all' || auction.status === status;
+            const matchesQuery = [auction.title, auction.green_bean.name, auction.green_bean.origin, auction.green_bean.process]
+                .join(' ')
+                .toLowerCase()
+                .includes(q);
+
+            return matchesStatus && matchesQuery;
+        });
+    }, [auctions, query, status]);
+
     return (
         <AppShell>
             <Head title="Auctions" />
 
             <section className="space-y-5">
-                <PageHeader accent="Live Bid" title="Auctions" />
+                <PageHeader accent="Live Bid" subtitle="Cari lot, cek status, lalu masuk room saat auction live." title="Auctions" />
 
                 <div className="space-y-3">
-                    {auctions.map((auction) => (
-                        <Link href={`/auctions/${auction.id}`} key={auction.id}>
-                            <Card className="hover:bg-accent/30 transition-colors">
-                                <CardContent className="flex flex-col gap-3 p-5">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div>
-                                            <h2 className="text-lg font-semibold text-foreground">{auction.title}</h2>
-                                            <p className="mt-1 text-sm text-muted-foreground">
-                                                {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
-                                            </p>
-                                        </div>
-                                        <StatusBadge status={auction.status} />
-                                    </div>
-                                    <p className="text-2xl font-bold text-foreground">{formatRupiah(auction.current_price)}</p>
-                                    <p className="text-xs text-muted-foreground">Ends {auction.ends_at}</p>
-                                </CardContent>
-                            </Card>
-                        </Link>
+                    <Input
+                        aria-label="Cari auction"
+                        className="min-h-11"
+                        onChange={(event) => setQuery(event.target.value)}
+                        placeholder="Cari nama lot, origin, proses..."
+                        type="search"
+                        value={query}
+                    />
+                    <CategoryTab
+                        onChange={setStatus}
+                        options={[
+                            { label: 'Semua', value: 'all' },
+                            { label: 'Live', value: 'live' },
+                            { label: 'Akan datang', value: 'published' },
+                            { label: 'Selesai', value: 'closed' },
+                        ]}
+                        value={status}
+                    />
+                </div>
+
+                <div className="space-y-3">
+                    {filteredAuctions.map((auction) => (
+                        <AuctionCard auction={auction} formatPrice={formatRupiah} key={auction.id} />
                     ))}
 
-                    {auctions.length === 0 && (
-                        <EmptyState description="Belum ada auction aktif." title="Tidak ada auction" />
+                    {filteredAuctions.length === 0 && (
+                        <EmptyState description="Coba ubah filter status atau kata kunci pencarian." title="Auction tidak ditemukan" />
                     )}
                 </div>
             </section>

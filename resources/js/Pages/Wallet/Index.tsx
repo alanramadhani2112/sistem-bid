@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
-import { Badge } from '@/components/ui/badge';
+import { EmptyState } from '@/components/app/EmptyState';
 import { FormField } from '@/components/app/FormField';
 import { PageHeader } from '@/components/app/PageHeader';
+import { Badge } from '@/components/ui/badge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type WalletTransaction = {
@@ -27,9 +29,6 @@ type WalletPageProps = {
     };
 };
 
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
-
 export default function WalletIndex({ wallet }: WalletPageProps) {
     const { data, errors, post, processing, setData } = useForm({ amount: '500000' });
 
@@ -43,11 +42,13 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
             <Head title="Wallet" />
 
             <section className="space-y-5">
+                <PageHeader accent="Bidder Wallet" subtitle="Saldo dipakai untuk validasi bid. Pastikan cukup sebelum masuk room." title="Wallet" />
+
                 <Card className="bg-primary/5">
                     <CardContent className="flex flex-col gap-3 p-6">
                         <Badge className="w-fit" variant="default">Wallet</Badge>
                         <h1 className="text-4xl font-bold text-foreground">{formatRupiah(wallet.balance)}</h1>
-                        <p className="text-sm text-muted-foreground">Saldo internal untuk validasi bid. Payment gateway belum aktif.</p>
+                        <p className="text-sm text-muted-foreground">Saldo internal untuk memastikan bid kamu valid saat auction live.</p>
                     </CardContent>
                 </Card>
 
@@ -79,7 +80,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                     <CardContent>
                         <div className="space-y-3">
                             {wallet.transactions.length === 0 ? (
-                                <p className="text-sm text-muted-foreground">Belum ada transaksi.</p>
+                                <EmptyState description="Top up manual akan muncul di sini." title="Belum ada transaksi" />
                             ) : (
                                 wallet.transactions.map((transaction) => (
                                     <div className="rounded-lg bg-muted/50 p-4" key={`${transaction.reference}-${transaction.created_at}`}>

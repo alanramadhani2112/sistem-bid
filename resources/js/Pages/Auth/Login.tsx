@@ -22,14 +22,19 @@ export default function Login() {
         <AppShell>
             <Head title="Login" />
 
-            <Card className="mx-auto max-w-md">
-                <CardHeader>
-                    <CardDescription className="font-semibold uppercase tracking-[0.2em]">Login</CardDescription>
-                    <CardTitle className="text-3xl font-bold">Masuk dengan email</CardTitle>
-                    <CardDescription>Google login sedang di-hold. Pakai akun seed lokal dulu.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form className="space-y-4" onSubmit={submit}>
+                <Card className="mx-auto max-w-md">
+                    <CardHeader>
+                        <CardDescription className="font-semibold uppercase tracking-[0.2em]">Login</CardDescription>
+                        <CardTitle className="text-3xl font-bold">Masuk dengan email</CardTitle>
+                        <CardDescription>Gunakan akun demo untuk admin atau bidder.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        {(errors.email || errors.password) && (
+                            <div className="mb-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive" role="alert">
+                                {errors.email ?? errors.password}
+                            </div>
+                        )}
+                        <form className="space-y-4" onSubmit={submit}>
                         <FormField
                             autoComplete="email"
                             error={errors.email}
@@ -54,11 +59,12 @@ export default function Login() {
                             Masuk
                         </Button>
                     </form>
-                    <p className="mt-4 text-sm text-muted-foreground">
-                        Demo: <span className="font-medium text-foreground">admin@jawara.test</span> atau{' '}
-                        <span className="font-medium text-foreground">bidder@jawara.test</span> / password{' '}
-                        <span className="font-medium text-foreground">password</span>
-                    </p>
+                    <div className="mt-4 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
+                        <p className="font-medium text-foreground">Akun demo</p>
+                        <p>Admin: admin@jawara.test</p>
+                        <p>Bidder: bidder@jawara.test</p>
+                        <p>Password: password</p>
+                    </div>
                     <Link className="mt-4 block" href="/">
                         <Button className="min-h-11 w-full text-base" size="lg" variant="outline">Kembali</Button>
                     </Link>

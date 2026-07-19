@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
+import { Countdown } from '@/components/app/Countdown';
 import { FormField } from '@/components/app/FormField';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { useAuctionRoom } from '../../Hooks/useAuctionRoom';
 import type { BidRow } from '../../Hooks/useAuctionRoom';
 import { AppShell } from '../../Layouts/AppShell';
@@ -27,9 +29,6 @@ type AuctionRoomProps = {
     bidHistory: BidRow[];
     leaderboard: BidRow[];
 };
-
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AuctionRoom({ auction, bidHistory, leaderboard }: AuctionRoomProps) {
     const room = useAuctionRoom(auction.id, auction.current_price, leaderboard, bidHistory);
@@ -59,7 +58,10 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
                             {auction.green_bean.name} · {auction.green_bean.origin}
                         </p>
                         <p className="text-4xl font-bold text-foreground">{formatRupiah(room.currentPrice)}</p>
-                        <p className="text-sm text-muted-foreground">End: {auction.ends_at}</p>
+                        <Countdown className="text-primary" mode="ends" target={auction.ends_at} />
+                        <p aria-live="polite" className="sr-only">
+                            Harga saat ini {formatRupiah(room.currentPrice)}
+                        </p>
                     </CardContent>
                 </Card>
 
@@ -87,9 +89,9 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
                 <div className="grid gap-4 md:grid-cols-2">
                     <SectionCard title="Leaderboard">
                         <div className="space-y-3">
-                            {room.leaderboard.map((bid) => (
+                            {room.leaderboard.map((bid, index) => (
                                 <div className="flex items-center justify-between rounded-lg bg-muted/50 p-3 text-sm" key={bid.id}>
-                                    <span className="text-foreground">{bid.bidder_name}</span>
+                                    <span className="text-foreground">#{index + 1} {bid.bidder_name}</span>
                                     <span className="font-bold text-foreground">{formatRupiah(bid.amount)}</span>
                                 </div>
                             ))}

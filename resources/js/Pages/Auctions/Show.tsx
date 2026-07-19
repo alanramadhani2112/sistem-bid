@@ -3,10 +3,11 @@ import { Head, Link, useForm } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
+import { Countdown } from '@/components/app/Countdown';
 import { FormField } from '@/components/app/FormField';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type AuctionShowProps = {
@@ -28,9 +29,6 @@ type AuctionShowProps = {
         };
     };
 };
-
-const formatRupiah = (value: number) =>
-    new Intl.NumberFormat('id-ID', { currency: 'IDR', maximumFractionDigits: 0, style: 'currency' }).format(value);
 
 export default function AuctionShow({ auction }: AuctionShowProps) {
     const canEnterRoom = auction.status === 'live';
@@ -60,6 +58,8 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                             {auction.green_bean.name} · {auction.green_bean.origin} · {auction.green_bean.process}
                         </p>
                         <p className="text-4xl font-bold text-foreground">{formatRupiah(auction.current_price)}</p>
+                        {auction.status === 'published' && <Countdown mode="starts" target={auction.starts_at} />}
+                        {auction.status === 'live' && <Countdown className="text-primary" mode="ends" target={auction.ends_at} />}
                     </CardContent>
                 </Card>
 
@@ -74,11 +74,19 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                     </CardContent>
                 </Card>
 
-                <Link href={canEnterRoom ? `/auctions/${auction.id}/room` : '#'}>
-                    <Button className="min-h-11 w-full font-bold" disabled={!canEnterRoom} size="lg" type="button" variant={canEnterRoom ? 'default' : 'secondary'}>
-                        {canEnterRoom ? 'Masuk Live Room' : 'Live room aktif saat auction live'}
-                    </Button>
-                </Link>
+                {canEnterRoom ? (
+                    <Link href={`/auctions/${auction.id}/room`}>
+                        <Button className="min-h-11 w-full font-bold" size="lg" type="button">
+                            Masuk Live Room
+                        </Button>
+                    </Link>
+                ) : (
+                    <Card>
+                        <CardContent className="p-5 text-sm text-muted-foreground">
+                            Live room terbuka saat status auction menjadi live. Pantau countdown dan kembali saat waktunya mulai.
+                        </CardContent>
+                    </Card>
+                )}
 
                 {canEnterRoom && (
                     <Card>
