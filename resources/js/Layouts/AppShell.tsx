@@ -1,8 +1,9 @@
 import { Link, usePage } from '@inertiajs/react';
 import type { ReactNode } from 'react';
 
+import { ActiveLink } from '@/components/app/ActiveLink';
+import { DarkModeToggle } from '@/components/app/DarkModeToggle';
 import { Badge } from '@/components/ui/badge';
-import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 type AppShellProps = {
@@ -34,8 +35,9 @@ const adminNavItems = [
 ];
 
 export function AppShell({ children }: AppShellProps) {
-    const { auth } = usePage<SharedProps>().props;
-    const navItems = auth?.user?.role === 'admin' ? adminNavItems : bidderNavItems;
+    const { props, url } = usePage<SharedProps>();
+    const isAdmin = props.auth?.user?.role === 'admin';
+    const navItems = isAdmin ? adminNavItems : bidderNavItems;
 
     return (
         <div className="min-h-dvh bg-background text-foreground">
@@ -48,10 +50,13 @@ export function AppShell({ children }: AppShellProps) {
 
             <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                 <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-4">
-                    <Link className="font-semibold tracking-tight text-primary" href="/">
-                        Jawara
-                    </Link>
-                    <Badge variant="default">Live Bid</Badge>
+                    <div className="flex items-center gap-3">
+                        <Link className="font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
+                            Jawara
+                        </Link>
+                        <Badge variant={isAdmin ? 'secondary' : 'default'}>{isAdmin ? 'Admin Console' : 'Live Auction'}</Badge>
+                    </div>
+                    <DarkModeToggle />
                 </div>
             </header>
 
@@ -59,16 +64,9 @@ export function AppShell({ children }: AppShellProps) {
                 <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-border bg-muted/30 p-4 md:block">
                     <nav className="space-y-1">
                         {navItems.map((item) => (
-                            <Link
-                                className={cn(
-                                    buttonVariants({ size: 'lg', variant: 'ghost' }),
-                                    'w-full justify-start text-muted-foreground hover:bg-accent hover:text-accent-foreground',
-                                )}
-                                href={item.href}
-                                key={item.href}
-                            >
+                            <ActiveLink exact={item.href === '/'} href={item.href} key={item.href}>
                                 {item.label}
-                            </Link>
+                            </ActiveLink>
                         ))}
                     </nav>
                 </aside>
@@ -81,10 +79,24 @@ export function AppShell({ children }: AppShellProps) {
             <nav className="fixed inset-x-0 bottom-0 z-30 flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden">
                 {navItems.map((item) => (
                     <Link
-                        className="flex flex-1 flex-col items-center gap-0.5 py-2 text-[10px] font-medium text-muted-foreground transition-colors hover:text-foreground min-h-16 justify-center"
+                        aria-current={url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`)) ? 'page' : undefined}
+                        className={cn(
+                            'flex min-h-16 flex-1 flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-medium transition-colors hover:text-foreground',
+                            url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`))
+                                ? 'text-foreground'
+                                : 'text-muted-foreground',
+                        )}
                         href={item.href}
                         key={item.href}
                     >
+                        <span
+                            className={cn(
+                                'mb-1 h-1 w-6 rounded-full transition-colors',
+                                url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`))
+                                    ? 'bg-primary'
+                                    : 'bg-transparent',
+                            )}
+                        />
                         <span>{item.label}</span>
                     </Link>
                 ))}
