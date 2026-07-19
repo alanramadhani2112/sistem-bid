@@ -46,14 +46,27 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                     {greenBeans.map((greenBean) => (
                         <Card key={greenBean.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-foreground">{greenBean.name}</h2>
+                                <div className="flex items-start gap-3">
+                                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted">
+                                        {greenBean.image_path ? (
+                                            <img
+                                                alt={greenBean.name}
+                                                className="h-full w-full object-cover"
+                                                src={`/storage/${greenBean.image_path}`}
+                                            />
+                                        ) : (
+                                            <span className="text-xs text-muted-foreground">No img</span>
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-start justify-between gap-3">
+                                            <h2 className="text-lg font-semibold text-foreground">{greenBean.name}</h2>
+                                            <StatusBadge status={formatRupiah(greenBean.starting_price)} />
+                                        </div>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {greenBean.origin} · {greenBean.process} · {greenBean.weight_gram}g
                                         </p>
                                     </div>
-                                    <StatusBadge status={formatRupiah(greenBean.starting_price)} />
                                 </div>
                                 <p className="text-sm text-muted-foreground">Increment {formatRupiah(greenBean.bid_increment)}</p>
                                 <div className="flex gap-2">

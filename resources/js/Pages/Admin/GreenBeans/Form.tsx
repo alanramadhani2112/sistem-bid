@@ -1,5 +1,5 @@
 import { Head, Link, useForm } from '@inertiajs/react';
-import type { FormEvent } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,6 +45,17 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
         starting_price: greenBean?.starting_price.toString() ?? '1000000',
         weight_gram: greenBean?.weight_gram.toString() ?? '',
     });
+
+    const [preview, setPreview] = useState<string | null>(
+        greenBean?.image_path ? `/storage/${greenBean.image_path}` : null,
+    );
+
+    useEffect(() => {
+        if (!data.image) return;
+        const url = URL.createObjectURL(data.image);
+        setPreview(url);
+        return () => URL.revokeObjectURL(url);
+    }, [data.image]);
 
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -92,6 +103,11 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
                                 <Textarea id="description" name="description" onChange={(e) => setData('description', e.target.value)} rows={4} value={data.description} />
                             </FormField>
                             <FormField error={errors.image} label="Image" name="image">
+                                {preview && (
+                                    <div className="mb-2 overflow-hidden rounded-lg border border-border">
+                                        <img alt="Preview" className="h-40 w-full object-cover" src={preview} />
+                                    </div>
+                                )}
                                 <Input accept="image/*" id="image" name="image" onChange={(e) => setData('image', e.target.files?.[0] ?? null)} type="file" />
                             </FormField>
 
