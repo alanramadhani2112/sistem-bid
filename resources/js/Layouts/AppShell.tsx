@@ -53,7 +53,7 @@ export function AppShell({ children }: AppShellProps) {
             </a>
 
             <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75">
-                <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md md:max-w-6xl md:px-6')}>
+                <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
                     <div className="flex items-center gap-3">
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
                             <span className="flex size-8 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
@@ -88,7 +88,7 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
             </header>
 
-            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'max-w-md md:max-w-6xl')}>
+            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'max-w-md')}>
                 {isAdmin && (
                     <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-border bg-muted/30 p-4 md:block">
                         <nav className="space-y-1">
@@ -115,12 +115,12 @@ export function AppShell({ children }: AppShellProps) {
                     </aside>
                 )}
 
-                <main className={cn('flex-1 px-4 py-6', isAdmin ? 'md:px-6 md:py-8' : 'pb-24 md:px-6 md:py-8')} id="main-content">
+                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-24 md:px-0 md:py-6')} id="main-content">
                     {children}
                 </main>
             </div>
 
-            <nav className={cn('fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60', isAdmin ? 'md:hidden' : 'max-w-md md:hidden')}>
+            <nav className={cn('fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60', isAdmin ? 'md:hidden' : 'max-w-md')}>
                 {navItems.map((item) => {
                     const active = url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`));
                     const Icon = item.icon;
@@ -155,7 +155,7 @@ export function AppShell({ children }: AppShellProps) {
                 })}
             </nav>
 
-            <div className="h-16 md:hidden" />
+            <div className={cn('h-16', isAdmin && 'md:hidden')} />
         </div>
     );
 }

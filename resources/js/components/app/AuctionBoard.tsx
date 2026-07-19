@@ -41,7 +41,7 @@ export function AuctionBoard({ auctions, formatPrice }: AuctionBoardProps) {
                         {items.length === 0 ? (
                             <EmptyState description="Belum ada lot pada status ini." title="Kosong" />
                         ) : (
-                            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                            <div className="grid gap-3">
                                 {items.map((auction) => (
                                     <AuctionCard auction={auction} formatPrice={formatPrice} key={auction.id} />
                                 ))}
