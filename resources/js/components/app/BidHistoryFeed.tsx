@@ -23,7 +23,14 @@ export function BidHistoryFeed({ rows, formatPrice, title = 'Bid History', class
                     <EmptyState description="Bid terbaru tampil realtime di sini." title="Belum ada bid" />
                 ) : (
                     rows.map((row, index) => (
-                        <div className="rounded-xl border border-border bg-muted/40 p-3" key={`${row.id}-${index}`}>
+                        <div
+                            className={
+                                index === 0
+                                    ? 'rounded-xl border border-primary/40 bg-primary/10 p-3 motion-safe:animate-pulse'
+                                    : 'rounded-xl border border-border bg-muted/40 p-3'
+                            }
+                            key={`${row.id}-${index}`}
+                        >
                             <div className="flex items-center justify-between gap-3">
                                 <p className="font-semibold text-foreground">{row.bidder_name}</p>
                                 <p className="font-bold tabular-nums text-foreground">{formatPrice(row.amount)}</p>

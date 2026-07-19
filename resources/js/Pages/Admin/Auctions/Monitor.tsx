@@ -1,6 +1,17 @@
 import { Head, router } from '@inertiajs/react';
 
 import { Button } from '@/components/ui/button';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
@@ -8,8 +19,10 @@ import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { PageHeader } from '@/components/app/PageHeader';
+import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
+import { WinnerPreviewCard } from '@/components/app/WinnerPreviewCard';
 import { useAuctionRoom } from '@/Hooks/useAuctionRoom';
 import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
@@ -56,7 +69,6 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
     const nextBid = currentPrice + 100_000;
 
     const handleClose = () => {
-        if (!window.confirm('Close this auction now and determine the winner?')) return;
         router.post(`/admin/auctions/${initial.id}/close`, {}, { preserveScroll: true });
     };
 
@@ -69,13 +81,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                     accent="Auction Command Center"
                     subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
                     title={initial.title}
-                    action={
-                        initial.status === 'live' ? (
-                            <Button className="min-h-11" onClick={handleClose} variant="destructive">
-                                Close Now
-                            </Button>
-                        ) : null
-                    }
+                    action={<RealtimeConnectionBadge />}
                 />
 
                 <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={initial.status} />
@@ -93,6 +99,31 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                         status={initial.status}
                         target={initial.status === 'published' ? initial.starts_at : initial.ends_at}
                     />
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+                    <WinnerPreviewCard bidCount={bidHistory.length} bidderName={leader} amount={leaderboard[0]?.amount ?? null} formatPrice={formatRupiah} />
+                    {initial.status === 'live' && (
+                        <AlertDialog>
+                            <AlertDialogTrigger render={<Button className="min-h-11 w-full" variant="destructive" />}>
+                                Close Now
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Tutup auction sekarang?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        Auction akan ditutup dan winner ditentukan dari bid tertinggi saat ini. Aksi ini tidak bisa dibatalkan.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Batal</AlertDialogCancel>
+                                    <AlertDialogAction onClick={handleClose} variant="destructive">
+                                        Tutup dan tentukan winner
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    )}
                 </div>
 
                 {latestBid && (
