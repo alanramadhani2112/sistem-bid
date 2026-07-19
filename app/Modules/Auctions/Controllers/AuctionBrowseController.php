@@ -6,6 +6,7 @@ namespace App\Modules\Auctions\Controllers;
 
 use App\Models\Auction;
 use App\Modules\Auctions\Services\AuctionBrowseService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -25,8 +26,8 @@ final class AuctionBrowseController
         ]);
     }
 
-    public function room(Auction $auction, AuctionBrowseService $auctionBrowseService): Response
+    public function room(Auction $auction, AuctionBrowseService $auctionBrowseService, Request $request): Response
     {
-        return Inertia::render('Auctions/Room', $auctionBrowseService->liveRoom($auction));
+        return Inertia::render('Auctions/Room', $auctionBrowseService->liveRoom($auction, $request->user()?->id));
     }
 }

@@ -82,7 +82,7 @@ final class AuctionBrowseService
     }
 
     /** @return array<string, mixed> */
-    public function liveRoom(Auction $auction): array
+    public function liveRoom(Auction $auction, ?int $userId = null): array
     {
         $roomAuction = $this->visibleAuction($auction)->load([
             'bids' => fn ($query) => $query->with('user:id,name')->latest()->limit(20),
@@ -103,6 +103,10 @@ final class AuctionBrowseService
             ])
             ->values();
 
+        $userHighestBid = $userId === null ? null : $roomAuction->bids()
+            ->where('user_id', $userId)
+            ->max('amount');
+
         return [
             'auction' => $roomAuction,
             'bidHistory' => $roomAuction->bids->map(fn ($bid): array => [
@@ -112,6 +116,7 @@ final class AuctionBrowseService
                 'placed_at' => $bid->created_at?->toISOString(),
             ])->values(),
             'leaderboard' => $leaderboard,
+            'userHighestBid' => $userHighestBid,
         ];
     }
 

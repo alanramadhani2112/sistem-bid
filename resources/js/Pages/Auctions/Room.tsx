@@ -1,14 +1,16 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 import { useEffect } from 'react';
 
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
 import { BidActionPanel } from '@/components/app/BidActionPanel';
+import { BidderPositionBanner } from '@/components/app/BidderPositionBanner';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
+import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { formatRupiah } from '@/lib/format';
 import { useAuctionRoom } from '../../Hooks/useAuctionRoom';
@@ -29,12 +31,23 @@ type AuctionRoomProps = {
     };
     bidHistory: BidRow[];
     leaderboard: BidRow[];
+    userHighestBid: number | null;
 };
 
-export default function AuctionRoom({ auction, bidHistory, leaderboard }: AuctionRoomProps) {
+type SharedProps = {
+    auth?: {
+        user?: {
+            name?: string;
+        } | null;
+    };
+};
+
+export default function AuctionRoom({ auction, bidHistory, leaderboard, userHighestBid }: AuctionRoomProps) {
+    const { props } = usePage<SharedProps>();
     const room = useAuctionRoom(auction.id, auction.current_price, leaderboard, bidHistory);
     const nextBid = room.currentPrice + auction.green_bean.bid_increment;
     const leader = room.leaderboard[0]?.bidder_name ?? null;
+    const leaderAmount = room.leaderboard[0]?.amount ?? null;
     const { data, errors, post, processing, setData } = useForm({
         amount: nextBid,
     });
@@ -67,6 +80,9 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
                             <p className="mt-2 text-sm text-muted-foreground">
                                 {auction.green_bean.name} · {auction.green_bean.origin}
                             </p>
+                            <div className="mt-4">
+                                <RealtimeConnectionBadge />
+                            </div>
                         </div>
                         <CurrentPriceCard
                             bidCount={room.bidHistory.length}
@@ -78,6 +94,13 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard }: Auctio
                         <p aria-live="polite" className="sr-only">
                             Harga saat ini {formatRupiah(room.currentPrice)}
                         </p>
+                        <BidderPositionBanner
+                            currentUserName={props.auth?.user?.name}
+                            formatPrice={formatRupiah}
+                            leaderAmount={leaderAmount}
+                            leaderName={leader}
+                            userHighestBid={userHighestBid}
+                        />
                     </div>
 
                     <div className="space-y-4">
