@@ -3,6 +3,8 @@ import { useMemo, useState } from 'react';
 
 import { AuctionCard } from '@/components/app/AuctionCard';
 import { CategoryTab } from '@/components/app/CategoryTab';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
@@ -52,9 +54,14 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
             <Head title="Auctions" />
 
             <section className="space-y-5">
-                <PageHeader accent="Live Bid" subtitle="Cari lot, cek status, lalu masuk room saat auction live." title="Auctions" />
+                <PageHeader accent="Auction Board" subtitle="Cari lot, cek status, lalu masuk room saat auction live." title="Coffee lots" />
 
-                <div className="space-y-3">
+                <Card className="sticky top-16 z-10 border-primary/20 bg-background/95 shadow-sm backdrop-blur">
+                    <CardContent className="space-y-3 p-3">
+                        <div className="flex items-center justify-between gap-3">
+                            <Badge variant="secondary">{filteredAuctions.length} lot</Badge>
+                            <p className="text-xs font-medium text-muted-foreground">Live price first, details second.</p>
+                        </div>
                     <Input
                         aria-label="Cari auction"
                         className="min-h-11"
@@ -73,7 +80,8 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                         ]}
                         value={status}
                     />
-                </div>
+                    </CardContent>
+                </Card>
 
                 <div className="space-y-3">
                     {filteredAuctions.map((auction) => (

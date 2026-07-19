@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -32,6 +34,7 @@ export function BidConfirmationDialog({
     processing = false,
 }: BidConfirmationDialogProps) {
     const isBelowNextBid = amount < nextBid;
+    const [confirmed, setConfirmed] = useState(false);
 
     return (
         <Drawer showSwipeHandle>
@@ -61,9 +64,20 @@ export function BidConfirmationDialog({
                     <p className="text-sm text-muted-foreground">
                         Bid akan dikirim ke live auction. Validasi saldo dan increment tetap dilakukan server.
                     </p>
+                    <label className="flex items-start gap-3 rounded-2xl border bg-muted/30 p-3 text-sm">
+                        <input
+                            checked={confirmed}
+                            className="mt-1 size-4 accent-primary"
+                            onChange={(event) => setConfirmed(event.target.checked)}
+                            type="checkbox"
+                        />
+                        <span className="text-muted-foreground">
+                            Saya paham bid ini masuk ke auction live dan tidak bisa dibatalkan setelah terkirim.
+                        </span>
+                    </label>
                 </div>
                 <DrawerFooter>
-                    <Button disabled={processing || isBelowNextBid} onClick={onConfirm}>
+                    <Button disabled={processing || isBelowNextBid || !confirmed} onClick={onConfirm}>
                         {processing ? 'Mengirim bid...' : 'Confirm bid'}
                     </Button>
                     <DrawerClose render={<Button variant="outline" />}>Cancel</DrawerClose>

@@ -1,4 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
+import { Gavel } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { CategoryTab } from '@/components/app/CategoryTab';
@@ -51,17 +52,20 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
                     value={status}
                 />
 
-                <div className="space-y-3">
+                <div className="relative space-y-3 pl-5 before:absolute before:bottom-0 before:left-2 before:top-0 before:w-px before:bg-border">
                     {filteredBids.map((bid) => (
-                        <Link href={`/auctions/${bid.auction.id}`} key={bid.id}>
-                            <Card className="hover:bg-accent/30 transition-colors">
+                        <Link className="block" href={`/auctions/${bid.auction.id}`} key={bid.id}>
+                            <Card className="relative transition-colors hover:bg-accent/30">
+                                <span className="absolute -left-[1.05rem] top-5 flex size-7 items-center justify-center rounded-full border bg-background text-primary shadow-sm">
+                                    <Gavel aria-hidden="true" className="size-3.5" />
+                                </span>
                                 <CardContent className="flex flex-col gap-2 p-5">
                                     <div className="flex items-start justify-between gap-3">
                                         <h2 className="text-base font-semibold text-foreground">{bid.auction.title}</h2>
                                         <StatusBadge status={bid.auction.status} />
                                     </div>
-                                    <p className="text-xl font-bold text-foreground">{formatRupiah(bid.amount)}</p>
-                                    <p className="text-xs text-muted-foreground">{bid.created_at}</p>
+                                    <p className="text-2xl font-black tabular-nums text-foreground">{formatRupiah(bid.amount)}</p>
+                                    <p className="text-xs font-medium text-muted-foreground">{bid.created_at}</p>
                                 </CardContent>
                             </Card>
                         </Link>

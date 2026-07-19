@@ -1,4 +1,5 @@
 import { Head, useForm } from '@inertiajs/react';
+import { Gavel, WalletCards } from 'lucide-react';
 import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -42,20 +43,23 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
             <Head title="Wallet" />
 
             <section className="space-y-5">
-                <PageHeader accent="Bidder Wallet" subtitle="Saldo dipakai untuk validasi bid. Pastikan cukup sebelum masuk room." title="Wallet" />
+                <PageHeader accent="Bid Power" subtitle="Saldo ini menentukan kemampuan kamu ikut live auction." title="Bid Power" />
 
-                <Card className="bg-primary/5">
+                <Card className="overflow-hidden border-primary/30 bg-primary/5">
                     <CardContent className="flex flex-col gap-3 p-6">
-                        <Badge className="w-fit" variant="default">Wallet</Badge>
-                        <h1 className="text-4xl font-bold text-foreground">{formatRupiah(wallet.balance)}</h1>
-                        <p className="text-sm text-muted-foreground">Saldo internal untuk memastikan bid kamu valid saat auction live.</p>
+                        <Badge className="w-fit" variant="default">
+                            <WalletCards data-icon="inline-start" />
+                            Available Bid Power
+                        </Badge>
+                        <h1 className="font-mono text-5xl font-black tabular-nums text-foreground">{formatRupiah(wallet.balance)}</h1>
+                        <p className="text-sm text-muted-foreground">Masuk live room hanya saat saldo cukup untuk minimum bid berikutnya.</p>
                     </CardContent>
                 </Card>
 
                 <Card>
                     <CardContent className="p-5">
                         <form onSubmit={submit}>
-                            <FormField error={errors.amount} label="Tambah saldo manual" name="amount">
+                            <FormField error={errors.amount} label="Tambah bid power" name="amount">
                                 <Input
                                     id="amount"
                                     inputMode="numeric"
@@ -67,7 +71,8 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                                 />
                             </FormField>
                             <Button className="mt-4 min-h-11 w-full font-bold" disabled={processing} type="submit">
-                                Tambah saldo
+                                <Gavel data-icon="inline-start" />
+                                {processing ? 'Memproses...' : 'Tambah bid power'}
                             </Button>
                         </form>
                     </CardContent>
