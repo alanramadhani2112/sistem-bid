@@ -52,7 +52,12 @@ export function AppShell({ children }: AppShellProps) {
                 Skip ke konten
             </a>
 
-            <header className="fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75">
+            <header
+                className={cn(
+                    'fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75',
+                    !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-3xl md:border-x md:shadow-md',
+                )}
+            >
                 <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
                     <div className="flex items-center gap-3">
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
@@ -120,7 +125,12 @@ export function AppShell({ children }: AppShellProps) {
                 </main>
             </div>
 
-            <nav className={cn('fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60', isAdmin ? 'md:hidden' : 'max-w-md')}>
+            <nav
+                className={cn(
+                    'fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+                    isAdmin ? 'md:hidden' : 'max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-3xl md:border-x md:shadow-md',
+                )}
+            >
                 {navItems.map((item) => {
                     const active = url === item.href || (item.href !== '/' && url.startsWith(`${item.href}/`));
                     const Icon = item.icon;

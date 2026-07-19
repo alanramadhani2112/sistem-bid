@@ -42,20 +42,20 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
 
     return (
         <Card className="overflow-hidden border-primary/40 bg-primary/5">
-            <CardContent className="grid gap-4 p-0 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr]">
+            <CardContent className="grid gap-3 p-0">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
-                    className="min-h-[220px] md:min-h-full"
+                    className="min-h-[220px]"
                     imagePath={auction.green_bean.image_path}
                     overlay
                 >
-                    <div className="relative flex min-h-[220px] flex-col justify-end p-5 text-white lg:p-6">
+                    <div className="relative flex min-h-[220px] flex-col justify-end p-5 text-white">
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">Today's Featured Auction</p>
-                        <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl md:text-4xl">{auction.title}</h2>
+                        <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{auction.title}</h2>
                     </div>
                 </AuctionImage>
                 <div className="space-y-3">
-                    <div className="space-y-3 p-5 lg:p-6">
+                    <div className="space-y-3 px-5 pt-2">
                         <div className="flex flex-wrap items-center gap-2">
                             <StatusBadge status={auction.status} />
                             <span className="text-sm font-medium text-primary">{title}</span>
@@ -69,7 +69,7 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
                             Masuk live room
                         </Link>
                     </div>
-                    <div className="grid gap-3 px-5 pb-5 lg:px-6 lg:pb-6">
+                    <div className="grid gap-3 px-5 pb-5">
                         <CurrentPriceCard
                             bidCount={auction.bid_count}
                             formatPrice={formatPrice}

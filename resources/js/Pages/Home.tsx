@@ -88,15 +88,15 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                 <MarketStatusStrip activeBids={activeBids} latestBid={latestBid} liveCount={liveCount} upcomingCount={upcomingCount} />
 
                 <Card>
-                    <CardContent className="p-5 md:p-6">
-                        <div className="space-y-5 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+                    <CardContent className="p-5">
+                        <div className="space-y-5">
                             <div>
-                                <h2 className="text-xl font-bold text-foreground md:text-2xl">Cara ikut live bid</h2>
+                                <h2 className="text-xl font-bold text-foreground">Cara ikut live bid</h2>
                                 <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
                                     Pilih lot, pastikan saldo cukup, masuk live room, lalu bid sebelum countdown habis.
                                 </p>
                             </div>
-                            <div className="grid shrink-0 gap-3 sm:grid-cols-2 md:min-w-[320px]">
+                            <div className="grid gap-3 sm:grid-cols-2">
                                 <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
                                     <Gavel data-icon="inline-start" />
                                     Buka Auction Board
