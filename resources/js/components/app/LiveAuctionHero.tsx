@@ -42,20 +42,20 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
 
     return (
         <Card className="overflow-hidden border-primary/40 bg-primary/5">
-            <CardContent className="grid gap-5 p-0 lg:grid-cols-[0.9fr_1.1fr]">
+            <CardContent className="grid gap-4 p-0 md:grid-cols-[0.95fr_1.05fr] lg:grid-cols-[0.9fr_1.1fr]">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
-                    className="min-h-[260px] lg:min-h-full"
+                    className="min-h-[220px] md:min-h-full"
                     imagePath={auction.green_bean.image_path}
                     overlay
                 >
-                    <div className="relative flex min-h-[260px] flex-col justify-end p-5 text-white lg:p-6">
+                    <div className="relative flex min-h-[220px] flex-col justify-end p-5 text-white lg:p-6">
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">Today's Featured Auction</p>
-                        <h2 className="mt-2 text-3xl font-black leading-tight md:text-5xl">{auction.title}</h2>
+                        <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl md:text-4xl">{auction.title}</h2>
                     </div>
                 </AuctionImage>
-                <div className="space-y-4">
-                    <div className="space-y-4 p-5 lg:p-6">
+                <div className="space-y-3">
+                    <div className="space-y-3 p-5 lg:p-6">
                         <div className="flex flex-wrap items-center gap-2">
                             <StatusBadge status={auction.status} />
                             <span className="text-sm font-medium text-primary">{title}</span>
@@ -69,15 +69,14 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
                             Masuk live room
                         </Link>
                     </div>
-
-                <div className="grid gap-3">
-                    <CurrentPriceCard
-                        bidCount={auction.bid_count}
-                        formatPrice={formatPrice}
-                        leader={auction.leader_name}
-                        nextBid={undefined}
-                        price={auction.current_price}
-                    />
+                    <div className="grid gap-3 px-5 pb-5 lg:px-6 lg:pb-6">
+                        <CurrentPriceCard
+                            bidCount={auction.bid_count}
+                            formatPrice={formatPrice}
+                            leader={auction.leader_name}
+                            nextBid={undefined}
+                            price={auction.current_price}
+                        />
                         <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />
                     </div>
                 </div>
