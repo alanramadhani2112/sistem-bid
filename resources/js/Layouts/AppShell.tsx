@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { ActiveLink } from '@/components/app/ActiveLink';
 import { DarkModeToggle } from '@/components/app/DarkModeToggle';
 import { Badge } from '@/components/ui/badge';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 type AppShellProps = {
@@ -13,6 +14,7 @@ type AppShellProps = {
 type SharedProps = {
     auth?: {
         user?: {
+            name?: string;
             role?: string;
         } | null;
     };
@@ -37,6 +39,7 @@ const adminNavItems = [
 export function AppShell({ children }: AppShellProps) {
     const { props, url } = usePage<SharedProps>();
     const isAdmin = props.auth?.user?.role === 'admin';
+    const user = props.auth?.user;
     const navItems = isAdmin ? adminNavItems : bidderNavItems;
 
     return (
@@ -56,7 +59,19 @@ export function AppShell({ children }: AppShellProps) {
                         </Link>
                         <Badge variant={isAdmin ? 'secondary' : 'default'}>{isAdmin ? 'Admin Console' : 'Live Auction'}</Badge>
                     </div>
-                    <DarkModeToggle />
+                    <div className="flex items-center gap-2">
+                        <DarkModeToggle />
+                        {user && (
+                            <Link
+                                as="button"
+                                className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), 'min-h-9')}
+                                href="/logout"
+                                method="post"
+                            >
+                                Logout
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </header>
 
@@ -69,6 +84,19 @@ export function AppShell({ children }: AppShellProps) {
                             </ActiveLink>
                         ))}
                     </nav>
+                    {user && (
+                        <div className="absolute inset-x-4 bottom-4 space-y-2">
+                            <p className="truncate text-xs text-muted-foreground">Login sebagai {user.name ?? 'User'}</p>
+                            <Link
+                                as="button"
+                                className={cn(buttonVariants({ variant: 'outline' }), 'min-h-11 w-full')}
+                                href="/logout"
+                                method="post"
+                            >
+                                Logout
+                            </Link>
+                        </div>
+                    )}
                 </aside>
 
                 <main className="flex-1 px-4 py-6 md:px-6 md:py-8" id="main-content">
