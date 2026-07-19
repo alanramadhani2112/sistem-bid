@@ -36,7 +36,7 @@ export function BidActionPanel({
     processing = false,
 }: BidActionPanelProps) {
     return (
-        <Card className={cn('border-primary/30 bg-background shadow-sm', className)}>
+        <Card className={cn('rounded-lg border-primary/30 bg-background shadow-sm', className)}>
             <CardContent className="p-4 md:p-5">
                 <div className="space-y-3">
                     <div className="flex items-center justify-between gap-3">
@@ -50,7 +50,7 @@ export function BidActionPanel({
                                 Minimal berikutnya: {formatPrice(nextBid)}
                             </p>
                         </div>
-                        <Button disabled={disabled || processing} onClick={() => onAmountChange(nextBid)} type="button" variant="outline">
+                        <Button className="rounded-md" disabled={disabled || processing} onClick={() => onAmountChange(nextBid)} type="button" variant="outline">
                             Pakai minimum
                         </Button>
                     </div>
@@ -60,6 +60,7 @@ export function BidActionPanel({
                         min={nextBid}
                         onChange={(event) => onAmountChange(Number(event.target.value))}
                         type="number"
+                        className="rounded-md"
                         value={amount}
                     />
                     {helper && <p className="text-xs text-muted-foreground">{helper}</p>}
