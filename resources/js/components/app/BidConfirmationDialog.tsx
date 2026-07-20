@@ -43,13 +43,13 @@ export function BidConfirmationDialog({
             </DrawerTrigger>
             <DrawerContent className="mx-auto max-w-md rounded-t-xl md:bottom-auto md:left-1/2 md:right-auto md:top-1/2 md:w-[520px] md:max-w-[calc(100vw-2rem)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl md:border">
                 <DrawerHeader className="text-left">
-                    <DrawerTitle>Confirm Your Bid</DrawerTitle>
+                    <DrawerTitle className="text-xl font-black">Confirm Your Bid</DrawerTitle>
                     <DrawerDescription>{auctionTitle}</DrawerDescription>
                 </DrawerHeader>
                 <div className="space-y-4 px-4 pb-4">
                     <div className="rounded-lg border bg-primary/5 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Bid amount</p>
-                    <p className="mt-2 font-sans text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
+                        <p className="mt-2 font-sans text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
                     </div>
                     <div className="grid gap-3 text-sm sm:grid-cols-2">
                         <div className="rounded-lg border bg-card p-3">

@@ -70,17 +70,17 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
 
                 <AuctionStateBanner endsAt={auction.ends_at} status="live" />
 
-                <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="grid gap-4">
                     <div className="space-y-4">
-                <div className="rounded-xl border border-primary/40 bg-primary/5 p-4">
-                            <StatusBadge status="live" />
-                            <h1 className="mt-3 text-3xl font-black leading-tight text-foreground md:text-5xl">{auction.title}</h1>
+                        <div className="rounded-xl border border-primary/40 bg-primary/5 p-4 shadow-[0_18px_44px_rgba(136,26,29,0.14)]">
+                            <div className="flex items-center justify-between gap-3">
+                                <StatusBadge status="live" />
+                                <RealtimeConnectionBadge />
+                            </div>
+                            <h1 className="mt-4 text-3xl font-black leading-tight text-foreground">{auction.title}</h1>
                             <p className="mt-2 text-sm text-muted-foreground">
                                 {auction.green_bean.name} · {auction.green_bean.origin}
                             </p>
-                            <div className="mt-4">
-                                <RealtimeConnectionBadge />
-                            </div>
                         </div>
                         <CurrentPriceCard
                             bidCount={room.bidHistory.length}
