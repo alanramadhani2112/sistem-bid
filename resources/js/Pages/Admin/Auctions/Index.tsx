@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
-import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Auction = {
@@ -168,7 +168,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                                     <StatusBadge status={auction.status} />
                                 </div>
 
-                                <p className="text-sm text-muted-foreground">Current {formatRupiah(auction.current_price)}</p>
+                                <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">Current <PriceText className="inline-block max-w-[10rem] text-muted-foreground" value={auction.current_price} /></p>
                                 <p className="text-xs text-muted-foreground">
                                     {auction.starts_at} — {auction.ends_at}
                                 </p>

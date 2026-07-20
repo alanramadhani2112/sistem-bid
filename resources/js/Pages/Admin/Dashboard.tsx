@@ -9,6 +9,7 @@ import { ControlRoomCard } from '@/components/app/ControlRoomCard';
 import { EmptyState } from '@/components/app/EmptyState';
 import { MetricCard } from '@/components/app/MetricCard';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { formatRupiah } from '@/lib/format';
@@ -143,7 +144,7 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                                     </div>
                                     <StatusBadge status={auction.status} />
                                 </div>
-                                <p className="mt-2 text-sm text-muted-foreground">{formatRupiah(auction.current_price)}</p>
+                                <PriceText className="mt-2 text-sm text-muted-foreground" prefixLabel="Current price" value={auction.current_price} />
                             </Link>
                         ))}
                         {recentAuctions.length === 0 && (

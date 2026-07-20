@@ -10,8 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { EmptyState } from '@/components/app/EmptyState';
 import { MetricCard } from '@/components/app/MetricCard';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
-import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type UserRow = {
@@ -77,9 +77,9 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                     </div>
                                     <StatusBadge status={user.role} />
                                 </div>
-                                <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
+                                <p className="inline-flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
                                     <Wallet aria-hidden="true" className="size-4" />
-                                    Wallet {formatRupiah(user.wallet?.balance ?? 0)}
+                                    Wallet <PriceText className="inline-block max-w-[10rem] text-muted-foreground" value={user.wallet?.balance ?? 0} />
                                 </p>
 
                                 <div className="flex items-center gap-2">

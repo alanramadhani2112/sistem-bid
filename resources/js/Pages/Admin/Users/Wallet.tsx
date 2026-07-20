@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
-import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type TxRow = {
@@ -47,7 +47,7 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
                 <Card className="bg-primary/5">
                     <CardContent className="p-5">
                         <p className="text-sm text-muted-foreground">Balance</p>
-                        <p className="mt-2 text-4xl font-black text-foreground">{formatRupiah(wallet.balance)}</p>
+                        <PriceText className="mt-2 text-foreground" prefixLabel="Wallet balance" value={wallet.balance} variant="hero" />
                     </CardContent>
                 </Card>
 
@@ -63,15 +63,15 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
                             <p className="text-sm text-muted-foreground">No transactions yet.</p>
                         )}
                         {transactions.map((tx) => (
-                            <div className="flex items-start justify-between gap-3 rounded-lg border border-border p-4" key={tx.id}>
-                                <div>
+                            <div className="flex min-w-0 items-start justify-between gap-3 rounded-lg border border-border p-4" key={tx.id}>
+                                <div className="min-w-0">
                                     <p className="font-semibold text-foreground">{txLabel[tx.type] ?? tx.type}</p>
-                                    <p className="mt-1 text-xs text-muted-foreground">{tx.reference ?? tx.notes}</p>
+                                    <p className="mt-1 truncate text-xs text-muted-foreground" title={tx.reference ?? tx.notes ?? ''}>{tx.reference ?? tx.notes}</p>
                                 </div>
-                                <div className="text-right">
-                                    <p className="font-bold text-foreground">{formatRupiah(tx.amount)}</p>
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        {formatRupiah(tx.balance_before)} → {formatRupiah(tx.balance_after)}
+                                <div className="min-w-0 max-w-[12rem] shrink-0 text-right">
+                                    <PriceText className="text-foreground" prefixLabel="Transaction amount" value={tx.amount} />
+                                    <p className="mt-1 flex min-w-0 items-center justify-end gap-1 text-xs text-muted-foreground">
+                                        <PriceText className="max-w-[5rem] text-muted-foreground" value={tx.balance_before} /> → <PriceText className="max-w-[5rem] text-muted-foreground" value={tx.balance_after} />
                                     </p>
                                     <p className="text-xs text-muted-foreground">{tx.created_at}</p>
                                 </div>

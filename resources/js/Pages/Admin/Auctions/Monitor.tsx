@@ -19,6 +19,7 @@ import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -128,7 +129,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
 
                 {latestBid && (
                     <p aria-live="polite" className="rounded-xl border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
-                        Bid terbaru: <span className="font-semibold text-foreground">{latestBid.bidder_name}</span> · {formatRupiah(latestBid.amount)}
+                        Bid terbaru: <span className="font-semibold text-foreground">{latestBid.bidder_name}</span> · <PriceText className="inline-block max-w-[10rem] align-bottom text-muted-foreground" value={latestBid.amount} />
                     </p>
                 )}
 

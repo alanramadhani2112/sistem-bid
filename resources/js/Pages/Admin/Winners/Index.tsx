@@ -6,7 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
-import { formatRupiah } from '@/lib/format';
+import { PriceText } from '@/components/app/PriceText';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type Winner = {
@@ -45,9 +45,9 @@ export default function AdminWinners({ winners }: WinnersProps) {
                     {winners.map((winner) => (
                         <Card key={winner.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <h2 className="inline-flex items-center gap-2 font-semibold text-foreground">
+                                <div className="flex min-w-0 items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                        <h2 className="inline-flex max-w-full items-center gap-2 truncate font-semibold text-foreground" title={winner.auction.title}>
                                             <Trophy aria-hidden="true" className="size-4 text-primary" />
                                             {winner.auction.title}
                                         </h2>
@@ -56,7 +56,7 @@ export default function AdminWinners({ winners }: WinnersProps) {
                                             {winner.auction.green_bean.name} · {winner.auction.green_bean.origin}
                                         </p>
                                     </div>
-                                    <p className="font-bold text-foreground">{formatRupiah(winner.winning_amount)}</p>
+                                    <PriceText className="max-w-[10rem] shrink-0 text-right text-foreground" prefixLabel="Winning amount" value={winner.winning_amount} />
                                 </div>
                                 <p className="inline-flex items-center gap-2 text-sm text-muted-foreground">
                                     <User aria-hidden="true" className="size-4" />

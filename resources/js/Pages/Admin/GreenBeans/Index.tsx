@@ -1,12 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
-import { StatusBadge } from '@/components/app/StatusBadge';
-import { formatRupiah } from '@/lib/format';
+import { PriceText } from '@/components/app/PriceText';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBean = {
@@ -59,14 +59,16 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                                     <div className="flex-1">
                                         <div className="flex items-start justify-between gap-3">
                                             <h2 className="text-lg font-semibold text-foreground">{greenBean.name}</h2>
-                                            <StatusBadge status={formatRupiah(greenBean.starting_price)} />
+                                            <Badge className="max-w-[9rem]" variant="outline">
+                                                <PriceText value={greenBean.starting_price} />
+                                            </Badge>
                                         </div>
                                         <p className="mt-1 text-sm text-muted-foreground">
                                             {greenBean.origin} · {greenBean.process} · {greenBean.weight_gram}g
                                         </p>
                                     </div>
                                 </div>
-                                <p className="text-sm text-muted-foreground">Increment {formatRupiah(greenBean.bid_increment)}</p>
+                                <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">Increment <PriceText className="inline-block max-w-[9rem] text-muted-foreground" value={greenBean.bid_increment} /></p>
                                 <div className="flex gap-2">
                                     <Link className="flex-1" href={`/admin/green-beans/${greenBean.id}/edit`}>
                                         <Button className="w-full" size="sm" variant="outline">Edit</Button>
