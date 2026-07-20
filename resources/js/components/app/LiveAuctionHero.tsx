@@ -45,22 +45,22 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
             <CardContent className="grid gap-3 p-0">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
-                    className="min-h-[300px]"
+                    className="min-h-[260px]"
                     imagePath={auction.green_bean.image_path}
                     overlay
                 >
-                    <div className="relative flex min-h-[300px] flex-col justify-between p-5 text-white">
+                    <div className="relative flex min-h-[260px] flex-col justify-between p-4 text-white">
                         <div className="flex items-center justify-between gap-3">
                             <p className="rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur">Live featured</p>
                             <StatusBadge status={auction.status} />
                         </div>
                         <div>
-                            <h2 className="max-w-sm text-3xl font-black leading-tight sm:text-4xl">{auction.title}</h2>
+                            <h2 className="max-w-sm text-2xl font-black leading-tight sm:text-3xl">{auction.title}</h2>
                             <p className="mt-2 text-sm font-medium text-white/80">{auction.green_bean.name} · {auction.green_bean.origin}</p>
                         </div>
                     </div>
                 </AuctionImage>
-                <div className="-mt-8 space-y-3 rounded-t-2xl bg-card px-4 pb-4 pt-5 shadow-[0_-18px_38px_rgba(2,2,2,0.10)]">
+                <div className="-mt-6 space-y-4 rounded-t-xl bg-card px-4 pb-4 pt-5 shadow-[0_-18px_38px_rgba(2,2,2,0.10)]">
                     <div className="space-y-1">
                         <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{title}</p>
                         <p className="text-sm text-muted-foreground">
@@ -68,7 +68,7 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
                         </p>
                     </div>
                     <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11 w-full')} href={`/auctions/${auction.id}/room`}>
-                            Masuk live room
+                        Masuk live room
                     </Link>
                     <CurrentPriceCard
                         bidCount={auction.bid_count}
