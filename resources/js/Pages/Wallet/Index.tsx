@@ -9,8 +9,8 @@ import { Input } from '@/components/ui/input';
 import { EmptyState } from '@/components/app/EmptyState';
 import { FormField } from '@/components/app/FormField';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { Badge } from '@/components/ui/badge';
-import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type WalletTransaction = {
@@ -51,7 +51,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                             <WalletCards data-icon="inline-start" />
                             Available Bid Power
                         </Badge>
-                        <h1 className="font-sans text-5xl font-black tabular-nums text-foreground">{formatRupiah(wallet.balance)}</h1>
+                        <PriceText className="text-foreground" prefixLabel="Available Bid Power" value={wallet.balance} variant="hero" />
                         <p className="text-sm text-muted-foreground">Masuk live room hanya saat saldo cukup untuk minimum bid berikutnya.</p>
                     </CardContent>
                 </Card>
@@ -89,9 +89,9 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                             ) : (
                                 wallet.transactions.map((transaction) => (
                                     <div className="rounded-lg bg-muted/50 p-4" key={`${transaction.reference}-${transaction.created_at}`}>
-                                        <div className="flex items-center justify-between gap-3">
-                                            <p className="text-sm font-semibold text-foreground">{transaction.type}</p>
-                                            <p className="text-sm font-bold text-foreground">{formatRupiah(transaction.amount)}</p>
+                                        <div className="flex min-w-0 items-center justify-between gap-3">
+                                            <p className="min-w-0 truncate text-sm font-semibold text-foreground" title={transaction.type}>{transaction.type}</p>
+                                            <PriceText className="max-w-[10rem] shrink-0 text-right text-sm text-foreground" prefixLabel="Transaction amount" value={transaction.amount} />
                                         </div>
                                         <p className="mt-2 text-xs text-muted-foreground">Penambahan bid power untuk ikut live auction.</p>
                                     </div>

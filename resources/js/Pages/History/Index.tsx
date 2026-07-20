@@ -7,8 +7,8 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
-import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
 type Bid = {
@@ -60,11 +60,11 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
                                     <Gavel aria-hidden="true" className="size-3.5" />
                                 </span>
                                 <CardContent className="flex flex-col gap-2 p-5">
-                                    <div className="flex items-start justify-between gap-3">
-                                        <h2 className="text-base font-semibold text-foreground">{bid.auction.title}</h2>
+                                    <div className="flex min-w-0 items-start justify-between gap-3">
+                                        <h2 className="min-w-0 truncate text-base font-semibold text-foreground" title={bid.auction.title}>{bid.auction.title}</h2>
                                         <StatusBadge status={bid.auction.status} />
                                     </div>
-                                    <p className="text-2xl font-black tabular-nums text-foreground">{formatRupiah(bid.amount)}</p>
+                                    <PriceText className="text-foreground" prefixLabel="Bid amount" value={bid.amount} variant="metric" />
                                     <p className="text-xs font-medium text-muted-foreground">{bid.created_at}</p>
                                 </CardContent>
                             </Card>

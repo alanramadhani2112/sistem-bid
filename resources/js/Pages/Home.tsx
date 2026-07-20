@@ -48,7 +48,7 @@ type HomeProps = {
 export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
     const liveCount = auctions.filter((auction) => auction.status === 'live').length;
     const upcomingCount = auctions.filter((auction) => auction.status === 'published').length;
-    const latestBid = latestBids[0] ? formatRupiah(latestBids[0].amount) : undefined;
+    const latestBid = latestBids[0]?.amount;
     const activeBids = auctions.reduce((sum, auction) => sum + (auction.bid_count ?? 0), 0);
     const actions = [
         {

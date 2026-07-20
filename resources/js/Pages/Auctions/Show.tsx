@@ -4,6 +4,7 @@ import { CalendarClock, Coffee, Gavel, MapPin, Scale, Sprout, TrendingUp } from 
 import { AuctionHeroMedia } from '@/components/app/AuctionHeroMedia';
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { PriceText } from '@/components/app/PriceText';
 import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -62,16 +63,16 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                         <CardContent className="space-y-4 p-4">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <StatusBadge status={auction.status} />
-                                <p className="text-sm font-medium text-muted-foreground">Minimum berikutnya {formatRupiah(nextBid)}</p>
+                                <p className="flex min-w-0 items-center gap-1 text-sm font-medium text-muted-foreground">
+                                    Minimum berikutnya <PriceText className="inline-block max-w-[9rem] align-bottom text-muted-foreground" value={nextBid} />
+                                </p>
                             </div>
                             <div>
                                 <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                                     <TrendingUp aria-hidden="true" className="size-4" />
                                     Harga saat ini
                                 </p>
-                                <p className="mt-2 font-sans text-4xl font-black tracking-tight text-foreground md:text-6xl">
-                                    {formatRupiah(auction.current_price)}
-                                </p>
+                                <PriceText className="mt-2 text-foreground" prefixLabel="Harga saat ini" value={auction.current_price} variant="hero" />
                             </div>
                             {auction.status === 'published' && <LiveCountdownPanel mode="starts" status={auction.status} target={auction.starts_at} variant="compact" />}
                             {auction.status === 'live' && <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />}
@@ -115,11 +116,11 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                         </div>
                         <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Gavel aria-hidden="true" className="size-4" /> Increment</dt>
-                            <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.bid_increment)}</dd>
+                            <dd className="mt-1 min-w-0"><PriceText className="text-foreground" value={auction.green_bean.bid_increment} /></dd>
                         </div>
                         <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Coffee aria-hidden="true" className="size-4" /> Starting price</dt>
-                            <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.starting_price)}</dd>
+                            <dd className="mt-1 min-w-0"><PriceText className="text-foreground" value={auction.green_bean.starting_price} /></dd>
                         </div>
                         <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><CalendarClock aria-hidden="true" className="size-4" /> Auction window</dt>
