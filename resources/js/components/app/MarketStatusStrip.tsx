@@ -1,12 +1,13 @@
 import { Gavel, Radio, TrendingUp, Trophy } from 'lucide-react';
 
+import { PriceText } from '@/components/app/PriceText';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 type MarketStatusStripProps = {
     liveCount: number;
     upcomingCount: number;
-    latestBid?: string;
+    latestBid?: string | number;
     activeBids?: number;
 };
 
@@ -30,7 +31,11 @@ export function MarketStatusStrip({ activeBids = 0, latestBid = '-', liveCount, 
                                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-75">{item.label}</p>
                                 <Icon aria-hidden="true" className="size-4 opacity-70" />
                             </div>
-                    <p className="mt-3 break-words font-sans text-2xl font-black leading-none tabular-nums tracking-tight">{item.value}</p>
+                            {typeof item.value === 'number' && item.label === 'Latest bid' ? (
+                                <PriceText className="mt-3" prefixLabel={item.label} value={item.value} variant="metric" />
+                            ) : (
+                                <p className="mt-3 min-w-0 truncate font-sans text-2xl font-black leading-none tabular-nums tracking-tight" title={String(item.value)}>{item.value}</p>
+                            )}
                         </CardContent>
                     </Card>
                 );

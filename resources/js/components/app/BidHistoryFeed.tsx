@@ -1,6 +1,7 @@
 import { History, Radio } from 'lucide-react';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
 
 export type BidHistoryRow = {
@@ -33,12 +34,12 @@ export function BidHistoryFeed({ rows, formatPrice, title = 'Bid History', class
                             }
                             key={`${row.id}-${index}`}
                         >
-                            <div className="flex items-center justify-between gap-3">
-                                <p className="inline-flex items-center gap-2 font-semibold text-foreground">
+                            <div className="flex min-w-0 items-center justify-between gap-3">
+                                <p className="inline-flex min-w-0 items-center gap-2 truncate font-semibold text-foreground" title={row.bidder_name}>
                                     {index === 0 && <Radio aria-hidden="true" className="size-4 text-primary" />}
                                     {row.bidder_name}
                                 </p>
-                                <p className="font-bold tabular-nums text-foreground">{formatPrice(row.amount)}</p>
+                                <PriceText className="max-w-[9rem] shrink-0 text-right text-foreground" prefixLabel="Bid amount" value={row.amount} />
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">{index === 0 ? 'Bid terbaru' : row.placed_at ?? 'Realtime bid'}</p>
                         </div>

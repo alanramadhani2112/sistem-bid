@@ -1,3 +1,4 @@
+import { PriceText } from '@/components/app/PriceText';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -43,8 +44,8 @@ export function BidderPositionBanner({
                 <p className="text-sm font-semibold text-foreground">{title}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{description}</p>
                 {leaderName && leaderAmount && (
-                    <p className="mt-2 text-xs text-muted-foreground">
-                        Leader: <span className="font-semibold text-foreground">{leaderName}</span> · {formatPrice(leaderAmount)}
+                    <p className="mt-2 flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
+                        Leader: <span className="truncate font-semibold text-foreground" title={leaderName}>{leaderName}</span> · <PriceText className="inline-block max-w-[8rem] text-muted-foreground" value={leaderAmount} />
                     </p>
                 )}
             </CardContent>

@@ -1,3 +1,4 @@
+import { PriceText } from '@/components/app/PriceText';
 import { Card, CardContent } from '@/components/ui/card';
 
 type WinnerPreviewCardProps = {
@@ -15,7 +16,7 @@ export function WinnerPreviewCard({ amount, bidCount, bidderName, formatPrice }:
                 {bidderName && amount ? (
                     <div className="mt-3 space-y-2">
                         <p className="text-2xl font-black text-foreground">{bidderName}</p>
-                        <p className="text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
+                        <PriceText className="text-primary" prefixLabel="Winner amount" value={amount} variant="metric" />
                         <p className="text-sm text-muted-foreground">
                             Jika auction ditutup sekarang, bid tertinggi ini menjadi winner. Tie-break mengikuti bid paling awal.
                         </p>

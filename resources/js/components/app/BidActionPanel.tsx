@@ -1,6 +1,7 @@
 import { Gavel, WalletCards } from 'lucide-react';
 
 import { BidConfirmationDialog } from '@/components/app/BidConfirmationDialog';
+import { PriceText } from '@/components/app/PriceText';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -47,7 +48,7 @@ export function BidActionPanel({
                             </p>
                             <p className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <WalletCards aria-hidden="true" className="size-3.5" />
-                                Minimal berikutnya: {formatPrice(nextBid)}
+                                Minimal berikutnya: <PriceText className="inline-block max-w-[8rem] align-bottom text-muted-foreground" value={nextBid} />
                             </p>
                         </div>
                         <Button className="rounded-md" disabled={disabled || processing} onClick={() => onAmountChange(nextBid)} type="button" variant="outline">

@@ -3,6 +3,7 @@ import { Coffee, Gavel, MapPin, Timer, TrendingUp } from 'lucide-react';
 
 import { AuctionImage } from '@/components/app/AuctionImage';
 import { Countdown } from '@/components/app/Countdown';
+import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,7 +28,7 @@ type AuctionCardProps = {
     formatPrice: (value: number) => string;
 };
 
-export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
+export function AuctionCard({ auction }: AuctionCardProps) {
     const isLive = auction.status === 'live';
     const isPublished = auction.status === 'published';
     const isClosed = auction.status === 'closed';
@@ -64,12 +65,12 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                     </div>
                 </div>
 
-                <div className="rounded-lg border border-primary/20 bg-background/80 p-3 shadow-sm">
+                <div className="min-w-0 rounded-lg border border-primary/20 bg-background/80 p-3 shadow-sm">
                     <p className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary">
                         <TrendingUp aria-hidden="true" className="size-3.5" />
                         Harga saat ini
                     </p>
-                    <p className="mt-1 text-2xl font-black tabular-nums text-foreground">{formatPrice(auction.current_price)}</p>
+                    <PriceText className="mt-1 text-foreground" prefixLabel="Harga saat ini" value={auction.current_price} variant="metric" />
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

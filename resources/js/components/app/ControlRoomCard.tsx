@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import { Activity, Radio, Trophy, TrendingUp, Users } from 'lucide-react';
 
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -36,13 +37,13 @@ export function ControlRoomCard({ auction, formatPrice }: ControlRoomCardProps) 
                     </div>
                     <h3 className="text-xl font-bold text-foreground">{auction.title}</h3>
                     <div className="grid gap-3 text-sm sm:grid-cols-3">
-                        <div>
+                        <div className="min-w-0">
                             <p className="flex items-center gap-1 text-muted-foreground"><TrendingUp aria-hidden="true" className="size-3.5" /> Harga</p>
-                            <p className="font-bold tabular-nums text-foreground">{formatPrice(auction.current_price)}</p>
+                            <PriceText className="text-foreground" prefixLabel="Current price" value={auction.current_price} />
                         </div>
-                        <div>
+                        <div className="min-w-0">
                             <p className="flex items-center gap-1 text-muted-foreground"><Trophy aria-hidden="true" className="size-3.5" /> Leader</p>
-                            <p className="font-semibold text-foreground">{auction.leader_name ?? 'Belum ada'}</p>
+                            <p className="truncate font-semibold text-foreground" title={auction.leader_name ?? 'Belum ada'}>{auction.leader_name ?? 'Belum ada'}</p>
                         </div>
                         <div>
                             <p className="flex items-center gap-1 text-muted-foreground"><Users aria-hidden="true" className="size-3.5" /> Bid</p>

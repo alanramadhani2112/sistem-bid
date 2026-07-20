@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { PriceText } from '@/components/app/PriceText';
 import { Button } from '@/components/ui/button';
 import {
     Drawer,
@@ -49,16 +50,16 @@ export function BidConfirmationDialog({
                 <div className="space-y-4 px-4 pb-4">
                     <div className="rounded-lg border bg-primary/5 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Bid amount</p>
-                        <p className="mt-2 font-sans text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
+                        <PriceText className="mt-2 text-primary" prefixLabel="Bid amount" value={amount} variant="hero" />
                     </div>
                     <div className="grid gap-3 text-sm sm:grid-cols-2">
-                        <div className="rounded-lg border bg-card p-3">
+                        <div className="min-w-0 rounded-lg border bg-card p-3">
                             <p className="text-muted-foreground">Harga saat ini</p>
-                            <p className="font-semibold">{formatPrice(currentPrice)}</p>
+                            <PriceText value={currentPrice} />
                         </div>
-                        <div className="rounded-lg border bg-card p-3">
+                        <div className="min-w-0 rounded-lg border bg-card p-3">
                             <p className="text-muted-foreground">Minimum berikutnya</p>
-                            <p className="font-semibold">{formatPrice(nextBid)}</p>
+                            <PriceText value={nextBid} />
                         </div>
                     </div>
                     <p className="text-sm text-muted-foreground">

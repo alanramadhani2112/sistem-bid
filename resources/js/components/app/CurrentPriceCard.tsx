@@ -1,5 +1,6 @@
 import { Trophy, TrendingUp, Users, WalletCards } from 'lucide-react';
 
+import { PriceText } from '@/components/app/PriceText';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -21,17 +22,17 @@ export function CurrentPriceCard({ price, formatPrice, nextBid, leader, bidCount
                     <TrendingUp aria-hidden="true" className="size-4" />
                     {label}
                 </p>
-                <p className="mt-3 text-4xl font-black leading-none tracking-tight text-foreground md:text-5xl">{formatPrice(price)}</p>
+                <PriceText className="mt-3 text-foreground" prefixLabel={label} value={price} variant="hero" />
                 <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
-                    <div>
+                    <div className="min-w-0">
                         <p className="flex items-center gap-1 text-muted-foreground"><WalletCards aria-hidden="true" className="size-3.5" /> Next bid</p>
-                        <p className="font-semibold text-foreground">{nextBid ? formatPrice(nextBid) : 'Belum tersedia'}</p>
+                        {nextBid ? <PriceText className="text-foreground" prefixLabel="Next bid" value={nextBid} /> : <p className="truncate font-semibold text-foreground">Belum tersedia</p>}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                         <p className="flex items-center gap-1 text-muted-foreground"><Trophy aria-hidden="true" className="size-3.5" /> Leader</p>
-                        <p className="font-semibold text-foreground">{leader ?? 'Belum ada bid'}</p>
+                        <p className="truncate font-semibold text-foreground" title={leader ?? 'Belum ada bid'}>{leader ?? 'Belum ada bid'}</p>
                     </div>
-                    <div>
+                    <div className="min-w-0">
                         <p className="flex items-center gap-1 text-muted-foreground"><Users aria-hidden="true" className="size-3.5" /> Bid masuk</p>
                         <p className="font-semibold text-foreground">{bidCount ?? 0}</p>
                     </div>
