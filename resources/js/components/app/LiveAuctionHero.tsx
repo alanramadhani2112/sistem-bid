@@ -41,15 +41,15 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
     }
 
     return (
-        <Card className="overflow-hidden border-primary/40 bg-primary/5">
+        <Card className="overflow-hidden rounded-xl border-primary/40 bg-primary/5 shadow-[0_20px_60px_rgba(1,45,29,0.16)]">
             <CardContent className="grid gap-3 p-0">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
-                    className="min-h-[220px]"
+                    className="min-h-[240px]"
                     imagePath={auction.green_bean.image_path}
                     overlay
                 >
-                    <div className="relative flex min-h-[220px] flex-col justify-end p-5 text-white">
+                    <div className="relative flex min-h-[240px] flex-col justify-end p-5 text-white">
                         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">Today's Featured Auction</p>
                         <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{auction.title}</h2>
                     </div>

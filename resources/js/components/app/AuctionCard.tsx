@@ -36,12 +36,12 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
     return (
         <Card
             className={cn(
-                'transition-colors hover:bg-accent/30',
-                isLive && 'border-primary/40 bg-primary/5',
+                'overflow-hidden rounded-xl shadow-[0_16px_40px_rgba(1,45,29,0.08)] transition-colors hover:bg-accent/30',
+                isLive && 'border-primary/45 bg-primary/5 shadow-[0_18px_44px_rgba(1,45,29,0.14)]',
                 isClosed && 'opacity-75',
             )}
         >
-            <AuctionImage alt={`${auction.green_bean.name} green beans`} className="h-40 rounded-t-xl" imagePath={auction.green_bean.image_path} />
+            <AuctionImage alt={`${auction.green_bean.name} green beans`} className="aspect-[4/3]" imagePath={auction.green_bean.image_path} />
             <CardContent className="flex flex-col gap-4 p-5">
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
