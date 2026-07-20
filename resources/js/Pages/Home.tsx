@@ -6,7 +6,6 @@ import { AuctionBoard } from '@/components/app/AuctionBoard';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
 import { MarketStatusStrip } from '@/components/app/MarketStatusStrip';
-import { PageHeader } from '@/components/app/PageHeader';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatRupiah } from '@/lib/format';
@@ -76,32 +75,32 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
         <AppShell>
             <Head title="Home" />
 
-            <section className="space-y-6">
-                <PageHeader
-                    accent="Jawara Green Beans"
-                    subtitle="Auction lobby untuk green beans. Lihat live lot, cek harga, lalu masuk room saat siap bid."
-                    title="Live auction kopi hijau"
-                />
+            <section className="space-y-5">
+                <div className="space-y-1">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Jawara Green Beans</p>
+                    <h1 className="text-2xl font-black tracking-tight text-foreground">Coffee auction floor</h1>
+                    <p className="text-sm leading-6 text-muted-foreground">Pantau lot live, harga tertinggi, dan countdown sebelum masuk room.</p>
+                </div>
 
                 <LiveAuctionHero auction={liveAuction} formatPrice={formatRupiah} />
 
                 <MarketStatusStrip activeBids={activeBids} latestBid={latestBid} liveCount={liveCount} upcomingCount={upcomingCount} />
 
-                <Card>
-                    <CardContent className="p-5">
-                        <div className="space-y-5">
+                <Card className="bg-card/80">
+                    <CardContent className="p-4">
+                        <div className="space-y-4">
                             <div>
-                                <h2 className="text-xl font-bold text-foreground">Cara ikut live bid</h2>
-                                <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
+                                <h2 className="text-base font-bold text-foreground">Cara ikut live bid</h2>
+                                <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                     Pilih lot, pastikan saldo cukup, masuk live room, lalu bid sebelum countdown habis.
                                 </p>
                             </div>
-                            <div className="grid gap-3 sm:grid-cols-2">
-                                <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href="/auctions">
+                            <div className="grid gap-2 sm:grid-cols-2">
+                                <Link className={cn(buttonVariants({ size: 'default' }), 'min-h-11')} href="/auctions">
                                     <Gavel data-icon="inline-start" />
                                     Buka Auction Board
                                 </Link>
-                                <Link className={cn(buttonVariants({ size: 'lg', variant: 'outline' }), 'min-h-11')} href="/wallet">
+                                <Link className={cn(buttonVariants({ size: 'default', variant: 'outline' }), 'min-h-11')} href="/wallet">
                                     <Wallet data-icon="inline-start" />
                                     Cek Wallet
                                 </Link>

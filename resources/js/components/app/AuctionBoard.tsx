@@ -30,23 +30,27 @@ const sections = [
 ];
 
 export function AuctionBoard({ auctions, formatPrice }: AuctionBoardProps) {
+    const hasAuctions = auctions.length > 0;
+
+    if (!hasAuctions) {
+        return <EmptyState description="Lot live dan upcoming akan muncul di sini." title="Belum ada auction" />;
+    }
+
     return (
-        <div className="space-y-4">
+        <div className="space-y-5">
             {sections.map((section) => {
                 const items = auctions.filter((auction) => auction.status === section.status);
 
+                if (items.length === 0) return null;
+
                 return (
-                    <SectionCard key={section.status} title={section.title}>
-                        <p className="mb-4 text-sm text-muted-foreground">{section.description}</p>
-                        {items.length === 0 ? (
-                            <EmptyState description="Belum ada lot pada status ini." title="Kosong" />
-                        ) : (
-                            <div className="grid gap-3">
-                                {items.map((auction) => (
-                                    <AuctionCard auction={auction} formatPrice={formatPrice} key={auction.id} />
-                                ))}
-                            </div>
-                        )}
+                    <SectionCard contentClassName="space-y-3" key={section.status} title={section.title}>
+                        <p className="text-xs leading-5 text-muted-foreground">{section.description}</p>
+                        <div className="grid gap-3">
+                            {items.map((auction) => (
+                                <AuctionCard auction={auction} formatPrice={formatPrice} key={auction.id} />
+                            ))}
+                        </div>
                     </SectionCard>
                 );
             })}

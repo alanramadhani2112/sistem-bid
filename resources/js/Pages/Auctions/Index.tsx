@@ -54,32 +54,32 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
             <Head title="Auctions" />
 
             <section className="space-y-5">
-                <PageHeader accent="Auction Board" subtitle="Cari lot, cek status, lalu masuk room saat auction live." title="Coffee lots" />
+                <PageHeader accent="Auction Board" subtitle="Cari lot, cek harga, dan masuk room saat status live." title="Coffee lots" />
 
                 <Card className="sticky top-16 z-10 border-primary/20 bg-background/95 shadow-sm backdrop-blur">
                     <CardContent className="space-y-3 p-3">
                         <div className="flex items-center justify-between gap-3">
                             <Badge variant="secondary">{filteredAuctions.length} lot</Badge>
-                            <p className="text-xs font-medium text-muted-foreground">Live price first, details second.</p>
+                            <p className="text-xs font-medium text-muted-foreground">Live first</p>
                         </div>
-                    <Input
-                        aria-label="Cari auction"
-                        className="min-h-11"
-                        onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Cari nama lot, origin, proses..."
-                        type="search"
-                        value={query}
-                    />
-                    <CategoryTab
-                        onChange={setStatus}
-                        options={[
-                            { label: 'Semua', value: 'all' },
-                            { label: 'Live', value: 'live' },
-                            { label: 'Akan datang', value: 'published' },
-                            { label: 'Selesai', value: 'closed' },
-                        ]}
-                        value={status}
-                    />
+                        <Input
+                            aria-label="Cari auction"
+                            className="min-h-11"
+                            onChange={(event) => setQuery(event.target.value)}
+                            placeholder="Cari nama lot, origin, proses..."
+                            type="search"
+                            value={query}
+                        />
+                        <CategoryTab
+                            onChange={setStatus}
+                            options={[
+                                { label: 'Semua', value: 'all' },
+                                { label: 'Live', value: 'live' },
+                                { label: 'Akan datang', value: 'published' },
+                                { label: 'Selesai', value: 'closed' },
+                            ]}
+                            value={status}
+                        />
                     </CardContent>
                 </Card>
 
