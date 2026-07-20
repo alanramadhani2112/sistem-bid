@@ -1,10 +1,11 @@
 import { Head } from '@inertiajs/react';
 import { Coffee, History, ShieldCheck, Wallet } from 'lucide-react';
 
+import { ActionTile } from '@/components/app/ActionTile';
+import { PageHeader } from '@/components/app/PageHeader';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
-import { PageHeader } from '@/components/app/PageHeader';
 import { AppShell } from '../../Layouts/AppShell';
 
 type ProfileShowProps = {
@@ -34,37 +35,30 @@ export default function ProfileShow({ user }: ProfileShowProps) {
                 <Card className="overflow-hidden">
                     <CardContent className="space-y-5 p-5">
                         <div className="flex items-center gap-4">
-                        {user?.avatar ? (
-                            <img alt="Avatar pengguna" className="size-16 rounded-full object-cover" src={user.avatar} />
-                        ) : (
-                            <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
-                                {initials ?? 'JW'}
+                            {user?.avatar ? (
+                                <img alt="Avatar pengguna" className="size-16 rounded-full object-cover" src={user.avatar} />
+                            ) : (
+                                <div className="flex size-16 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">
+                                    {initials ?? 'JW'}
+                                </div>
+                            )}
+                            <div className="min-w-0">
+                                <p className="text-lg font-semibold text-foreground">{user?.name}</p>
+                                <p className="truncate text-sm text-muted-foreground">{user?.email}</p>
+                                <Badge className="mt-2 w-fit" variant="secondary">
+                                    {user?.role}
+                                </Badge>
                             </div>
-                        )}
-                        <div className="min-w-0">
-                            <p className="text-lg font-semibold text-foreground">{user?.name}</p>
-                            <p className="truncate text-sm text-muted-foreground">{user?.email}</p>
-                            <Badge className="mt-2 w-fit" variant="secondary">{user?.role}</Badge>
-                        </div>
                         </div>
 
                         <div className="grid gap-3 text-sm">
-                            <div className="flex items-center gap-3 rounded-2xl border bg-muted/30 p-3">
+                            <div className="flex items-center gap-3 rounded-lg border bg-muted/30 p-3">
                                 <ShieldCheck aria-hidden="true" className="size-4 text-primary" />
                                 <span className="text-muted-foreground">Akun dipakai untuk akses live bidding dan validasi wallet.</span>
                             </div>
-                            <div className="grid grid-cols-3 gap-2 text-center">
-                                {[
-                                    { icon: Coffee, label: 'Lots' },
-                                    { icon: Wallet, label: 'Wallet' },
-                                    { icon: History, label: 'Activity' },
-                                ].map((item) => (
-                                    <div className="rounded-2xl border bg-card p-3" key={item.label}>
-                                        <item.icon aria-hidden="true" className="mx-auto size-4 text-primary" />
-                                        <p className="mt-1 text-xs font-semibold text-muted-foreground">{item.label}</p>
-                                    </div>
-                                ))}
-                            </div>
+                            <ActionTile description="Cari lot live dan upcoming." href="/auctions" icon={Coffee} title="Auction lots" />
+                            <ActionTile description="Cek bid power sebelum masuk room." href="/wallet" icon={Wallet} title="Wallet" />
+                            <ActionTile description="Lihat aktivitas bid akun ini." href="/history" icon={History} title="Activity" />
                         </div>
                     </CardContent>
                 </Card>
