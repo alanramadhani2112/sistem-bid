@@ -75,30 +75,35 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
         <AppShell>
             <Head title="Home" />
 
-            <section className="space-y-5">
-                <div className="space-y-1">
+            <section className="space-y-4">
+                <div className="rounded-xl border bg-card p-4 shadow-sm">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Jawara Green Beans</p>
-                    <h1 className="text-2xl font-black tracking-tight text-foreground">Coffee auction floor</h1>
-                    <p className="text-sm leading-6 text-muted-foreground">Pantau lot live, harga tertinggi, dan countdown sebelum masuk room.</p>
+                    <div className="mt-2 flex items-end justify-between gap-3">
+                        <div>
+                            <h1 className="text-2xl font-black tracking-tight text-foreground">Auction Feed</h1>
+                            <p className="mt-1 text-sm leading-6 text-muted-foreground">Live lot, harga tertinggi, countdown, dan aktivitas bid dalam satu layar.</p>
+                        </div>
+                        <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">LIVE</span>
+                    </div>
                 </div>
 
                 <LiveAuctionHero auction={liveAuction} formatPrice={formatRupiah} />
 
                 <MarketStatusStrip activeBids={activeBids} latestBid={latestBid} liveCount={liveCount} upcomingCount={upcomingCount} />
 
-                <Card className="bg-card/80">
+                <Card className="border-primary/20 bg-secondary/35">
                     <CardContent className="p-4">
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                             <div>
-                                <h2 className="text-base font-bold text-foreground">Cara ikut live bid</h2>
+                                <h2 className="text-base font-black text-foreground">Cara ikut live bid</h2>
                                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
                                     Pilih lot, pastikan saldo cukup, masuk live room, lalu bid sebelum countdown habis.
                                 </p>
                             </div>
-                            <div className="grid gap-2 sm:grid-cols-2">
+                            <div className="grid gap-2">
                                 <Link className={cn(buttonVariants({ size: 'default' }), 'min-h-11')} href="/auctions">
                                     <Gavel data-icon="inline-start" />
-                                    Buka Auction Board
+                                    Buka auction board
                                 </Link>
                                 <Link className={cn(buttonVariants({ size: 'default', variant: 'outline' }), 'min-h-11')} href="/wallet">
                                     <Wallet data-icon="inline-start" />

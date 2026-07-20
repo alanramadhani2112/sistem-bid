@@ -41,44 +41,43 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
     }
 
     return (
-        <Card className="overflow-hidden rounded-xl border-primary/40 bg-primary/5 shadow-[0_20px_60px_rgba(1,45,29,0.16)]">
+        <Card className="overflow-hidden rounded-xl border-primary/40 bg-primary/5 shadow-[0_22px_58px_rgba(136,26,29,0.18)]">
             <CardContent className="grid gap-3 p-0">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
-                    className="min-h-[240px]"
+                    className="min-h-[300px]"
                     imagePath={auction.green_bean.image_path}
                     overlay
                 >
-                    <div className="relative flex min-h-[240px] flex-col justify-end p-5 text-white">
-                        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/75">Today's Featured Auction</p>
-                        <h2 className="mt-2 text-2xl font-black leading-tight sm:text-3xl">{auction.title}</h2>
-                    </div>
-                </AuctionImage>
-                <div className="space-y-3">
-                    <div className="space-y-3 px-5 pt-2">
-                        <div className="flex flex-wrap items-center gap-2">
+                    <div className="relative flex min-h-[300px] flex-col justify-between p-5 text-white">
+                        <div className="flex items-center justify-between gap-3">
+                            <p className="rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur">Live featured</p>
                             <StatusBadge status={auction.status} />
-                            <span className="text-sm font-medium text-primary">{title}</span>
                         </div>
                         <div>
-                            <p className="mt-2 text-sm text-muted-foreground">
-                                {auction.green_bean.name} · {auction.green_bean.origin} {auction.green_bean.process ? `· ${auction.green_bean.process}` : ''}
-                            </p>
+                            <h2 className="max-w-sm text-3xl font-black leading-tight sm:text-4xl">{auction.title}</h2>
+                            <p className="mt-2 text-sm font-medium text-white/80">{auction.green_bean.name} · {auction.green_bean.origin}</p>
                         </div>
-                        <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11')} href={`/auctions/${auction.id}/room`}>
+                    </div>
+                </AuctionImage>
+                <div className="-mt-8 space-y-3 rounded-t-2xl bg-card px-4 pb-4 pt-5 shadow-[0_-18px_38px_rgba(2,2,2,0.10)]">
+                    <div className="space-y-1">
+                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-primary">{title}</p>
+                        <p className="text-sm text-muted-foreground">
+                            {auction.green_bean.process ? `${auction.green_bean.process} process` : 'Green beans lot'} · harga bergerak realtime.
+                        </p>
+                    </div>
+                    <Link className={cn(buttonVariants({ size: 'lg' }), 'min-h-11 w-full')} href={`/auctions/${auction.id}/room`}>
                             Masuk live room
-                        </Link>
-                    </div>
-                    <div className="grid gap-3 px-5 pb-5">
-                        <CurrentPriceCard
-                            bidCount={auction.bid_count}
-                            formatPrice={formatPrice}
-                            leader={auction.leader_name}
-                            nextBid={undefined}
-                            price={auction.current_price}
-                        />
-                        <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />
-                    </div>
+                    </Link>
+                    <CurrentPriceCard
+                        bidCount={auction.bid_count}
+                        formatPrice={formatPrice}
+                        leader={auction.leader_name}
+                        nextBid={undefined}
+                        price={auction.current_price}
+                    />
+                    <LiveCountdownPanel mode="ends" status={auction.status} target={auction.ends_at} variant="compact" />
                 </div>
             </CardContent>
         </Card>

@@ -36,17 +36,22 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
     return (
         <Card
             className={cn(
-                'overflow-hidden rounded-xl shadow-[0_16px_40px_rgba(1,45,29,0.08)] transition-colors hover:bg-accent/30',
-                isLive && 'border-primary/45 bg-primary/5 shadow-[0_18px_44px_rgba(1,45,29,0.14)]',
+                'overflow-hidden rounded-xl border-border bg-card shadow-[0_18px_48px_rgba(2,2,2,0.08)] transition-colors hover:border-primary/30 hover:bg-accent/25',
+                isLive && 'border-primary/55 bg-primary/5 shadow-[0_20px_52px_rgba(136,26,29,0.16)]',
                 isClosed && 'opacity-75',
             )}
         >
-            <AuctionImage alt={`${auction.green_bean.name} green beans`} className="aspect-[4/3]" imagePath={auction.green_bean.image_path} />
-            <CardContent className="flex flex-col gap-4 p-5">
+            <div className="relative">
+                <AuctionImage alt={`${auction.green_bean.name} green beans`} className="aspect-[1.55]" imagePath={auction.green_bean.image_path} />
+                <div className="absolute left-3 top-3">
+                    <StatusBadge className="shadow-sm" status={auction.status} />
+                </div>
+            </div>
+            <CardContent className="flex flex-col gap-3 p-4">
                 <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                        <h2 className="line-clamp-2 text-lg font-semibold text-foreground">{auction.title}</h2>
-                        <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                        <h2 className="line-clamp-2 text-xl font-black leading-tight text-foreground">{auction.title}</h2>
+                        <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] text-muted-foreground">
                             <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1">
                                 <Coffee aria-hidden="true" className="size-3.5" />
                                 {auction.green_bean.name}
@@ -57,15 +62,14 @@ export function AuctionCard({ auction, formatPrice }: AuctionCardProps) {
                             </span>
                         </div>
                     </div>
-                    <StatusBadge className="shrink-0" status={auction.status} />
                 </div>
 
-                        <div className="rounded-lg border border-border bg-background/70 p-3 shadow-sm">
-                    <p className="inline-flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                <div className="rounded-lg border border-primary/20 bg-background/80 p-3 shadow-sm">
+                    <p className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-primary">
                         <TrendingUp aria-hidden="true" className="size-3.5" />
                         Harga saat ini
                     </p>
-                    <p className="text-2xl font-bold text-foreground">{formatPrice(auction.current_price)}</p>
+                    <p className="mt-1 text-2xl font-black tabular-nums text-foreground">{formatPrice(auction.current_price)}</p>
                 </div>
 
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
