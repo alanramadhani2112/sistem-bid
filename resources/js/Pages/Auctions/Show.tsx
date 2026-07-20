@@ -55,11 +55,11 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                     title={auction.title}
                 />
 
-                <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={auction.status} />
+                <div className="-mt-12 space-y-4 rounded-t-2xl bg-background px-1 pt-5 shadow-[0_-20px_40px_rgba(2,2,2,0.10)]">
+                    <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={auction.status} />
 
-                <div className="space-y-4">
-                    <Card className="bg-primary/5">
-                        <CardContent className="space-y-4 p-6">
+                    <Card className="border-primary/25 bg-primary/5">
+                        <CardContent className="space-y-4 p-4">
                             <div className="flex flex-wrap items-center justify-between gap-3">
                                 <StatusBadge status={auction.status} />
                                 <p className="text-sm font-medium text-muted-foreground">Minimum berikutnya {formatRupiah(nextBid)}</p>
@@ -99,37 +99,36 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                             </Card>
                         )}
                     </div>
-                </div>
-
-                <SectionCard title="Lot specifications">
-                    <dl className="grid gap-3 text-sm sm:grid-cols-2">
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                    <SectionCard title="Lot specifications">
+                        <dl className="grid gap-3 text-sm sm:grid-cols-2">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><MapPin aria-hidden="true" className="size-4" /> Origin</dt>
                             <dd className="mt-1 font-medium text-foreground">{auction.green_bean.origin}</dd>
                         </div>
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Sprout aria-hidden="true" className="size-4" /> Process</dt>
                             <dd className="mt-1 font-medium text-foreground">{auction.green_bean.process}</dd>
                         </div>
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Scale aria-hidden="true" className="size-4" /> Weight</dt>
                             <dd className="mt-1 font-medium text-foreground">{auction.green_bean.weight_gram}g</dd>
                         </div>
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Gavel aria-hidden="true" className="size-4" /> Increment</dt>
                             <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.bid_increment)}</dd>
                         </div>
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><Coffee aria-hidden="true" className="size-4" /> Starting price</dt>
                             <dd className="mt-1 font-medium text-foreground">{formatRupiah(auction.green_bean.starting_price)}</dd>
                         </div>
-                                    <div className="rounded-lg border border-border bg-card p-3">
+                        <div className="rounded-lg border border-border bg-card p-3">
                             <dt className="flex items-center gap-2 text-muted-foreground"><CalendarClock aria-hidden="true" className="size-4" /> Auction window</dt>
                             <dd className="mt-1 font-medium text-foreground">{formatDateTime(auction.starts_at)} → {formatDateTime(auction.ends_at)}</dd>
                         </div>
-                    </dl>
-                    {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}
-                </SectionCard>
+                        </dl>
+                        {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}
+                    </SectionCard>
+                </div>
             </section>
         </AppShell>
     );
