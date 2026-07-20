@@ -30,7 +30,7 @@ export function MarketStatusStrip({ activeBids = 0, latestBid = '-', liveCount, 
                                 <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-75">{item.label}</p>
                                 <Icon aria-hidden="true" className="size-4 opacity-70" />
                             </div>
-                            <p className="mt-3 break-words font-mono text-2xl font-black leading-none tabular-nums tracking-tight">{item.value}</p>
+                    <p className="mt-3 break-words font-sans text-2xl font-black leading-none tabular-nums tracking-tight">{item.value}</p>
                         </CardContent>
                     </Card>
                 );

@@ -99,7 +99,7 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
                         <p
                             aria-live="polite"
-                            className={cn('mt-2 font-mono font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-5xl' : 'text-2xl')}
+                className={cn('mt-2 font-sans font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-5xl' : 'text-2xl')}
                         >
                             {value}
                         </p>

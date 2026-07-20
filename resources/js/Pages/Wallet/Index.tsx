@@ -51,7 +51,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                             <WalletCards data-icon="inline-start" />
                             Available Bid Power
                         </Badge>
-                        <h1 className="font-mono text-5xl font-black tabular-nums text-foreground">{formatRupiah(wallet.balance)}</h1>
+                        <h1 className="font-sans text-5xl font-black tabular-nums text-foreground">{formatRupiah(wallet.balance)}</h1>
                         <p className="text-sm text-muted-foreground">Masuk live room hanya saat saldo cukup untuk minimum bid berikutnya.</p>
                     </CardContent>
                 </Card>

@@ -69,7 +69,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                                     <TrendingUp aria-hidden="true" className="size-4" />
                                     Harga saat ini
                                 </p>
-                                <p className="mt-2 font-mono text-4xl font-black tracking-tight text-foreground md:text-6xl">
+                                <p className="mt-2 font-sans text-4xl font-black tracking-tight text-foreground md:text-6xl">
                                     {formatRupiah(auction.current_price)}
                                 </p>
                             </div>

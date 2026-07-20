@@ -49,7 +49,7 @@ export function BidConfirmationDialog({
                 <div className="space-y-4 px-4 pb-4">
                     <div className="rounded-lg border bg-primary/5 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Bid amount</p>
-                        <p className="mt-2 font-mono text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
+                    <p className="mt-2 font-sans text-3xl font-black tabular-nums text-primary">{formatPrice(amount)}</p>
                     </div>
                     <div className="grid gap-3 text-sm sm:grid-cols-2">
                         <div className="rounded-lg border bg-card p-3">
