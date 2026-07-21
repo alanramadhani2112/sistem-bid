@@ -61,6 +61,8 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
 
             <FormPageShell
                 backHref="/admin/auctions"
+                cardDescription="Isi data auction dengan jadwal dan status yang benar sebelum ditampilkan ke bidder."
+                cardTitle="Data auction"
                 subtitle="Pilih bean, jadwal, dan status dengan hati-hati karena status mengatur akses bidder."
                 title={isEdit ? 'Edit Auction' : 'Tambah Auction'}
             >

@@ -69,6 +69,8 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
 
             <FormPageShell
                 backHref="/admin/green-beans"
+                cardDescription="Isi detail produk, harga awal, increment, dan foto yang akan dilihat bidder."
+                cardTitle="Data green bean"
                 subtitle="Data ini muncul ke bidder, jadi isi origin, proses, harga, dan increment dengan jelas."
                 title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}
             >

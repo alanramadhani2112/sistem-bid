@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 type SectionCardProps = {
@@ -9,16 +9,20 @@ type SectionCardProps = {
     children: ReactNode;
     className?: string;
     contentClassName?: string;
+    description?: ReactNode;
 };
 
-export function SectionCard({ title, action, children, className, contentClassName }: SectionCardProps) {
+export function SectionCard({ title, action, children, className, contentClassName, description }: SectionCardProps) {
     return (
         <Card className={cn('gap-0 overflow-hidden border-border/80 bg-card/95 shadow-sm', className)}>
-            {(title || action) && (
+            {(title || description || action) && (
                 <CardHeader className="border-b border-border/70 px-4 py-3.5 sm:px-5">
-                    <div className="flex items-center justify-between gap-3">
-                        {title && <CardTitle>{title}</CardTitle>}
-                        {action}
+                    <div className="grid grid-cols-[1fr_auto] items-start gap-3">
+                        <div className="min-w-0 space-y-1">
+                            {title && <CardTitle>{title}</CardTitle>}
+                            {description && <CardDescription>{description}</CardDescription>}
+                        </div>
+                        {action && <CardAction>{action}</CardAction>}
                     </div>
                 </CardHeader>
             )}
