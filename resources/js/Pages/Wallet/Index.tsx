@@ -1,5 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { Gavel, WalletCards } from 'lucide-react';
+import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -11,6 +12,7 @@ import { FormField } from '@/components/app/FormField';
 import { PageHeader } from '@/components/app/PageHeader';
 import { PriceText } from '@/components/app/PriceText';
 import { Badge } from '@/components/ui/badge';
+import { useWalletFeed } from '../../Hooks/useWalletFeed';
 import { AppShell } from '../../Layouts/AppShell';
 
 type WalletTransaction = {
@@ -30,8 +32,29 @@ type WalletPageProps = {
     };
 };
 
+type SharedProps = {
+    auth?: {
+        user?: {
+            id?: number;
+        } | null;
+    };
+};
+
 export default function WalletIndex({ wallet }: WalletPageProps) {
+    const { props } = usePage<SharedProps>();
+    const [balance, setBalance] = useState(wallet.balance);
+    const [transactions, setTransactions] = useState(wallet.transactions);
     const { data, errors, post, processing, setData } = useForm({ amount: '500000' });
+    const handleWalletUpdate = useCallback((payload: { wallet: { balance: number }; transaction: WalletTransaction }) => {
+        setBalance(payload.wallet.balance);
+        setTransactions((current) => {
+            const transactionKey = `${payload.transaction.reference}-${payload.transaction.created_at}`;
+
+            return [payload.transaction, ...current.filter((transaction) => `${transaction.reference}-${transaction.created_at}` !== transactionKey)].slice(0, 10);
+        });
+    }, []);
+
+    useWalletFeed(props.auth?.user?.id, handleWalletUpdate);
 
     const submit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -51,7 +74,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                             <WalletCards data-icon="inline-start" />
                             Available Bid Power
                         </Badge>
-                        <PriceText className="text-foreground" prefixLabel="Available Bid Power" value={wallet.balance} variant="hero" />
+                        <PriceText className="text-foreground" prefixLabel="Available Bid Power" value={balance} variant="hero" />
                         <p className="text-sm text-muted-foreground">Masuk live room hanya saat saldo cukup untuk minimum bid berikutnya.</p>
                     </CardContent>
                 </Card>
@@ -84,10 +107,10 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-3">
-                            {wallet.transactions.length === 0 ? (
+                            {transactions.length === 0 ? (
                                 <EmptyState description="Penambahan bid power akan muncul di sini." title="Belum ada transaksi" />
                             ) : (
-                                wallet.transactions.map((transaction) => (
+                                transactions.map((transaction) => (
                                     <div className="rounded-xl border border-border/70 bg-muted/35 p-4" key={`${transaction.reference}-${transaction.created_at}`}>
                                         <div className="flex min-w-0 items-center justify-between gap-3">
                                             <p className="min-w-0 truncate text-sm font-semibold text-foreground" title={transaction.type}>{transaction.type}</p>

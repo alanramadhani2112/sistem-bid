@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use App\Modules\Shared\Enums\TransactionType;
+use App\Modules\Wallet\Events\WalletUpdated;
 use Illuminate\Support\Facades\DB;
 
 final class WalletService
@@ -22,7 +23,7 @@ final class WalletService
 
     public function topUp(User $user, int $amount): WalletTransaction
     {
-        return DB::transaction(function () use ($amount, $user): WalletTransaction {
+        $transaction = DB::transaction(function () use ($amount, $user): WalletTransaction {
             $wallet = Wallet::query()->where('user_id', $user->id)->lockForUpdate()->first();
             $wallet ??= Wallet::query()->create(['user_id' => $user->id, 'balance' => 0]);
 
@@ -41,5 +42,9 @@ final class WalletService
                 'notes' => 'Manual core top-up tanpa payment gateway.',
             ]);
         });
+
+        WalletUpdated::dispatch($transaction);
+
+        return $transaction;
     }
 }
