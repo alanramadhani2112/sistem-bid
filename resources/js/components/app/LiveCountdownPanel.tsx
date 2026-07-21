@@ -81,7 +81,7 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
     return (
         <Card className={cn('border', toneClass(timeLeft, status), className)}>
             <CardContent className={cn('p-4', variant === 'hero' && 'md:p-5')}>
-                <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_1fr] md:items-center')}>
+                <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_minmax(0,1fr)] md:items-center')}>
                     {variant === 'hero' && (
                         <div
                             aria-hidden="true"
@@ -95,11 +95,11 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
                             </div>
                         </div>
                     )}
-                    <div>
+                    <div className="min-w-0">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
                         <p
                             aria-live="polite"
-                className={cn('mt-2 font-sans font-black tabular-nums leading-none', variant === 'hero' ? 'text-4xl md:text-5xl' : 'text-2xl')}
+                            className={cn('mt-2 truncate font-sans font-black tabular-nums leading-none', variant === 'hero' ? 'text-[clamp(2.25rem,7vw,3.25rem)]' : 'text-2xl')}
                         >
                             {value}
                         </p>
