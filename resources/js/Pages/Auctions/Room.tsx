@@ -66,7 +66,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
         <AppShell>
             <Head title={`Live Room · ${auction.title}`} />
 
-            <section className="space-y-4 pb-28 lg:pb-0">
+            <section className="space-y-4">
                 <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href={`/auctions/${auction.id}`}>
                     ← Kembali
                 </Link>
@@ -75,12 +75,12 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
 
                 <div className="grid gap-4">
                     <div className="space-y-4">
-                        <div className="rounded-xl border border-primary/40 bg-primary/5 p-4 shadow-[0_18px_44px_rgba(136,26,29,0.14)]">
+                        <div className="rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm">
                             <div className="flex items-center justify-between gap-3">
                                 <StatusBadge status={room.auctionStatus} />
                                 <RealtimeConnectionBadge />
                             </div>
-                            <h1 className="mt-4 text-3xl font-black leading-tight text-foreground">{auction.title}</h1>
+                            <h1 className="mt-4 text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">{auction.title}</h1>
                             <p className="mt-2 text-sm text-muted-foreground">
                                 {auction.green_bean.name} · {auction.green_bean.origin}
                             </p>
@@ -109,7 +109,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         <BidActionPanel
                             amount={data.amount}
                             auctionTitle={auction.title}
-                            className="sticky bottom-20 z-10 lg:static"
+                            className="sticky bottom-[calc(5rem+env(safe-area-inset-bottom))] z-10 lg:static"
                             currentPrice={room.currentPrice}
                             disabled={!canBid}
                             error={errors.amount}

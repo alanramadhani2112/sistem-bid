@@ -56,7 +56,7 @@ export function AppShell({ children }: AppShellProps) {
                 className={cn(
                     'fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/90 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75',
                     isAdmin && 'md:left-60',
-                    !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-xl md:border-x md:shadow-md',
+                    !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-2xl md:border-x md:shadow-md',
                 )}
             >
                 <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
@@ -94,7 +94,7 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
             </header>
 
-            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'max-w-md')}>
+            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'w-full max-w-md')}>
                 {isAdmin && (
                     <aside className="fixed bottom-0 left-0 top-0 hidden w-60 border-r border-border bg-card/90 p-4 shadow-sm backdrop-blur md:block">
                         <Link className="mb-6 flex h-10 items-center gap-2 font-semibold tracking-tight text-primary" href="/admin/dashboard">
@@ -128,7 +128,7 @@ export function AppShell({ children }: AppShellProps) {
                     </aside>
                 )}
 
-                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-24 md:py-6')} id="main-content">
+                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-32 pt-5 md:py-6 md:pb-32')} id="main-content">
                     {children}
                 </main>
             </div>
@@ -136,7 +136,7 @@ export function AppShell({ children }: AppShellProps) {
             <nav
                 className={cn(
                     'fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/90 shadow-[0_-12px_32px_rgba(2,2,2,0.08)] backdrop-blur supports-[backdrop-filter]:bg-background/70',
-                    isAdmin ? 'md:hidden' : 'max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-xl md:border-x md:shadow-md',
+                    isAdmin ? 'md:hidden' : 'w-full max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-2xl md:border-x md:shadow-md',
                 )}
             >
                 {navItems.map((item) => {
@@ -147,7 +147,7 @@ export function AppShell({ children }: AppShellProps) {
                         <Link
                             aria-current={active ? 'page' : undefined}
                             className={cn(
-                                'relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 py-2 text-[10px] font-semibold transition-colors hover:text-foreground',
+                                'relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 pb-[calc(0.5rem+env(safe-area-inset-bottom))] pt-2 text-[10px] font-semibold transition-colors hover:text-foreground',
                                 active ? 'text-foreground' : 'text-muted-foreground',
                             )}
                             href={item.href}
@@ -173,7 +173,7 @@ export function AppShell({ children }: AppShellProps) {
                 })}
             </nav>
 
-            <div className={cn('h-16', isAdmin && 'md:hidden')} />
+            <div className={cn('h-[calc(4rem+env(safe-area-inset-bottom))]', isAdmin && 'md:hidden')} />
         </div>
     );
 }
