@@ -1,6 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -84,7 +84,14 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                     accent="Auction Command Center"
                     subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
                     title={initial.title}
-                    action={<RealtimeConnectionBadge />}
+                    action={(
+                        <div className="flex flex-wrap items-center gap-2">
+                            <a className={buttonVariants({ variant: 'outline' })} href={`/live/${initial.id}/monitor`} rel="noreferrer" target="_blank">
+                                Buka layar publik
+                            </a>
+                            <RealtimeConnectionBadge />
+                        </div>
+                    )}
                 />
 
                 <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={auctionStatus} />

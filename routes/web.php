@@ -3,6 +3,7 @@
 use App\Modules\Admin\Controllers\AdminDashboardController;
 use App\Modules\Auctions\Controllers\AuctionBrowseController;
 use App\Modules\Auctions\Controllers\AuctionController;
+use App\Modules\Auctions\Controllers\PublicLiveMonitorController;
 use App\Modules\Auctions\Services\AuctionBrowseService;
 use App\Modules\Authentication\Controllers\AuthController;
 use App\Modules\Bidding\Controllers\BiddingController;
@@ -40,6 +41,7 @@ Route::get('/auctions', [AuctionBrowseController::class, 'index'])->name('auctio
 Route::get('/auctions/{auction}', [AuctionBrowseController::class, 'show'])->name('auctions.show');
 Route::get('/auctions/{auction}/room', [AuctionBrowseController::class, 'room'])->middleware('auth')->name('auctions.room');
 Route::post('/auctions/{auction}/bids', [BiddingController::class, 'store'])->middleware('auth')->name('auctions.bids.store');
+Route::get('/live/{auction}/monitor', [PublicLiveMonitorController::class, 'show'])->name('live.monitor');
 
 Route::get('/wallet', [WalletController::class, 'index'])->middleware('auth')->name('wallet.index');
 Route::post('/wallet/topup', [WalletController::class, 'topUp'])->middleware('auth')->name('wallet.topup');
