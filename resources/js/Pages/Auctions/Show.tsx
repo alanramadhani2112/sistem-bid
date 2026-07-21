@@ -3,6 +3,7 @@ import { CalendarClock, Coffee, Gavel, MapPin, Scale, Sprout, TrendingUp } from 
 
 import { AuctionHeroMedia } from '@/components/app/AuctionHeroMedia';
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { BackLink } from '@/components/app/BackLink';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { PriceText } from '@/components/app/PriceText';
 import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
@@ -44,9 +45,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
             <Head title={auction.title} />
 
             <section className="space-y-5">
-                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/auctions">
-                    ← Kembali
-                </Link>
+                <BackLink href="/auctions" />
 
                 <AuctionHeroMedia
                     alt={`${auction.green_bean.name} green beans`}

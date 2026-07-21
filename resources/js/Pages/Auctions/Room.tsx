@@ -1,7 +1,8 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { BackLink } from '@/components/app/BackLink';
 import { BidActionPanel } from '@/components/app/BidActionPanel';
 import { BidderPositionBanner } from '@/components/app/BidderPositionBanner';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
@@ -67,9 +68,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
             <Head title={`Live Room · ${auction.title}`} />
 
             <section className="min-w-0 space-y-4 overflow-hidden">
-                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href={`/auctions/${auction.id}`}>
-                    ← Kembali
-                </Link>
+                <BackLink href={`/auctions/${auction.id}`} />
 
                 <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={room.auctionStatus} />
 
