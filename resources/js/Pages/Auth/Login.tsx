@@ -1,8 +1,9 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { BackLink } from '@/components/app/BackLink';
 import { FormField } from '@/components/app/FormField';
 
 import { AppShell } from '../../Layouts/AppShell';
@@ -21,6 +22,9 @@ export default function Login() {
     return (
         <AppShell>
             <Head title="Login" />
+
+                <section className="space-y-4">
+                <BackLink href="/" />
 
                 <Card className="mx-auto max-w-md border-border/80 bg-card/95 shadow-sm">
                     <CardHeader>
@@ -65,11 +69,9 @@ export default function Login() {
                         <p>Bidder: bidder@jawara.test</p>
                         <p>Password: password</p>
                     </div>
-                    <Link className="mt-4 block" href="/">
-                        <Button className="min-h-11 w-full text-base" size="lg" variant="outline">Kembali</Button>
-                    </Link>
                 </CardContent>
             </Card>
+            </section>
         </AppShell>
     );
 }
