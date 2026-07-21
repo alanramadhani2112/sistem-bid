@@ -39,6 +39,8 @@ const adminNavItems = [
     { href: '/panduan-admin', icon: BookOpen, label: 'Panduan' },
 ];
 
+const brandLogo = '/brand/jcc-logo.png';
+
 export function AppShell({ children }: AppShellProps) {
     const { props, url } = usePage<SharedProps>();
     const isAdmin = props.auth?.user?.role === 'admin';
@@ -64,10 +66,10 @@ export function AppShell({ children }: AppShellProps) {
                 <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'w-full' : 'max-w-md')}>
                     <div className={cn('flex items-center gap-3', isAdmin && 'md:hidden')}>
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
-                            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-                                {isAdmin ? <LayoutDashboard aria-hidden="true" className="size-4" /> : <Coffee aria-hidden="true" className="size-4" />}
+                            <span className="flex size-9 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-border">
+                                <img alt="JCC" className="h-full w-full object-contain p-1" src={brandLogo} />
                             </span>
-                            <span className="hidden sm:inline">Jawara</span>
+                            <span className="hidden sm:inline">JCC</span>
                         </Link>
                         <Badge variant={isAdmin ? 'secondary' : 'default'}>{isAdmin ? 'Admin Console' : 'Live Auction'}</Badge>
                     </div>
@@ -100,10 +102,10 @@ export function AppShell({ children }: AppShellProps) {
                 {isAdmin && (
                     <aside className="fixed bottom-0 left-0 top-0 hidden w-60 border-r border-border bg-card/90 p-4 shadow-sm backdrop-blur md:block">
                         <Link className="mb-6 flex h-10 items-center gap-2 font-semibold tracking-tight text-primary" href="/admin/dashboard">
-                            <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
-                                <LayoutDashboard aria-hidden="true" className="size-4" />
+                            <span className="flex size-10 items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-border">
+                                <img alt="JCC" className="h-full w-full object-contain p-1" src={brandLogo} />
                             </span>
-                            <span>Jawara</span>
+                            <span>JCC</span>
                             <Badge variant="secondary">Admin Console</Badge>
                         </Link>
                         <nav className="space-y-1.5">

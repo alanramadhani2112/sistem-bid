@@ -96,7 +96,7 @@ export default function Home({ auctions, latestBids }: HomeProps) {
 
             <PageShell>
                 <PageHeader
-                    accent="Jawara Green Beans"
+                    accent="JCC"
                     subtitle="Mulai dari sini: cek live lot, saldo, dan riwayat bid."
                     title="Lobby Bidder"
                 />

@@ -9,7 +9,7 @@ import { createRoot } from 'react-dom/client';
 const pages = import.meta.glob<{ default: ResolvedComponent }>('./Pages/**/*.tsx');
 
 createInertiaApp({
-    title: (title) => (title ? `${title} · Jawara Green Beans` : 'Jawara Green Beans'),
+    title: (title) => (title ? `${title} · JCC` : 'JCC'),
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.tsx`,

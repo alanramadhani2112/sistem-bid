@@ -72,7 +72,7 @@ export default function PublicLiveMonitor({ auction: initial, leaderboard: lb, b
                     <div className="min-w-0 space-y-3">
                         <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.24em] text-primary">
                             <Radio aria-hidden="true" className="size-4" />
-                            Jawara Live Auction
+                            JCC Live Auction
                         </p>
                         <div className="min-w-0 space-y-2">
                             <h1 className="break-words text-[clamp(2rem,5vw,4.5rem)] font-black leading-none tracking-tight">{initial.title}</h1>
