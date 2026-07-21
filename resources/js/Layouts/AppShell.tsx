@@ -94,7 +94,7 @@ export function AppShell({ children }: AppShellProps) {
                 </div>
             </header>
 
-            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'w-full max-w-md')}>
+            <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'w-full max-w-md min-w-0')}>
                 {isAdmin && (
                     <aside className="fixed bottom-0 left-0 top-0 hidden w-60 border-r border-border bg-card/90 p-4 shadow-sm backdrop-blur md:block">
                         <Link className="mb-6 flex h-10 items-center gap-2 font-semibold tracking-tight text-primary" href="/admin/dashboard">
@@ -128,7 +128,7 @@ export function AppShell({ children }: AppShellProps) {
                     </aside>
                 )}
 
-                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-32 pt-5 md:py-6 md:pb-32')} id="main-content">
+                <main className={cn('min-w-0 flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-32 pt-5 md:py-6 md:pb-32')} id="main-content">
                     {children}
                 </main>
             </div>
