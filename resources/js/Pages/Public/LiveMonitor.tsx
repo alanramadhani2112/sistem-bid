@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { Coffee, Radio, Trophy, Users } from 'lucide-react';
 
 import { AuctionImage } from '@/components/app/AuctionImage';
+import { AuctionSoundToggle } from '@/components/app/AuctionSoundToggle';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
@@ -10,6 +11,7 @@ import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadg
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { WinnerPreviewCard } from '@/components/app/WinnerPreviewCard';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAuctionSoundEffects } from '@/Hooks/useAuctionSoundEffects';
 import { useAuctionRoom } from '@/Hooks/useAuctionRoom';
 import { formatRupiah } from '@/lib/format';
 
@@ -62,6 +64,12 @@ export default function PublicLiveMonitor({ auction: initial, leaderboard: lb, b
     const leader = winner?.bidder_name ?? leaderboard[0]?.bidder_name ?? null;
     const winnerAmount = winner?.winning_amount ?? leaderboard[0]?.amount ?? null;
     const nextBid = auctionStatus === 'live' ? currentPrice + initial.green_bean.bid_increment : undefined;
+    const sound = useAuctionSoundEffects({
+        auctionStatus,
+        bidHistory,
+        endsAt: initial.ends_at,
+        winner,
+    });
 
     return (
         <main className="min-h-dvh overflow-x-hidden bg-[radial-gradient(circle_at_top_left,rgba(136,26,29,0.28),transparent_34%),linear-gradient(135deg,hsl(var(--background)),hsl(var(--muted)))] text-foreground">
@@ -90,6 +98,7 @@ export default function PublicLiveMonitor({ auction: initial, leaderboard: lb, b
                     </div>
                     <div className="flex flex-wrap items-start justify-start gap-2 lg:justify-end">
                         <StatusBadge status={auctionStatus} />
+                        <AuctionSoundToggle enabled={sound.enabled} onToggle={sound.toggleSound} />
                         <RealtimeConnectionBadge />
                     </div>
                 </header>

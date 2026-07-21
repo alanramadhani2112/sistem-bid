@@ -1,6 +1,7 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
+import { AuctionSoundToggle } from '@/components/app/AuctionSoundToggle';
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
 import { BackLink } from '@/components/app/BackLink';
 import { BidActionPanel } from '@/components/app/BidActionPanel';
@@ -14,6 +15,7 @@ import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
 import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { formatRupiah } from '@/lib/format';
+import { useAuctionSoundEffects } from '@/Hooks/useAuctionSoundEffects';
 import { useAuctionRoom } from '../../Hooks/useAuctionRoom';
 import type { BidRow } from '../../Hooks/useAuctionRoom';
 import { AppShell } from '../../Layouts/AppShell';
@@ -52,6 +54,12 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
     const canBid = room.auctionStatus === 'live';
     const leader = room.leaderboard[0]?.bidder_name ?? null;
     const leaderAmount = room.leaderboard[0]?.amount ?? null;
+    const sound = useAuctionSoundEffects({
+        auctionStatus: room.auctionStatus,
+        bidHistory: room.bidHistory,
+        endsAt: auction.ends_at,
+        winner: room.winner,
+    });
     const { data, errors, post, processing, setData } = useForm({
         amount: nextBid,
     });
@@ -78,7 +86,10 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         <div className="min-w-0 space-y-4 rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm sm:p-5">
                             <div className="flex items-center justify-between gap-3">
                                 <StatusBadge status={room.auctionStatus} />
-                                <RealtimeConnectionBadge />
+                                <div className="flex flex-wrap justify-end gap-2">
+                                    <AuctionSoundToggle enabled={sound.enabled} onToggle={sound.toggleSound} />
+                                    <RealtimeConnectionBadge />
+                                </div>
                             </div>
                             <div className="space-y-2">
                                 <h1 className="text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">{auction.title}</h1>

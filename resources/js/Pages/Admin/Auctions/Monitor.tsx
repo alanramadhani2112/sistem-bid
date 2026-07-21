@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
+import { AuctionSoundToggle } from '@/components/app/AuctionSoundToggle';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
@@ -25,6 +26,7 @@ import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadg
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { WinnerPreviewCard } from '@/components/app/WinnerPreviewCard';
+import { useAuctionSoundEffects } from '@/Hooks/useAuctionSoundEffects';
 import { useAuctionRoom } from '@/Hooks/useAuctionRoom';
 import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../../Layouts/AppShell';
@@ -70,6 +72,12 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
     const latestBid = bidHistory[0];
     const leader = leaderboard[0]?.bidder_name ?? null;
     const nextBid = currentPrice + 100_000;
+    const sound = useAuctionSoundEffects({
+        auctionStatus,
+        bidHistory,
+        endsAt: initial.ends_at,
+        winner,
+    });
 
     const handleClose = () => {
         router.post(`/admin/auctions/${initial.id}/close`, {}, { preserveScroll: true });
@@ -89,6 +97,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                             <a className={buttonVariants({ variant: 'outline' })} href={`/live/${initial.id}/monitor`} rel="noreferrer" target="_blank">
                                 Buka layar publik
                             </a>
+                            <AuctionSoundToggle enabled={sound.enabled} onToggle={sound.toggleSound} />
                             <RealtimeConnectionBadge />
                         </div>
                     )}
