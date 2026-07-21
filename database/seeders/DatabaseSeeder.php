@@ -34,16 +34,19 @@ class DatabaseSeeder extends Seeder
             ],
         );
 
-        $bidder = User::query()->updateOrCreate(
-            ['email' => 'bidder@jawara.test'],
+        $bidders = collect([
+            ['email' => 'bidder@jawara.test', 'google_id' => 'seed-bidder-google-id', 'name' => 'Jawara Bidder 1', 'balance' => 5_000_000],
+            ['email' => 'bidder2@jawara.test', 'google_id' => 'seed-bidder-2-google-id', 'name' => 'Jawara Bidder 2', 'balance' => 5_000_000],
+        ])->map(fn (array $bidder): User => User::query()->updateOrCreate(
+            ['email' => $bidder['email']],
             [
-                'name' => 'Jawara Bidder',
-                'google_id' => 'seed-bidder-google-id',
+                'name' => $bidder['name'],
+                'google_id' => $bidder['google_id'],
                 'password' => Hash::make('password'),
                 'role' => UserRole::Bidder,
                 'email_verified_at' => now(),
             ],
-        );
+        ));
 
         Wallet::query()->firstOrCreate([
             'user_id' => $admin->id,
@@ -51,22 +54,24 @@ class DatabaseSeeder extends Seeder
             'balance' => 0,
         ]);
 
-        $bidderWallet = Wallet::query()->firstOrCreate([
-            'user_id' => $bidder->id,
-        ], [
-            'balance' => 5_000_000,
-        ]);
+        $bidders->each(function (User $bidder, int $index): void {
+            $bidderWallet = Wallet::query()->firstOrCreate([
+                'user_id' => $bidder->id,
+            ], [
+                'balance' => 5_000_000,
+            ]);
 
-        WalletTransaction::query()->firstOrCreate([
-            'reference' => 'seed-topup',
-        ], [
-            'wallet_id' => $bidderWallet->id,
-            'type' => TransactionType::TopUp,
-            'amount' => 5_000_000,
-            'balance_before' => 0,
-            'balance_after' => 5_000_000,
-            'notes' => 'Initial demo balance',
-        ]);
+            WalletTransaction::query()->firstOrCreate([
+                'reference' => $index === 0 ? 'seed-topup' : 'seed-topup-bidder-2',
+            ], [
+                'wallet_id' => $bidderWallet->id,
+                'type' => TransactionType::TopUp,
+                'amount' => 5_000_000,
+                'balance_before' => 0,
+                'balance_after' => 5_000_000,
+                'notes' => 'Initial demo balance',
+            ]);
+        });
 
         $greenBean = GreenBean::query()->updateOrCreate([
             'name' => 'Gayo Wine Natural Lot A',
