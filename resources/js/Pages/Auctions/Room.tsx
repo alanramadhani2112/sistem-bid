@@ -110,6 +110,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         <LiveCountdownPanel mode="ends" status={room.auctionStatus} target={auction.ends_at} />
                         <BidActionPanel
                             amount={data.amount}
+                            auctionId={auction.id}
                             auctionTitle={auction.title}
                             className="sticky bottom-[calc(5rem+env(safe-area-inset-bottom))] z-10 lg:static"
                             currentPrice={room.currentPrice}

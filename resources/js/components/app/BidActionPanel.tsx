@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 
 type BidActionPanelProps = {
     amount: number;
+    auctionId: number;
     auctionTitle: string;
     currentPrice: number;
     error?: string;
@@ -24,6 +25,7 @@ type BidActionPanelProps = {
 
 export function BidActionPanel({
     amount,
+    auctionId,
     auctionTitle,
     className,
     currentPrice,
@@ -69,6 +71,7 @@ export function BidActionPanel({
                     {error && <p className="text-xs font-medium text-destructive">{error}</p>}
                     <BidConfirmationDialog
                         amount={amount}
+                        auctionId={auctionId}
                         auctionTitle={auctionTitle}
                         currentPrice={currentPrice}
                         disabled={disabled}

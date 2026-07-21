@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PriceText } from '@/components/app/PriceText';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import {
 
 type BidConfirmationDialogProps = {
     amount: number;
+    auctionId: number;
     auctionTitle: string;
     currentPrice: number;
     disabled?: boolean;
@@ -26,6 +27,7 @@ type BidConfirmationDialogProps = {
 
 export function BidConfirmationDialog({
     amount,
+    auctionId,
     auctionTitle,
     currentPrice,
     disabled = false,
@@ -37,16 +39,36 @@ export function BidConfirmationDialog({
     const isBelowNextBid = amount < nextBid;
     const [confirmed, setConfirmed] = useState(false);
     const [open, setOpen] = useState(false);
+    const acknowledgementKey = `bid-confirmation-ack:${auctionId}`;
+    const [acknowledged, setAcknowledged] = useState(() => {
+        if (typeof window === 'undefined') return false;
+
+        return window.localStorage.getItem(acknowledgementKey) === '1';
+    });
+
+    useEffect(() => {
+        setAcknowledged(window.localStorage.getItem(acknowledgementKey) === '1');
+    }, [acknowledgementKey]);
 
     const handleOpenChange = (nextOpen: boolean) => {
         setOpen(nextOpen);
         if (!nextOpen) setConfirmed(false);
     };
 
+    const handleConfirmedChange = (nextConfirmed: boolean) => {
+        setConfirmed(nextConfirmed);
+        if (!nextConfirmed) return;
+
+        window.localStorage.setItem(acknowledgementKey, '1');
+        setAcknowledged(true);
+    };
+
     const confirmBid = () => {
         onConfirm();
         handleOpenChange(false);
     };
+
+    const canSubmit = acknowledged || confirmed;
 
     return (
         <Dialog onOpenChange={handleOpenChange} open={open}>
@@ -77,20 +99,22 @@ export function BidConfirmationDialog({
                     <p className="text-sm text-muted-foreground">
                         Bid akan dikirim ke live auction. Validasi saldo dan increment tetap dilakukan server.
                     </p>
-                    <label className="flex items-start gap-3 rounded-xl border bg-muted/30 p-3 text-sm">
-                        <input
-                            checked={confirmed}
-                            className="mt-1 size-4 accent-primary"
-                            onChange={(event) => setConfirmed(event.target.checked)}
-                            type="checkbox"
-                        />
-                        <span className="text-muted-foreground">
-                            Saya paham bid ini masuk ke auction live dan tidak bisa dibatalkan setelah terkirim.
-                        </span>
-                    </label>
+                    {!acknowledged && (
+                        <label className="flex items-start gap-3 rounded-xl border bg-muted/30 p-3 text-sm">
+                            <input
+                                checked={confirmed}
+                                className="mt-1 size-4 accent-primary"
+                                onChange={(event) => handleConfirmedChange(event.target.checked)}
+                                type="checkbox"
+                            />
+                            <span className="text-muted-foreground">
+                                Saya paham bid ini masuk ke auction live dan tidak bisa dibatalkan setelah terkirim.
+                            </span>
+                        </label>
+                    )}
                 </div>
                 <DialogFooter className="m-0 flex-col gap-2 rounded-none border-t bg-background/95 p-4 sm:flex-row sm:justify-end">
-                    <Button className="min-h-11 w-full rounded-md sm:w-auto" disabled={processing || isBelowNextBid || !confirmed} onClick={confirmBid}>
+                    <Button className="min-h-11 w-full rounded-md sm:w-auto" disabled={processing || isBelowNextBid || !canSubmit} onClick={confirmBid}>
                         {processing ? 'Mengirim bid...' : 'Kirim bid'}
                     </Button>
                     <DialogClose render={<Button className="min-h-11 w-full rounded-md sm:w-auto" variant="outline" />}>Batal</DialogClose>
