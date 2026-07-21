@@ -28,9 +28,12 @@ final class AuctionClosed implements ShouldBroadcastNow
         return 'AuctionClosed';
     }
 
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel("auction.{$this->auction->id}");
+        return [
+            new Channel('auctions'),
+            new Channel("auction.{$this->auction->id}"),
+        ];
     }
 
     /** @return array<string, mixed> */
@@ -41,8 +44,11 @@ final class AuctionClosed implements ShouldBroadcastNow
         return [
             'auction' => [
                 'id' => $this->auction->id,
+                'title' => $this->auction->title,
                 'status' => $this->auction->status->value,
                 'current_price' => $this->auction->current_price,
+                'starts_at' => $this->auction->starts_at?->toISOString(),
+                'ends_at' => $this->auction->ends_at?->toISOString(),
             ],
             'winner' => $winner ? [
                 'user_id' => $winner->user_id,

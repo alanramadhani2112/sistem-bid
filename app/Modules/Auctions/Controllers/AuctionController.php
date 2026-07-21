@@ -9,6 +9,7 @@ use App\Models\GreenBean;
 use App\Modules\Auctions\Requests\AuctionRequest;
 use App\Modules\Auctions\Requests\AuctionStatusRequest;
 use App\Modules\Auctions\Services\AuctionService;
+use App\Modules\Auctions\Services\AuctionWinnerService;
 use App\Modules\Shared\Enums\AuctionStatus;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
@@ -73,9 +74,17 @@ final class AuctionController
         return redirect()->route('admin.auctions.index');
     }
 
-    public function status(AuctionStatusRequest $request, Auction $auction, AuctionService $auctionService): RedirectResponse
+    public function status(AuctionStatusRequest $request, Auction $auction, AuctionService $auctionService, AuctionWinnerService $winnerService): RedirectResponse
     {
-        $auctionService->changeStatus($auction, AuctionStatus::from($request->validated('status')));
+        $status = AuctionStatus::from($request->validated('status'));
+
+        if ($status === AuctionStatus::Closed && $auction->status === AuctionStatus::Live) {
+            $winnerService->closeAuction($auction);
+
+            return redirect()->route('admin.auctions.index');
+        }
+
+        $auctionService->changeStatus($auction, $status);
 
         return redirect()->route('admin.auctions.index');
     }

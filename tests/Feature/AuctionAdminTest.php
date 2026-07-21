@@ -8,8 +8,11 @@ use App\Models\Auction;
 use App\Models\Bid;
 use App\Models\GreenBean;
 use App\Models\User;
+use App\Modules\Auctions\Events\AuctionClosed;
+use App\Modules\Auctions\Events\AuctionStatusChanged;
 use App\Modules\Shared\Enums\AuctionStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 final class AuctionAdminTest extends TestCase
@@ -79,11 +82,14 @@ final class AuctionAdminTest extends TestCase
 
     public function test_admin_can_move_published_auction_to_live_then_closed(): void
     {
+        Event::fake([AuctionClosed::class, AuctionStatusChanged::class]);
         $auction = Auction::factory()->create(['status' => AuctionStatus::Published]);
 
         $this->actingAs($this->admin())
             ->patch("/admin/auctions/{$auction->id}/status", ['status' => AuctionStatus::Live->value])
             ->assertRedirect('/admin/auctions');
+
+        Event::assertDispatched(AuctionStatusChanged::class, fn (AuctionStatusChanged $event): bool => $event->broadcastWith()['auction']['status'] === AuctionStatus::Live->value);
 
         $this->assertDatabaseHas('auctions', [
             'id' => $auction->id,
@@ -98,6 +104,7 @@ final class AuctionAdminTest extends TestCase
             'id' => $auction->id,
             'status' => AuctionStatus::Closed->value,
         ]);
+        Event::assertDispatched(AuctionClosed::class);
     }
 
     public function test_invalid_status_transition_is_rejected(): void

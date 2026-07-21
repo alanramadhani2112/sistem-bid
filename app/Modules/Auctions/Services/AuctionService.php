@@ -6,6 +6,7 @@ namespace App\Modules\Auctions\Services;
 
 use App\Models\Auction;
 use App\Models\GreenBean;
+use App\Modules\Auctions\Events\AuctionStatusChanged;
 use App\Modules\Shared\Enums\AuctionStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -38,7 +39,7 @@ final class AuctionService
 
     public function changeStatus(Auction $auction, AuctionStatus $status): Auction
     {
-        return DB::transaction(function () use ($auction, $status): Auction {
+        $changedAuction = DB::transaction(function () use ($auction, $status): Auction {
             $lockedAuction = Auction::query()->lockForUpdate()->findOrFail($auction->id);
 
             $this->ensureStatusTransitionAllowed($lockedAuction, $status);
@@ -46,6 +47,10 @@ final class AuctionService
 
             return $lockedAuction->refresh();
         });
+
+        AuctionStatusChanged::dispatch($changedAuction);
+
+        return $changedAuction;
     }
 
     public function delete(Auction $auction): void
