@@ -53,6 +53,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/auctions/{auction}/monitor', [AdminDashboardController::class, 'monitor'])->name('auctions.monitor');
     Route::post('/auctions/{auction}/close', [AdminDashboardController::class, 'closeAuction'])->name('auctions.close');
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('users.index');
+    Route::post('/users', [AdminDashboardController::class, 'storeUser'])->name('users.store');
     Route::get('/users/{user}/wallet', [AdminDashboardController::class, 'userWallet'])->name('users.wallet');
     Route::patch('/users/{user}/role', [AdminDashboardController::class, 'updateRole'])->name('users.role');
     Route::get('/winners', [AdminDashboardController::class, 'winners'])->name('winners.index');

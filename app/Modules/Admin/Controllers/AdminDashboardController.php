@@ -6,12 +6,14 @@ namespace App\Modules\Admin\Controllers;
 
 use App\Models\Auction;
 use App\Models\User;
+use App\Modules\Admin\Requests\StoreUserRequest;
 use App\Modules\Admin\Requests\UserRoleRequest;
 use App\Modules\Admin\Services\AdminDashboardService;
 use App\Modules\Auctions\Services\AuctionWinnerService;
 use App\Modules\Shared\Enums\AuctionStatus;
 use App\Modules\Shared\Enums\UserRole;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,6 +32,21 @@ final class AdminDashboardController
     public function users(AdminDashboardService $service): Response
     {
         return Inertia::render('Admin/Users/Index', $service->users());
+    }
+
+    public function storeUser(StoreUserRequest $request): RedirectResponse
+    {
+        $user = User::query()->create([
+            'name' => $request->string('name')->toString(),
+            'email' => $request->string('email')->toString(),
+            'password' => Hash::make($request->string('password')->toString()),
+            'role' => UserRole::from($request->string('role')->toString()),
+            'email_verified_at' => now(),
+        ]);
+
+        $user->wallet()->create(['balance' => 0]);
+
+        return back()->with('success', "User {$user->name} created.");
     }
 
     public function winners(AdminDashboardService $service): Response

@@ -10,6 +10,7 @@ use App\Models\Bid;
 use App\Models\GreenBean;
 use App\Models\User;
 use App\Modules\Shared\Enums\AuctionStatus;
+use App\Modules\Shared\Enums\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -68,6 +69,27 @@ final class AdminDashboardTest extends TestCase
                 ->component('Admin/Users/Index')
                 ->has('stats')
                 ->has('users', 2));
+    }
+
+    public function test_admin_can_create_user_from_users_page(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->post('/admin/users', [
+                'name' => 'Manual Bidder',
+                'email' => 'manual-bidder@example.test',
+                'password' => 'password',
+                'role' => 'bidder',
+            ])
+            ->assertRedirect();
+
+        $user = User::query()->where('email', 'manual-bidder@example.test')->firstOrFail();
+
+        $this->assertSame('Manual Bidder', $user->name);
+        $this->assertSame(UserRole::Bidder, $user->role);
+        $this->assertNotNull($user->wallet);
+        $this->assertSame(0, $user->wallet->balance);
     }
 
     public function test_admin_can_open_winners_page(): void
