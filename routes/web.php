@@ -17,6 +17,14 @@ Route::get('/', function (AuctionBrowseService $auctionBrowseService) {
     return Inertia::render('Home', $auctionBrowseService->liveAuctionLobby());
 })->name('home');
 
+Route::get('/panduan-bidder', function () {
+    return Inertia::render('UsageGuide', ['audience' => 'bidder']);
+})->name('usage-guide.bidder');
+
+Route::get('/panduan-admin', function () {
+    return Inertia::render('UsageGuide', ['audience' => 'admin']);
+})->name('usage-guide.admin');
+
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login');
