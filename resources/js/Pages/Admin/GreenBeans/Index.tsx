@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
@@ -34,18 +34,19 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                     accent="Admin"
                     action={
                         <Link href="/admin/green-beans/create">
-                            <Button size="sm">Tambah</Button>
+                            <Button size="sm">Tambah bean</Button>
                         </Link>
                     }
+                    subtitle="Kelola lot mentah sebelum dijadikan auction."
                     title="Green Beans"
                 />
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                     {greenBeans.map((greenBean) => (
-                        <Card key={greenBean.id}>
+                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={greenBean.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start gap-3">
-                                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted">
+                                    <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/80 bg-muted shadow-sm">
                                         {greenBean.image_path ? (
                                             <img
                                                 alt={greenBean.name}
@@ -73,22 +74,31 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                                     <Link className="flex-1" href={`/admin/green-beans/${greenBean.id}/edit`}>
                                         <Button className="w-full" size="sm" variant="outline">Edit</Button>
                                     </Link>
-                                    <Link
-                                        as="button"
-                                        className="flex-1"
-                                        href={`/admin/green-beans/${greenBean.id}`}
-                                        method="delete"
-                                        preserveScroll
-                                    >
-                                        <Button className="w-full" size="sm" variant="destructive">Hapus</Button>
-                                    </Link>
+                                     <Link
+                                         as="button"
+                                        className={buttonVariants({ className: 'flex-1', size: 'sm', variant: 'destructive' })}
+                                         href={`/admin/green-beans/${greenBean.id}`}
+                                         method="delete"
+                                         onClick={(event) => { if (!window.confirm(`Hapus green bean "${greenBean.name}"?`)) event.preventDefault(); }}
+                                         preserveScroll
+                                     >
+                                        Hapus
+                                     </Link>
                                 </div>
                             </CardContent>
                         </Card>
                     ))}
 
                     {greenBeans.length === 0 && (
-                        <EmptyState description="Belum ada green beans." title="Tidak ada green beans" />
+                        <EmptyState
+                            action={(
+                                <Link href="/admin/green-beans/create">
+                                    <Button>Tambah bean</Button>
+                                </Link>
+                            )}
+                            description="Tambahkan green bean dulu sebelum membuat auction."
+                            title="Tidak ada green beans"
+                        />
                     )}
                 </div>
             </section>

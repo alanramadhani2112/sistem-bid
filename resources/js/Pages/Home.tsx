@@ -1,13 +1,16 @@
 import { Head, Link } from '@inertiajs/react';
 import { Gavel, History, Wallet } from 'lucide-react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { ActionTile } from '@/components/app/ActionTile';
 import { AuctionBoard } from '@/components/app/AuctionBoard';
 import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
 import { MarketStatusStrip } from '@/components/app/MarketStatusStrip';
+import { PageHeader } from '@/components/app/PageHeader';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAuctionStatusFeed } from '@/Hooks/useAuctionStatusFeed';
 import { formatRupiah } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
@@ -45,11 +48,26 @@ type HomeProps = {
     latestBids: LatestBid[];
 };
 
-export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
-    const liveCount = auctions.filter((auction) => auction.status === 'live').length;
-    const upcomingCount = auctions.filter((auction) => auction.status === 'published').length;
+export default function Home({ auctions, latestBids }: HomeProps) {
+    const [auctionItems, setAuctionItems] = useState(auctions);
+    const handleAuctionStatus = useCallback((auction: LobbyAuction) => {
+        setAuctionItems((current) => {
+            if (auction.status === 'draft') return current.filter((item) => item.id !== auction.id);
+
+            const exists = current.some((item) => item.id === auction.id);
+            if (!exists) return [auction, ...current];
+
+            return current.map((item) => (item.id === auction.id ? { ...item, ...auction, green_bean: { ...item.green_bean, ...auction.green_bean } } : item));
+        });
+    }, []);
+
+    useAuctionStatusFeed<LobbyAuction>(handleAuctionStatus);
+
+    const liveAuction = useMemo(() => auctionItems.find((auction) => auction.status === 'live') ?? null, [auctionItems]);
+    const liveCount = auctionItems.filter((auction) => auction.status === 'live').length;
+    const upcomingCount = auctionItems.filter((auction) => auction.status === 'published').length;
     const latestBid = latestBids[0]?.amount;
-    const activeBids = auctions.reduce((sum, auction) => sum + (auction.bid_count ?? 0), 0);
+    const activeBids = auctionItems.reduce((sum, auction) => sum + (auction.bid_count ?? 0), 0);
     const actions = [
         {
             description: 'Lihat lot green beans yang sudah publish dan siap live bidding.',
@@ -75,17 +93,12 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
         <AppShell>
             <Head title="Home" />
 
-            <section className="space-y-4">
-                <div className="rounded-xl border bg-card p-4 shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Jawara Green Beans</p>
-                    <div className="mt-2 flex items-end justify-between gap-3">
-                        <div>
-                            <h1 className="text-2xl font-black tracking-tight text-foreground">Auction Feed</h1>
-                            <p className="mt-1 text-sm leading-6 text-muted-foreground">Live lot, harga tertinggi, countdown, dan aktivitas bid dalam satu layar.</p>
-                        </div>
-                        <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">LIVE</span>
-                    </div>
-                </div>
+            <section className="space-y-5">
+                <PageHeader
+                    accent="Jawara Green Beans"
+                    subtitle="Mulai dari sini: cek live lot, saldo, dan riwayat bid."
+                    title="Lobby Bidder"
+                />
 
                 <LiveAuctionHero auction={liveAuction} formatPrice={formatRupiah} />
 
@@ -103,7 +116,7 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                             <div className="grid gap-2">
                                 <Link className={cn(buttonVariants({ size: 'default' }), 'min-h-11')} href="/auctions">
                                     <Gavel data-icon="inline-start" />
-                                    Buka auction board
+                                    Buka auction
                                 </Link>
                                 <Link className={cn(buttonVariants({ size: 'default', variant: 'outline' }), 'min-h-11')} href="/wallet">
                                     <Wallet data-icon="inline-start" />
@@ -114,7 +127,7 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                     </CardContent>
                 </Card>
 
-                <AuctionBoard auctions={auctions} formatPrice={formatRupiah} />
+                <AuctionBoard auctions={auctionItems} formatPrice={formatRupiah} />
 
                 <BidHistoryFeed
                     formatPrice={formatRupiah}
@@ -127,7 +140,7 @@ export default function Home({ auctions, liveAuction, latestBids }: HomeProps) {
                     title="Recent bid activity"
                 />
 
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="grid gap-3">
                     {actions.map((item) => (
                         <ActionTile description={item.description} href={item.href} icon={item.icon} key={item.href} title={item.title} />
                     ))}

@@ -38,12 +38,20 @@ export default function AdminWinners({ winners }: WinnersProps) {
                     title="Winners"
                 />
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                     {winners.length === 0 && (
-                        <EmptyState description="Winner akan muncul setelah auction live ditutup dan bid tertinggi ditemukan." title="Belum ada winner" />
+                        <EmptyState
+                            action={(
+                                <Link href="/admin/auctions">
+                                    <Button>Kelola auction</Button>
+                                </Link>
+                            )}
+                            description="Winner muncul setelah auction live ditutup dan bid tertinggi valid."
+                            title="Belum ada winner"
+                        />
                     )}
                     {winners.map((winner) => (
-                        <Card key={winner.id}>
+                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={winner.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex min-w-0 items-start justify-between gap-3">
                                     <div className="min-w-0">

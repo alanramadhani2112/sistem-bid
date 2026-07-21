@@ -12,13 +12,13 @@ type PageHeaderProps = {
 
 export function PageHeader({ title, subtitle, accent, action, className }: PageHeaderProps) {
     return (
-        <div className={cn('flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-3', className)}>
-            <div>
-                {accent && <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">{accent}</p>}
-                <h1 className={cn('text-2xl font-bold text-foreground sm:text-3xl', accent && 'mt-1')}>{title}</h1>
-                {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+        <div className={cn('flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4', className)}>
+            <div className="min-w-0 space-y-1.5">
+                {accent && <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-primary/80">{accent}</p>}
+                <h1 className="text-balance text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">{title}</h1>
+                {subtitle && <p className="max-w-2xl text-sm leading-6 text-muted-foreground">{subtitle}</p>}
             </div>
-            {action && <div className="shrink-0">{action}</div>}
+            {action && <div className="shrink-0 self-start sm:self-end">{action}</div>}
         </div>
     );
 }

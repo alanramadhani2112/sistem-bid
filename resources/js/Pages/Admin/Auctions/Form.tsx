@@ -67,15 +67,16 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
 
                 <PageHeader
                     accent="Admin"
+                    subtitle="Pilih bean, jadwal, dan status dengan hati-hati karena status mengatur akses bidder."
                     title={isEdit ? 'Edit Auction' : 'Tambah Auction'}
                 />
 
-                <Card>
+                <Card className="border-border/80 bg-card/95 shadow-sm">
                     <CardContent className="p-5">
                         <form className="space-y-4" onSubmit={submit}>
-                            <FormField error={errors.green_bean_id} label="Green Bean" name="green_bean_id">
+                            <FormField description="Bean menentukan harga awal dan increment bid." error={errors.green_bean_id} label="Green Bean" name="green_bean_id" required>
                                 <select
-                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-11 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                                     id="green_bean_id"
                                     name="green_bean_id"
                                     onChange={(e) => setData('green_bean_id', e.target.value)}
@@ -88,12 +89,12 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
                                     ))}
                                 </select>
                             </FormField>
-                            <FormField error={errors.title} label="Title" name="title">
+                            <FormField description="Nama lot yang dilihat bidder di lobby dan room." error={errors.title} label="Title" name="title" required>
                                 <Input id="title" name="title" onChange={(e) => setData('title', e.target.value)} value={data.title} />
                             </FormField>
-                            <FormField error={errors.status} label="Status" name="status">
+                            <FormField description="Gunakan draft sebelum siap, published untuk antre, live saat bidding dibuka." error={errors.status} label="Status" name="status" required>
                                 <select
-                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                    className="border-input bg-background ring-offset-background file:text-foreground placeholder:text-muted-foreground focus-visible:ring-ring flex h-11 w-full rounded-md border px-3 py-1 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                                     id="status"
                                     name="status"
                                     onChange={(e) => setData('status', e.target.value)}
@@ -106,15 +107,15 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
                                     ))}
                                 </select>
                             </FormField>
-                            <FormField error={errors.starts_at} label="Starts at" name="starts_at">
+                            <FormField description="Waktu auction mulai menerima bid jika status sudah live." error={errors.starts_at} label="Starts at" name="starts_at" required>
                                 <Input id="starts_at" name="starts_at" onChange={(e) => setData('starts_at', e.target.value)} type="datetime-local" value={data.starts_at} />
                             </FormField>
-                            <FormField error={errors.ends_at} label="Ends at" name="ends_at">
+                            <FormField description="Waktu countdown habis dan auction siap ditutup." error={errors.ends_at} label="Ends at" name="ends_at" required>
                                 <Input id="ends_at" name="ends_at" onChange={(e) => setData('ends_at', e.target.value)} type="datetime-local" value={data.ends_at} />
                             </FormField>
 
                             <Button className="w-full min-h-11 font-bold" disabled={processing || greenBeans.length === 0} type="submit">
-                                Simpan
+                                {processing ? 'Menyimpan...' : isEdit ? 'Update auction' : 'Buat auction'}
                             </Button>
                         </form>
                     </CardContent>

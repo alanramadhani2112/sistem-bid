@@ -51,21 +51,31 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                     ))}
                 </div>
 
-                <Input
-                    aria-label="Cari user"
-                    className="min-h-11"
-                    onChange={(event) => setQuery(event.target.value)}
-                    placeholder="Cari nama, email, role..."
-                    type="search"
-                    value={query}
-                />
+                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                    <Input
+                        aria-label="Cari user"
+                        className="min-h-11"
+                        onChange={(event) => setQuery(event.target.value)}
+                        placeholder="Cari nama, email, role..."
+                        type="search"
+                        value={query}
+                    />
+                </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                     {filteredUsers.length === 0 && (
-                        <EmptyState description="Coba ubah kata kunci pencarian." title="User tidak ditemukan" />
+                        <EmptyState
+                            action={query ? (
+                                <Button onClick={() => setQuery('')} type="button" variant="outline">
+                                    Reset pencarian
+                                </Button>
+                            ) : undefined}
+                            description="Coba ubah kata kunci pencarian."
+                            title="User tidak ditemukan"
+                        />
                     )}
                     {filteredUsers.map((user) => (
-                        <Card key={user.id}>
+                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={user.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
@@ -82,16 +92,16 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                     Wallet <PriceText className="inline-block max-w-[10rem] text-muted-foreground" value={user.wallet?.balance ?? 0} />
                                 </p>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex flex-wrap items-center gap-2">
                                     <Link href={`/admin/users/${user.id}/wallet`}>
-                                        <Button size="sm" variant="outline"><Wallet data-icon="inline-start" />View Wallet</Button>
+                                        <Button size="sm" variant="outline"><Wallet data-icon="inline-start" />Kelola wallet</Button>
                                     </Link>
                                     <Select
                                         defaultValue={user.role}
                                         onValueChange={(role) => {
                                             if (
                                                 role !== user.role
-                                                && window.confirm(`Change ${user.name} role to ${role}?`)
+                                                && window.confirm(`Ubah role ${user.name} ke ${role}?\n\nAkses menu user akan berubah setelah disimpan.`)
                                             ) {
                                                 router.patch(
                                                     `/admin/users/${user.id}/role`,
@@ -101,7 +111,7 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                             }
                                         }}
                                     >
-                                        <SelectTrigger className="h-9 w-32 text-xs">
+                                        <SelectTrigger className="h-9 w-36 text-xs">
                                             <ShieldCheck aria-hidden="true" className="size-3.5 text-muted-foreground" />
                                             <SelectValue />
                                         </SelectTrigger>

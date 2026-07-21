@@ -75,34 +75,35 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
 
                 <PageHeader
                     accent="Admin"
+                    subtitle="Data ini muncul ke bidder, jadi isi origin, proses, harga, dan increment dengan jelas."
                     title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}
                 />
 
-                <Card>
+                <Card className="border-border/80 bg-card/95 shadow-sm">
                     <CardContent className="p-5">
                         <form className="space-y-4" onSubmit={submit}>
-                            <FormField error={errors.name} label="Nama" name="name">
+                            <FormField description="Nama produk yang muncul di auction card." error={errors.name} label="Nama" name="name" required>
                                 <Input id="name" name="name" onChange={(e) => setData('name', e.target.value)} value={data.name} />
                             </FormField>
-                            <FormField error={errors.origin} label="Origin" name="origin">
+                            <FormField description="Contoh: Kintamani, Gayo, Toraja." error={errors.origin} label="Origin" name="origin" required>
                                 <Input id="origin" name="origin" onChange={(e) => setData('origin', e.target.value)} value={data.origin} />
                             </FormField>
-                            <FormField error={errors.process} label="Process" name="process">
+                            <FormField description="Contoh: natural, washed, honey." error={errors.process} label="Process" name="process" required>
                                 <Input id="process" name="process" onChange={(e) => setData('process', e.target.value)} value={data.process} />
                             </FormField>
-                            <FormField error={errors.weight_gram} label="Weight gram" name="weight_gram">
+                            <FormField description="Isi berat dalam gram." error={errors.weight_gram} label="Weight gram" name="weight_gram" required>
                                 <Input id="weight_gram" inputMode="numeric" min="1" name="weight_gram" onChange={(e) => setData('weight_gram', e.target.value)} type="number" value={data.weight_gram} />
                             </FormField>
-                            <FormField error={errors.starting_price} label="Starting price" name="starting_price">
+                            <FormField description="Harga awal dalam rupiah, tanpa titik atau koma." error={errors.starting_price} label="Starting price" name="starting_price" required>
                                 <Input id="starting_price" inputMode="numeric" min="1000" name="starting_price" onChange={(e) => setData('starting_price', e.target.value)} type="number" value={data.starting_price} />
                             </FormField>
-                            <FormField error={errors.bid_increment} label="Bid increment" name="bid_increment">
+                            <FormField description="Kenaikan minimum tiap bid dalam rupiah." error={errors.bid_increment} label="Bid increment" name="bid_increment" required>
                                 <Input id="bid_increment" inputMode="numeric" min="1000" name="bid_increment" onChange={(e) => setData('bid_increment', e.target.value)} type="number" value={data.bid_increment} />
                             </FormField>
-                            <FormField error={errors.description} label="Description" name="description">
+                            <FormField description="Catatan rasa atau detail lot untuk membantu bidder memahami produk." error={errors.description} label="Description" name="description">
                                 <Textarea id="description" name="description" onChange={(e) => setData('description', e.target.value)} rows={4} value={data.description} />
                             </FormField>
-                            <FormField error={errors.image} label="Image" name="image">
+                            <FormField description="Gunakan foto jelas; biarkan kosong jika belum ada." error={errors.image} label="Image" name="image">
                                 {preview && (
                                     <div className="mb-2 overflow-hidden rounded-lg border border-border">
                                         <img alt="Preview" className="h-40 w-full object-cover" src={preview} />
@@ -112,7 +113,7 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
                             </FormField>
 
                             <Button className="w-full min-h-11 font-bold" disabled={processing} type="submit">
-                                Simpan
+                                {processing ? 'Menyimpan...' : isEdit ? 'Update green bean' : 'Simpan green bean'}
                             </Button>
                         </form>
                     </CardContent>

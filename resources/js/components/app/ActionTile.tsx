@@ -18,7 +18,7 @@ export function ActionTile({ badge, className, description, disabled = false, hr
     const content = (
         <>
             <div className="flex items-start justify-between gap-3">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary shadow-sm ring-1 ring-primary/15">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-sm ring-1 ring-primary/15 transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                     <Icon aria-hidden="true" className="size-5" />
                 </span>
                 {badge && <Badge variant="secondary">{badge}</Badge>}
@@ -31,7 +31,7 @@ export function ActionTile({ badge, className, description, disabled = false, hr
     );
 
     const classes = cn(
-                    'group flex min-h-36 flex-col justify-between rounded-xl border border-border bg-card p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/25 hover:bg-accent/30 hover:shadow-md',
+        'group flex min-h-36 flex-col justify-between rounded-xl border border-border/80 bg-card/95 p-4 text-left shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-primary/30 hover:bg-accent/25 hover:shadow-md',
         disabled && 'pointer-events-none opacity-60',
         className,
     );

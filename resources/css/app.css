@@ -158,4 +158,10 @@ textarea {
   html {
     @apply font-sans;
     }
+
+  .app-surface {
+    background:
+      radial-gradient(circle at top left, color-mix(in oklch, var(--primary) 12%, transparent), transparent 32rem),
+      linear-gradient(180deg, color-mix(in oklch, var(--muted) 38%, var(--background)), var(--background) 22rem);
+    }
 }

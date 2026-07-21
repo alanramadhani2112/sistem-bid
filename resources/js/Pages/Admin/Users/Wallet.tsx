@@ -44,7 +44,7 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
                     title={`Wallet — ${user.name}`}
                 />
 
-                <Card className="bg-primary/5">
+                <Card className="border-primary/30 bg-primary/5 shadow-[0_18px_44px_rgba(136,26,29,0.12)]">
                     <CardContent className="p-5">
                         <p className="text-sm text-muted-foreground">Balance</p>
                         <PriceText className="mt-2 text-foreground" prefixLabel="Wallet balance" value={wallet.balance} variant="hero" />

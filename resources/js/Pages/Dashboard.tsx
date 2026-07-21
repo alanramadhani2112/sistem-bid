@@ -37,7 +37,7 @@ export default function Dashboard() {
                     title={`Halo, ${auth.user?.name ?? 'Bidder'}`}
                 />
 
-                <Card>
+                <Card className="border-primary/20 bg-primary/5 shadow-sm">
                     <CardContent className="p-6">
                         <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Akun aktif</p>
                         <h2 className="mt-3 text-2xl font-bold text-foreground">{auth.user?.email}</h2>

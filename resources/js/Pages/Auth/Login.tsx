@@ -22,7 +22,7 @@ export default function Login() {
         <AppShell>
             <Head title="Login" />
 
-                <Card className="mx-auto max-w-md">
+                <Card className="mx-auto max-w-md border-border/80 bg-card/95 shadow-sm">
                     <CardHeader>
                         <CardDescription className="font-semibold uppercase tracking-[0.2em]">Login</CardDescription>
                         <CardTitle className="text-3xl font-bold">Masuk dengan email</CardTitle>

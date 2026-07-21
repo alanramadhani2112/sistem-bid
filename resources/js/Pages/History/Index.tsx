@@ -3,6 +3,7 @@ import { Gavel } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { CategoryTab } from '@/components/app/CategoryTab';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
@@ -41,21 +42,24 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
             <section className="space-y-5">
                 <PageHeader accent="Bidder" subtitle="Riwayat bid kamu per auction." title="History" />
 
-                <CategoryTab
-                    onChange={setStatus}
-                    options={[
-                        { label: 'Semua', value: 'all' },
-                        { label: 'Live', value: 'live' },
-                        { label: 'Selesai', value: 'closed' },
-                        { label: 'Akan datang', value: 'published' },
-                    ]}
-                    value={status}
-                />
+                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                    <CategoryTab
+                        onChange={setStatus}
+                        options={[
+                            { label: 'Semua', value: 'all' },
+                            { label: 'Live', value: 'live' },
+                            { label: 'Selesai', value: 'closed' },
+                            { label: 'Akan datang', value: 'published' },
+                        ]}
+                        value={status}
+                    />
+                    <p className="mt-3 text-xs font-medium text-muted-foreground">Menampilkan {filteredBids.length} bid</p>
+                </div>
 
                 <div className="relative space-y-3 pl-5 before:absolute before:bottom-0 before:left-2 before:top-0 before:w-px before:bg-border">
                     {filteredBids.map((bid) => (
                         <Link className="block" href={`/auctions/${bid.auction.id}`} key={bid.id}>
-                            <Card className="relative transition-colors hover:bg-accent/30">
+                            <Card className="relative border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/25 hover:shadow-md">
                                 <span className="absolute -left-[1.05rem] top-5 flex size-7 items-center justify-center rounded-full border bg-background text-primary shadow-sm">
                                     <Gavel aria-hidden="true" className="size-3.5" />
                                 </span>
@@ -70,7 +74,17 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
                             </Card>
                         </Link>
                     ))}
-                    {filteredBids.length === 0 && <EmptyState description="Bid kamu akan muncul setelah masuk live room." title="Tidak ada history" />}
+                    {filteredBids.length === 0 && (
+                        <EmptyState
+                            action={(
+                                <Link href="/auctions">
+                                    <Button>Lihat auction</Button>
+                                </Link>
+                            )}
+                            description="Bid kamu akan muncul setelah masuk live room."
+                            title="Tidak ada history"
+                        />
+                    )}
                 </div>
             </section>
         </AppShell>

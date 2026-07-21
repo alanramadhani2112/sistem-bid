@@ -21,9 +21,9 @@ export function DataList({ items, emptyMessage = 'Tidak ada data', className }: 
     }
 
     return (
-        <div className={cn('space-y-2', className)}>
+        <div className={cn('space-y-2.5', className)}>
             {items.map((item) => (
-                <div className="rounded-xl border border-border bg-card p-4 text-card-foreground" key={item.id}>
+                <div className="rounded-xl border border-border/80 bg-card/95 p-4 text-card-foreground shadow-sm" key={item.id}>
                     {item.content}
                 </div>
             ))}

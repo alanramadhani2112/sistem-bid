@@ -45,7 +45,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
             <section className="space-y-5">
                 <PageHeader accent="Bid Power" subtitle="Saldo ini menentukan kemampuan kamu ikut live auction." title="Bid Power" />
 
-                <Card className="overflow-hidden border-primary/30 bg-primary/5">
+                <Card className="overflow-hidden border-primary/30 bg-primary/5 shadow-[0_18px_44px_rgba(136,26,29,0.12)]">
                     <CardContent className="flex flex-col gap-3 p-6">
                         <Badge className="w-fit" variant="default">
                             <WalletCards data-icon="inline-start" />
@@ -56,10 +56,10 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="border-border/80 bg-card/95 shadow-sm">
                     <CardContent className="p-5">
                         <form onSubmit={submit}>
-                            <FormField error={errors.amount} label="Tambah bid power" name="amount">
+                            <FormField description="Minimal Rp10.000. Pakai angka tanpa titik atau koma." error={errors.amount} label="Tambah bid power" name="amount">
                                 <Input
                                     id="amount"
                                     inputMode="numeric"
@@ -78,8 +78,8 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                     </CardContent>
                 </Card>
 
-                <Card>
-                    <CardHeader>
+                <Card className="border-border/80 bg-card/95 shadow-sm">
+                    <CardHeader className="border-b border-border/70">
                         <CardTitle>Transaksi terakhir</CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -88,7 +88,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                                 <EmptyState description="Penambahan bid power akan muncul di sini." title="Belum ada transaksi" />
                             ) : (
                                 wallet.transactions.map((transaction) => (
-                                    <div className="rounded-lg bg-muted/50 p-4" key={`${transaction.reference}-${transaction.created_at}`}>
+                                    <div className="rounded-xl border border-border/70 bg-muted/35 p-4" key={`${transaction.reference}-${transaction.created_at}`}>
                                         <div className="flex min-w-0 items-center justify-between gap-3">
                                             <p className="min-w-0 truncate text-sm font-semibold text-foreground" title={transaction.type}>{transaction.type}</p>
                                             <PriceText className="max-w-[10rem] shrink-0 text-right text-sm text-foreground" prefixLabel="Transaction amount" value={transaction.amount} />

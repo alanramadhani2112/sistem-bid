@@ -3,6 +3,7 @@ import { CircleStop, Edit, PlayCircle, Radio, RotateCcw, Trash2 } from 'lucide-r
 import { useMemo, useState } from 'react';
 
 import { CategoryTab } from '@/components/app/CategoryTab';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -33,7 +34,7 @@ type AuctionsIndexProps = {
 
 function ActionButtons({ auction }: { auction: Auction }) {
     function patchStatus(status: string) {
-        if (window.confirm(`Change status to "${status}"?`)) {
+        if (window.confirm(`Ubah status "${auction.title}" ke "${status}"?\n\nPerubahan ini memengaruhi akses bidder dan winner.`)) {
             router.patch(
                 `/admin/auctions/${auction.id}/status`,
                 { status },
@@ -53,7 +54,7 @@ function ActionButtons({ auction }: { auction: Auction }) {
                     <Link href={`/admin/auctions/${auction.id}/edit`}>
                         <Button className="w-full" size="sm" variant="outline"><Edit data-icon="inline-start" />Edit</Button>
                     </Link>
-                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
+                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" onClick={(event) => { if (!window.confirm(`Hapus auction "${auction.title}"?`)) event.preventDefault(); }} preserveScroll>
                         <Button className="w-full" size="sm" variant="destructive"><Trash2 data-icon="inline-start" />Hapus</Button>
                     </Link>
                 </>
@@ -72,7 +73,7 @@ function ActionButtons({ auction }: { auction: Auction }) {
                     <Link href={`/admin/auctions/${auction.id}/edit`}>
                         <Button className="w-full" size="sm" variant="outline"><Edit data-icon="inline-start" />Edit</Button>
                     </Link>
-                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" preserveScroll>
+                    <Link as="button" href={`/admin/auctions/${auction.id}`} method="delete" onClick={(event) => { if (!window.confirm(`Hapus auction "${auction.title}"?`)) event.preventDefault(); }} preserveScroll>
                         <Button className="w-full" size="sm" variant="destructive"><Trash2 data-icon="inline-start" />Hapus</Button>
                     </Link>
                 </>
@@ -102,6 +103,7 @@ function ActionButtons({ auction }: { auction: Auction }) {
 export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
     const [status, setStatus] = useState('all');
     const [query, setQuery] = useState('');
+    const hasFilter = status !== 'all' || query.length > 0;
     const filteredAuctions = useMemo(() => {
         const q = query.toLowerCase();
 
@@ -125,14 +127,22 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                     accent="Admin"
                     action={
                         <Link href="/admin/auctions/create">
-                            <Button size="sm">Tambah</Button>
+                            <Button size="sm">Tambah auction</Button>
                         </Link>
                     }
                     subtitle="Kelola lifecycle auction: draft, published, live, closed."
                     title="Auctions"
                 />
 
-                <div className="space-y-3">
+                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
+                        <Badge variant="secondary">{filteredAuctions.length} auction</Badge>
+                        {hasFilter && (
+                            <Button className="h-8 px-2 text-xs" onClick={() => { setStatus('all'); setQuery(''); }} size="sm" type="button" variant="ghost">
+                                Reset filter
+                            </Button>
+                        )}
+                    </div>
                     <Input
                         aria-label="Cari auction admin"
                         className="min-h-11"
@@ -154,9 +164,9 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                     />
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                     {filteredAuctions.map((auction) => (
-                        <Card key={auction.id}>
+                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={auction.id}>
                             <CardContent className="flex flex-col gap-3 p-5">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
@@ -179,7 +189,15 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                     ))}
 
                     {filteredAuctions.length === 0 && (
-                        <EmptyState description="Coba ubah filter status atau pencarian." title="Auction tidak ditemukan" />
+                        <EmptyState
+                            action={hasFilter ? (
+                                <Button onClick={() => { setStatus('all'); setQuery(''); }} type="button" variant="outline">
+                                    Reset filter
+                                </Button>
+                            ) : undefined}
+                            description="Coba ubah filter status atau pencarian."
+                            title="Auction tidak ditemukan"
+                        />
                     )}
                 </div>
             </section>

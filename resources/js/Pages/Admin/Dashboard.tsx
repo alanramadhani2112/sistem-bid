@@ -84,7 +84,15 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                             <ControlRoomCard auction={auction} formatPrice={formatRupiah} key={auction.id} />
                         ))}
                         {liveAuctions.length === 0 && (
-                            <EmptyState description="Auction live akan muncul paling atas saat status diubah ke live." title="Tidak ada auction live" />
+                            <EmptyState
+                                action={(
+                                    <Link href="/admin/auctions">
+                                        <Button variant="outline">Kelola auctions</Button>
+                                    </Link>
+                                )}
+                                description="Auction live akan muncul paling atas saat status diubah ke live."
+                                title="Tidak ada auction live"
+                            />
                         )}
                     </div>
                 </SectionCard>
@@ -96,7 +104,15 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                                 <ControlRoomCard auction={auction} formatPrice={formatRupiah} key={auction.id} />
                             ))}
                             {upcomingAuctions.length === 0 && (
-                                <EmptyState description="Published auction yang menunggu start akan tampil di sini." title="Queue kosong" />
+                                <EmptyState
+                                    action={(
+                                        <Link href="/admin/auctions/create">
+                                            <Button variant="outline">Buat auction</Button>
+                                        </Link>
+                                    )}
+                                    description="Published auction yang menunggu start akan tampil di sini."
+                                    title="Queue kosong"
+                                />
                             )}
                         </div>
                     </SectionCard>
@@ -114,7 +130,7 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                 <div className="grid gap-3 sm:grid-cols-4">
                     {Object.entries(auctionsByStatus).map(([status, count]) => (
                         <Link href="/admin/auctions" key={status}>
-                            <Card className="transition-colors hover:bg-accent/30">
+                            <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20">
                                 <CardContent className="flex flex-col gap-2 p-5">
                                     <StatusBadge status={status} />
                                     <p className="text-2xl font-bold text-foreground">{count}</p>

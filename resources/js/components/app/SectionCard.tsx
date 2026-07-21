@@ -13,16 +13,16 @@ type SectionCardProps = {
 
 export function SectionCard({ title, action, children, className, contentClassName }: SectionCardProps) {
     return (
-        <Card className={cn('gap-0', className)}>
+        <Card className={cn('gap-0 border-border/80 bg-card/95 shadow-sm', className)}>
             {(title || action) && (
-                <CardHeader className="px-4 py-3 sm:px-6">
+                <CardHeader className="border-b border-border/70 px-4 py-3 sm:px-5">
                     <div className="flex items-center justify-between gap-3">
                         {title && <CardTitle>{title}</CardTitle>}
                         {action}
                     </div>
                 </CardHeader>
             )}
-            <CardContent className={cn('px-4 pb-4 sm:px-6 sm:pb-6', contentClassName)}>
+            <CardContent className={cn('px-4 pb-4 sm:px-5 sm:pb-5', contentClassName)}>
                 {children}
             </CardContent>
         </Card>

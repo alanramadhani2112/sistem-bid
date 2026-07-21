@@ -34,7 +34,7 @@ const adminNavItems = [
     { href: '/admin/auctions', icon: Radio, label: 'Auctions' },
     { href: '/admin/green-beans', icon: Package, label: 'Beans' },
     { href: '/admin/users', icon: Users, label: 'Users' },
-    { href: '/admin/winners', icon: Trophy, label: 'More' },
+    { href: '/admin/winners', icon: Trophy, label: 'Winners' },
 ];
 
 export function AppShell({ children }: AppShellProps) {
@@ -44,7 +44,7 @@ export function AppShell({ children }: AppShellProps) {
     const navItems = isAdmin ? adminNavItems : bidderNavItems;
 
     return (
-        <div className="min-h-dvh bg-background text-foreground">
+        <div className="app-surface min-h-dvh text-foreground">
             <a
                 className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-3 focus:text-primary-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 href="#main-content"
@@ -54,12 +54,13 @@ export function AppShell({ children }: AppShellProps) {
 
             <header
                 className={cn(
-                    'fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/95 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75',
+                    'fixed inset-x-0 top-0 z-30 h-14 border-b border-border bg-background/90 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/75',
+                    isAdmin && 'md:left-60',
                     !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-xl md:border-x md:shadow-md',
                 )}
             >
                 <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
-                    <div className="flex items-center gap-3">
+                    <div className={cn('flex items-center gap-3', isAdmin && 'md:hidden')}>
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
                             <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
                                 {isAdmin ? <LayoutDashboard aria-hidden="true" className="size-4" /> : <Coffee aria-hidden="true" className="size-4" />}
@@ -95,8 +96,15 @@ export function AppShell({ children }: AppShellProps) {
 
             <div className={cn('mx-auto flex pt-14', isAdmin ? 'max-w-6xl md:pl-60' : 'max-w-md')}>
                 {isAdmin && (
-                    <aside className="fixed bottom-0 left-0 top-14 hidden w-60 border-r border-border bg-muted/30 p-4 md:block">
-                        <nav className="space-y-1">
+                    <aside className="fixed bottom-0 left-0 top-0 hidden w-60 border-r border-border bg-card/90 p-4 shadow-sm backdrop-blur md:block">
+                        <Link className="mb-6 flex h-10 items-center gap-2 font-semibold tracking-tight text-primary" href="/admin/dashboard">
+                            <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+                                <LayoutDashboard aria-hidden="true" className="size-4" />
+                            </span>
+                            <span>Jawara</span>
+                            <Badge variant="secondary">Admin Console</Badge>
+                        </Link>
+                        <nav className="space-y-1.5">
                             {navItems.map((item) => (
                                 <ActiveLink exact={item.href === '/'} href={item.href} key={`${item.label}-${item.href}`}>
                                     <item.icon data-icon="inline-start" />
@@ -120,14 +128,14 @@ export function AppShell({ children }: AppShellProps) {
                     </aside>
                 )}
 
-                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-24 md:px-0 md:py-6')} id="main-content">
+                <main className={cn('flex-1 px-4 py-5', isAdmin ? 'md:px-6 md:py-8' : 'pb-24 md:py-6')} id="main-content">
                     {children}
                 </main>
             </div>
 
             <nav
                 className={cn(
-                    'fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60',
+                    'fixed inset-x-0 bottom-0 z-30 mx-auto flex border-t border-border bg-background/90 shadow-[0_-12px_32px_rgba(2,2,2,0.08)] backdrop-blur supports-[backdrop-filter]:bg-background/70',
                     isAdmin ? 'md:hidden' : 'max-w-md md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-t-xl md:border-x md:shadow-md',
                 )}
             >
