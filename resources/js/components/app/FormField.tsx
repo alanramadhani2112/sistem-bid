@@ -9,6 +9,7 @@ type FormFieldProps = Omit<ComponentProps<typeof Input>, 'id' | 'name'> & {
     name: string;
     error?: string;
     required?: boolean;
+    description?: ReactNode;
     children?: ReactNode;
     className?: string;
 };
@@ -18,6 +19,7 @@ export function FormField({
     name,
     error,
     required,
+    description,
     children,
     type = 'text',
     className,
@@ -37,6 +39,7 @@ export function FormField({
                     {...inputProps}
                 />
             )}
+            {description && <p className="text-xs text-muted-foreground">{description}</p>}
             {error && <p className="text-xs text-destructive">{error}</p>}
         </div>
     );

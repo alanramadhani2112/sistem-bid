@@ -1,14 +1,16 @@
 import { Head } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { AuctionCard } from '@/components/app/AuctionCard';
 import { CategoryTab } from '@/components/app/CategoryTab';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
 import { PageHeader } from '@/components/app/PageHeader';
+import { useAuctionStatusFeed } from '@/Hooks/useAuctionStatusFeed';
 import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
 
@@ -33,12 +35,27 @@ type AuctionsIndexProps = {
 };
 
 export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
+    const [auctionItems, setAuctionItems] = useState(auctions);
     const [status, setStatus] = useState('all');
     const [query, setQuery] = useState('');
+    const hasFilter = status !== 'all' || query.length > 0;
+    const handleAuctionStatus = useCallback((auction: Auction) => {
+        setAuctionItems((current) => {
+            if (auction.status === 'draft') return current.filter((item) => item.id !== auction.id);
+
+            const exists = current.some((item) => item.id === auction.id);
+            if (!exists) return [auction, ...current];
+
+            return current.map((item) => (item.id === auction.id ? { ...item, ...auction, green_bean: { ...item.green_bean, ...auction.green_bean } } : item));
+        });
+    }, []);
+
+    useAuctionStatusFeed<Auction>(handleAuctionStatus);
+
     const filteredAuctions = useMemo(() => {
         const q = query.toLowerCase();
 
-        return auctions.filter((auction) => {
+        return auctionItems.filter((auction) => {
             const matchesStatus = status === 'all' || auction.status === status;
             const matchesQuery = [auction.title, auction.green_bean.name, auction.green_bean.origin, auction.green_bean.process]
                 .join(' ')
@@ -47,7 +64,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
 
             return matchesStatus && matchesQuery;
         });
-    }, [auctions, query, status]);
+    }, [auctionItems, query, status]);
 
     return (
         <AppShell>
@@ -56,11 +73,17 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
             <section className="space-y-5">
                 <PageHeader accent="Auction Board" subtitle="Cari lot, cek harga, dan masuk room saat status live." title="Coffee lots" />
 
-                <Card className="sticky top-16 z-10 border-primary/20 bg-background/95 shadow-sm backdrop-blur">
+                <Card className="sticky top-16 z-10 border-primary/20 bg-card/95 shadow-md backdrop-blur">
                     <CardContent className="space-y-3 p-3">
                         <div className="flex items-center justify-between gap-3">
                             <Badge variant="secondary">{filteredAuctions.length} lot</Badge>
-                            <p className="text-xs font-medium text-muted-foreground">Live first</p>
+                            {hasFilter ? (
+                                <Button className="h-8 px-2 text-xs" onClick={() => { setStatus('all'); setQuery(''); }} size="sm" type="button" variant="ghost">
+                                    Reset filter
+                                </Button>
+                            ) : (
+                                <p className="text-xs font-medium text-muted-foreground">Live first</p>
+                            )}
                         </div>
                         <Input
                             aria-label="Cari auction"
@@ -83,13 +106,21 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                     </CardContent>
                 </Card>
 
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                     {filteredAuctions.map((auction) => (
                         <AuctionCard auction={auction} formatPrice={formatRupiah} key={auction.id} />
                     ))}
 
                     {filteredAuctions.length === 0 && (
-                        <EmptyState description="Coba ubah filter status atau kata kunci pencarian." title="Auction tidak ditemukan" />
+                        <EmptyState
+                            action={hasFilter ? (
+                                <Button onClick={() => { setStatus('all'); setQuery(''); }} type="button" variant="outline">
+                                    Reset filter
+                                </Button>
+                            ) : undefined}
+                            description="Coba ubah filter status atau kata kunci pencarian."
+                            title="Auction tidak ditemukan"
+                        />
                     )}
                 </div>
             </section>

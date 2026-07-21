@@ -21,7 +21,9 @@ type AuctionRoomProps = {
         id: number;
         title: string;
         current_price: number;
+        starts_at: string;
         ends_at: string;
+        status: string;
         green_bean: {
             name: string;
             origin: string;
@@ -43,8 +45,9 @@ type SharedProps = {
 
 export default function AuctionRoom({ auction, bidHistory, leaderboard, userHighestBid }: AuctionRoomProps) {
     const { props } = usePage<SharedProps>();
-    const room = useAuctionRoom(auction.id, auction.current_price, leaderboard, bidHistory);
+    const room = useAuctionRoom(auction.id, auction.current_price, leaderboard, bidHistory, auction.status);
     const nextBid = room.currentPrice + auction.green_bean.bid_increment;
+    const canBid = room.auctionStatus === 'live';
     const leader = room.leaderboard[0]?.bidder_name ?? null;
     const leaderAmount = room.leaderboard[0]?.amount ?? null;
     const { data, errors, post, processing, setData } = useForm({
@@ -68,13 +71,13 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                     ← Kembali
                 </Link>
 
-                <AuctionStateBanner endsAt={auction.ends_at} status="live" />
+                <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={room.auctionStatus} />
 
                 <div className="grid gap-4">
                     <div className="space-y-4">
                         <div className="rounded-xl border border-primary/40 bg-primary/5 p-4 shadow-[0_18px_44px_rgba(136,26,29,0.14)]">
                             <div className="flex items-center justify-between gap-3">
-                                <StatusBadge status="live" />
+                                <StatusBadge status={room.auctionStatus} />
                                 <RealtimeConnectionBadge />
                             </div>
                             <h1 className="mt-4 text-3xl font-black leading-tight text-foreground">{auction.title}</h1>
@@ -102,15 +105,16 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                     </div>
 
                     <div className="space-y-4">
-                        <LiveCountdownPanel mode="ends" status="live" target={auction.ends_at} />
+                        <LiveCountdownPanel mode="ends" status={room.auctionStatus} target={auction.ends_at} />
                         <BidActionPanel
                             amount={data.amount}
                             auctionTitle={auction.title}
                             className="sticky bottom-20 z-10 lg:static"
                             currentPrice={room.currentPrice}
+                            disabled={!canBid}
                             error={errors.amount}
                             formatPrice={formatRupiah}
-                            helper="Bid hanya diterima kalau saldo cukup dan increment valid."
+                            helper={canBid ? 'Cek nominal sebelum kirim. Server tetap validasi saldo dan minimum bid.' : 'Auction sudah tidak menerima bid.'}
                             nextBid={nextBid}
                             onAmountChange={(value) => setData('amount', value)}
                             onConfirm={submitBid}
@@ -118,7 +122,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         />
                         <ReadinessChecklist
                             items={[
-                                { description: 'Auction sedang live.', label: 'Status live', ready: true },
+                                { description: canBid ? 'Auction sedang live.' : 'Auction sudah selesai.', label: 'Status live', ready: canBid },
                                 { description: `Minimal bid berikutnya ${formatRupiah(nextBid)}.`, label: 'Bid berikutnya jelas', ready: true },
                                 { description: 'Sistem validasi saldo saat submit bid.', label: 'Wallet dicek otomatis', ready: true },
                             ]}

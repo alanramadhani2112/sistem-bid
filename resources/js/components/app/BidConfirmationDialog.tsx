@@ -40,12 +40,12 @@ export function BidConfirmationDialog({
     return (
         <Drawer showSwipeHandle>
             <DrawerTrigger disabled={disabled || processing || isBelowNextBid} render={<Button className="min-h-11 w-full rounded-md" disabled={disabled || processing || isBelowNextBid} />}>
-                {processing ? 'Memproses...' : 'Review bid'}
+                {processing ? 'Memproses...' : 'Review bid sebelum kirim'}
             </DrawerTrigger>
             <DrawerContent className="mx-auto max-w-md rounded-t-xl md:bottom-auto md:left-1/2 md:right-auto md:top-1/2 md:w-[520px] md:max-w-[calc(100vw-2rem)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl md:border">
                 <DrawerHeader className="text-left">
-                    <DrawerTitle className="text-xl font-black">Confirm Your Bid</DrawerTitle>
-                    <DrawerDescription>{auctionTitle}</DrawerDescription>
+                    <DrawerTitle className="text-xl font-black">Konfirmasi bid</DrawerTitle>
+                    <DrawerDescription>{auctionTitle} · cek nominal sebelum dikirim.</DrawerDescription>
                 </DrawerHeader>
                 <div className="space-y-4 px-4 pb-4">
                     <div className="rounded-lg border bg-primary/5 p-4">
@@ -79,9 +79,9 @@ export function BidConfirmationDialog({
                 </div>
                 <DrawerFooter className="gap-2 md:flex-row md:justify-end">
                     <Button className="rounded-md md:order-2" disabled={processing || isBelowNextBid || !confirmed} onClick={onConfirm}>
-                        {processing ? 'Mengirim bid...' : 'Confirm bid'}
+                        {processing ? 'Mengirim bid...' : 'Kirim bid'}
                     </Button>
-                    <DrawerClose render={<Button className="rounded-md md:order-1" variant="outline" />}>Cancel</DrawerClose>
+                    <DrawerClose render={<Button className="rounded-md md:order-1" variant="outline" />}>Batal</DrawerClose>
                 </DrawerFooter>
             </DrawerContent>
         </Drawer>

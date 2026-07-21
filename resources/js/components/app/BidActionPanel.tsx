@@ -44,7 +44,7 @@ export function BidActionPanel({
                         <div>
                             <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground">
                                 <Gavel aria-hidden="true" className="size-4 text-primary" />
-                                Place bid
+                                Pasang bid
                             </p>
                             <p className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <WalletCards aria-hidden="true" className="size-3.5" />
@@ -57,6 +57,7 @@ export function BidActionPanel({
                     </div>
 
                     <Input
+                        aria-label="Nominal bid"
                         aria-invalid={Boolean(error)}
                         min={nextBid}
                         onChange={(event) => onAmountChange(Number(event.target.value))}

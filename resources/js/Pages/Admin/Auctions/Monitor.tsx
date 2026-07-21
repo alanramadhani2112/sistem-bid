@@ -59,11 +59,12 @@ type MonitorProps = {
 const serverToHookRow = (r: BidRow) => ({ id: r.id, amount: r.amount, bidder_name: r.user.name });
 
 export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidHistory: bh }: MonitorProps) {
-    const { currentPrice, leaderboard, bidHistory } = useAuctionRoom(
+    const { auctionStatus, currentPrice, leaderboard, bidHistory, winner } = useAuctionRoom(
         initial.id,
         initial.current_price,
         lb.map(serverToHookRow),
         bh.map(serverToHookRow),
+        initial.status,
     );
     const latestBid = bidHistory[0];
     const leader = leaderboard[0]?.bidder_name ?? null;
@@ -85,7 +86,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                     action={<RealtimeConnectionBadge />}
                 />
 
-                <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={initial.status} />
+                <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={auctionStatus} />
 
                 <div className="sticky top-16 z-10 grid gap-3 rounded-xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[1.2fr_0.8fr]">
                     <CurrentPriceCard
@@ -96,24 +97,29 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                         price={currentPrice}
                     />
                     <LiveCountdownPanel
-                        mode={initial.status === 'published' ? 'starts' : 'ends'}
-                        status={initial.status}
-                        target={initial.status === 'published' ? initial.starts_at : initial.ends_at}
+                        mode={auctionStatus === 'published' ? 'starts' : 'ends'}
+                        status={auctionStatus}
+                        target={auctionStatus === 'published' ? initial.starts_at : initial.ends_at}
                     />
                 </div>
 
                 <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-                    <WinnerPreviewCard bidCount={bidHistory.length} bidderName={leader} amount={leaderboard[0]?.amount ?? null} formatPrice={formatRupiah} />
-                    {initial.status === 'live' && (
+                    <WinnerPreviewCard
+                        bidCount={bidHistory.length}
+                        bidderName={winner?.bidder_name ?? leader}
+                        amount={winner?.winning_amount ?? leaderboard[0]?.amount ?? null}
+                        formatPrice={formatRupiah}
+                    />
+                    {auctionStatus === 'live' && (
                         <AlertDialog>
                             <AlertDialogTrigger render={<Button className="min-h-11 w-full" variant="destructive" />}>
-                                Close Now
+                                Tutup auction
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
                                     <AlertDialogTitle>Tutup auction sekarang?</AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        Auction akan ditutup dan winner ditentukan dari bid tertinggi saat ini. Aksi ini tidak bisa dibatalkan.
+                                        {initial.title} akan ditutup dan winner ditentukan dari bid tertinggi saat ini. Aksi ini tidak bisa dibatalkan.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
                                 <AlertDialogFooter>

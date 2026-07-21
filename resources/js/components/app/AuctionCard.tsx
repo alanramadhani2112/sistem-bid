@@ -33,17 +33,18 @@ export function AuctionCard({ auction }: AuctionCardProps) {
     const isPublished = auction.status === 'published';
     const isClosed = auction.status === 'closed';
     const href = isLive ? `/auctions/${auction.id}/room` : `/auctions/${auction.id}`;
+    const ctaLabel = isLive ? 'Masuk room' : isPublished ? 'Lihat jadwal' : isClosed ? 'Lihat hasil' : 'Lihat detail';
 
     return (
         <Card
             className={cn(
-                'overflow-hidden rounded-xl border-border bg-card shadow-[0_18px_48px_rgba(2,2,2,0.08)] transition-colors hover:border-primary/30 hover:bg-accent/25',
+                'overflow-hidden rounded-xl border-border bg-card pt-0 shadow-[0_18px_48px_rgba(2,2,2,0.08)] transition-colors hover:border-primary/30 hover:bg-accent/25',
                 isLive && 'border-primary/55 bg-primary/5 shadow-[0_20px_52px_rgba(136,26,29,0.16)]',
                 isClosed && 'opacity-75',
             )}
         >
             <div className="relative">
-                <AuctionImage alt={`${auction.green_bean.name} green beans`} className="aspect-[1.55]" imagePath={auction.green_bean.image_path} />
+                <AuctionImage alt={`${auction.green_bean.name} green beans`} className="aspect-[1.9] w-full" imagePath={auction.green_bean.image_path} />
                 <div className="absolute left-3 top-3">
                     <StatusBadge className="shadow-sm" status={auction.status} />
                 </div>
@@ -86,7 +87,7 @@ export function AuctionCard({ auction }: AuctionCardProps) {
                         href={href}
                     >
                         {isLive ? <Gavel data-icon="inline-start" /> : <Timer data-icon="inline-start" />}
-                        {isLive ? 'Masuk room' : 'Lihat detail'}
+                        {ctaLabel}
                     </Link>
                 </div>
             </CardContent>
