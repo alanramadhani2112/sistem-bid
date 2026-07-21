@@ -19,6 +19,7 @@ import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { SectionCard } from '@/components/app/SectionCard';
@@ -78,7 +79,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
         <AppShell>
             <Head title={`Monitor ${initial.title}`} />
 
-            <section className="space-y-6">
+            <PageShell spacing="lg">
                 <PageHeader
                     accent="Auction Command Center"
                     subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
@@ -164,7 +165,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                         </div>
                     </div>
                 </SectionCard>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }
