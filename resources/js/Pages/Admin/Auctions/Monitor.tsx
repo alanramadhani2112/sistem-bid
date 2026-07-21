@@ -78,7 +78,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
         <AppShell>
             <Head title={`Monitor ${initial.title}`} />
 
-            <section className="space-y-5">
+            <section className="space-y-6">
                 <PageHeader
                     accent="Auction Command Center"
                     subtitle={`${initial.green_bean.name} · ${initial.green_bean.origin} · ${initial.green_bean.process}`}
@@ -88,7 +88,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
 
                 <AuctionStateBanner endsAt={initial.ends_at} startsAt={initial.starts_at} status={auctionStatus} />
 
-                <div className="sticky top-16 z-10 grid gap-3 rounded-xl border border-border bg-background/95 p-3 shadow-sm backdrop-blur lg:grid-cols-[1.2fr_0.8fr]">
+                <div className="sticky top-16 z-10 grid gap-4 rounded-2xl border border-border bg-background/95 p-4 shadow-sm backdrop-blur lg:grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)]">
                     <CurrentPriceCard
                         bidCount={bidHistory.length}
                         formatPrice={formatRupiah}
@@ -103,7 +103,7 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                     />
                 </div>
 
-                <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
+                <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_20rem]">
                     <WinnerPreviewCard
                         bidCount={bidHistory.length}
                         bidderName={winner?.bidder_name ?? leader}
@@ -134,18 +134,18 @@ export default function AuctionMonitor({ auction: initial, leaderboard: lb, bidH
                 </div>
 
                 {latestBid && (
-                    <p aria-live="polite" className="rounded-xl border border-border bg-muted/40 p-3 text-sm text-muted-foreground">
+                    <p aria-live="polite" className="rounded-xl border border-border bg-muted/40 p-3.5 text-sm text-muted-foreground">
                         Bid terbaru: <span className="font-semibold text-foreground">{latestBid.bidder_name}</span> · <PriceText className="inline-block max-w-[10rem] align-bottom text-muted-foreground" value={latestBid.amount} />
                     </p>
                 )}
 
-                <div className="grid gap-4 lg:grid-cols-2">
+                <div className="grid gap-5 lg:grid-cols-2">
                     <BidHistoryFeed formatPrice={formatRupiah} rows={bidHistory} title="Realtime bid feed" />
                     <LeaderboardPanel formatPrice={formatRupiah} rows={leaderboard} />
                 </div>
 
                 <SectionCard title="Lot information">
-                    <div className="grid gap-3 text-sm sm:grid-cols-4">
+                    <div className="grid gap-4 text-sm sm:grid-cols-4">
                         <div>
                             <p className="text-muted-foreground">Green bean</p>
                             <p className="font-semibold text-foreground">{initial.green_bean.name}</p>

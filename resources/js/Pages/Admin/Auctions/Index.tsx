@@ -122,7 +122,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
         <AppShell>
             <Head title="Admin Auctions" />
 
-            <section className="space-y-5">
+            <section className="space-y-6">
                 <PageHeader
                     accent="Admin"
                     action={
@@ -134,7 +134,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                     title="Auctions"
                 />
 
-                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                <div className="space-y-4 rounded-xl border border-border/80 bg-card/95 p-4 shadow-sm">
                     <div className="flex items-center justify-between gap-3">
                         <Badge variant="secondary">{filteredAuctions.length} auction</Badge>
                         {hasFilter && (
@@ -143,45 +143,49 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                             </Button>
                         )}
                     </div>
-                    <Input
-                        aria-label="Cari auction admin"
-                        className="min-h-11"
-                        onChange={(event) => setQuery(event.target.value)}
-                        placeholder="Cari auction, green bean, origin..."
-                        type="search"
-                        value={query}
-                    />
-                    <CategoryTab
-                        onChange={setStatus}
-                        options={[
-                            { label: 'Semua', value: 'all' },
-                            { label: 'Draft', value: 'draft' },
-                            { label: 'Published', value: 'published' },
-                            { label: 'Live', value: 'live' },
-                            { label: 'Closed', value: 'closed' },
-                        ]}
-                        value={status}
-                    />
+                    <div className="space-y-3">
+                        <Input
+                            aria-label="Cari auction admin"
+                            className="min-h-11"
+                            onChange={(event) => setQuery(event.target.value)}
+                            placeholder="Cari auction, green bean, origin..."
+                            type="search"
+                            value={query}
+                        />
+                        <CategoryTab
+                            onChange={setStatus}
+                            options={[
+                                { label: 'Semua', value: 'all' },
+                                { label: 'Draft', value: 'draft' },
+                                { label: 'Published', value: 'published' },
+                                { label: 'Live', value: 'live' },
+                                { label: 'Closed', value: 'closed' },
+                            ]}
+                            value={status}
+                        />
+                    </div>
                 </div>
 
-                <div className="space-y-3.5">
+                <div className="space-y-4">
                     {filteredAuctions.map((auction) => (
                         <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={auction.id}>
-                            <CardContent className="flex flex-col gap-3 p-5">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
+                            <CardContent className="flex flex-col gap-4 p-4 sm:p-5">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="min-w-0 space-y-1.5">
                                         <h2 className="text-lg font-semibold text-foreground">{auction.title}</h2>
-                                        <p className="mt-1 text-sm text-muted-foreground">
+                                        <p className="text-sm text-muted-foreground">
                                             {auction.green_bean.name} · {auction.green_bean.origin}
                                         </p>
                                     </div>
-                                    <StatusBadge status={auction.status} />
+                                    <StatusBadge className="shrink-0" status={auction.status} />
                                 </div>
 
-                                <p className="flex min-w-0 items-center gap-1 text-sm text-muted-foreground">Current <PriceText className="inline-block max-w-[10rem] text-muted-foreground" value={auction.current_price} /></p>
-                                <p className="text-xs text-muted-foreground">
-                                    {auction.starts_at} — {auction.ends_at}
-                                </p>
+                                <div className="grid gap-2 rounded-xl border border-border/70 bg-muted/25 p-3 text-sm sm:grid-cols-[1fr_auto] sm:items-center">
+                                    <p className="flex min-w-0 items-center gap-1 text-muted-foreground">Current <PriceText className="inline-block max-w-[10rem] text-foreground" value={auction.current_price} /></p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {auction.starts_at} — {auction.ends_at}
+                                    </p>
+                                </div>
 
                                 <ActionButtons auction={auction} />
                             </CardContent>
