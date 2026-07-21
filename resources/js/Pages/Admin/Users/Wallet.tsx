@@ -1,8 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+import { BackLink } from '@/components/app/BackLink';
 import { PageHeader } from '@/components/app/PageHeader';
 import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
@@ -38,6 +38,8 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
             <Head title={`Wallet ${user.name}`} />
 
             <section className="space-y-5">
+                <BackLink href="/admin/users" label="Back to users" />
+
                 <PageHeader
                     accent="Admin"
                     subtitle={`${user.email} · ${user.role}`}
@@ -50,13 +52,6 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
                         <PriceText className="mt-2 text-foreground" prefixLabel="Wallet balance" value={wallet.balance} variant="hero" />
                     </CardContent>
                 </Card>
-
-                <div className="flex items-center gap-2">
-                    <Link href="/admin/users">
-                        <Button size="sm" variant="outline">← Back to users</Button>
-                    </Link>
-                </div>
-
                 <SectionCard title="Ledger">
                     <div className="space-y-3">
                         {transactions.length === 0 && (
