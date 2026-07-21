@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { type FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import { FormField } from '@/components/app/FormField';
+import { BackLink } from '@/components/app/BackLink';
 import { PageHeader } from '@/components/app/PageHeader';
 import { AppShell } from '../../../Layouts/AppShell';
 
@@ -69,9 +70,7 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
             <Head title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'} />
 
             <section className="space-y-4">
-                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/admin/green-beans">
-                    ← Kembali
-                </Link>
+                <BackLink href="/admin/green-beans" />
 
                 <PageHeader
                     accent="Admin"

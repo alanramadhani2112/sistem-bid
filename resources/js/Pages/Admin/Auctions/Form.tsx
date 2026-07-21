@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import { FormField } from '@/components/app/FormField';
+import { BackLink } from '@/components/app/BackLink';
 import { PageHeader } from '@/components/app/PageHeader';
 import { AppShell } from '../../../Layouts/AppShell';
 
@@ -61,9 +62,7 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
             <Head title={isEdit ? 'Edit Auction' : 'Tambah Auction'} />
 
             <section className="space-y-4">
-                <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href="/admin/auctions">
-                    ← Kembali
-                </Link>
+                <BackLink href="/admin/auctions" />
 
                 <PageHeader
                     accent="Admin"
