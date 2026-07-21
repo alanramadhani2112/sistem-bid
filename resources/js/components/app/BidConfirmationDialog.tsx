@@ -36,9 +36,20 @@ export function BidConfirmationDialog({
 }: BidConfirmationDialogProps) {
     const isBelowNextBid = amount < nextBid;
     const [confirmed, setConfirmed] = useState(false);
+    const [open, setOpen] = useState(false);
+
+    const handleOpenChange = (nextOpen: boolean) => {
+        setOpen(nextOpen);
+        if (!nextOpen) setConfirmed(false);
+    };
+
+    const confirmBid = () => {
+        onConfirm();
+        handleOpenChange(false);
+    };
 
     return (
-        <Dialog>
+        <Dialog onOpenChange={handleOpenChange} open={open}>
             <DialogTrigger disabled={disabled || processing || isBelowNextBid} render={<Button className="min-h-11 w-full rounded-md" disabled={disabled || processing || isBelowNextBid} />}>
                 {processing ? 'Memproses...' : 'Review bid sebelum kirim'}
             </DialogTrigger>
@@ -79,7 +90,7 @@ export function BidConfirmationDialog({
                     </label>
                 </div>
                 <DialogFooter className="m-0 flex-col gap-2 rounded-none border-t bg-background/95 p-4 sm:flex-row sm:justify-end">
-                    <Button className="min-h-11 w-full rounded-md sm:w-auto" disabled={processing || isBelowNextBid || !confirmed} onClick={onConfirm}>
+                    <Button className="min-h-11 w-full rounded-md sm:w-auto" disabled={processing || isBelowNextBid || !confirmed} onClick={confirmBid}>
                         {processing ? 'Mengirim bid...' : 'Kirim bid'}
                     </Button>
                     <DialogClose render={<Button className="min-h-11 w-full rounded-md sm:w-auto" variant="outline" />}>Batal</DialogClose>
