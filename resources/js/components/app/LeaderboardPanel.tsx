@@ -28,7 +28,7 @@ export function LeaderboardPanel({ rows, formatPrice, title = 'Leaderboard', cla
                     {rows.map((row, index) => (
                         <div
                             className={cn(
-                                'flex min-w-0 items-center justify-between gap-3 rounded-xl border border-border bg-background p-3',
+                                'flex min-w-0 items-center justify-between gap-4 rounded-xl border border-border bg-background p-3.5',
                                 index === 0 && 'border-primary/40 bg-primary/5',
                             )}
                             key={`${row.id}-${index}`}
@@ -42,7 +42,7 @@ export function LeaderboardPanel({ rows, formatPrice, title = 'Leaderboard', cla
                                     {index === 0 && <p className="text-xs text-primary">Temporary leader</p>}
                                 </div>
                             </div>
-                            <PriceText className="max-w-[9rem] shrink-0 text-right text-foreground" prefixLabel="Leader amount" value={row.amount} />
+                            <PriceText className="max-w-[8rem] shrink-0 text-right text-foreground sm:max-w-[10rem]" prefixLabel="Leader amount" value={row.amount} />
                         </div>
                     ))}
                 </div>

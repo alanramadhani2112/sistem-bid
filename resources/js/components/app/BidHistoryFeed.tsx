@@ -29,17 +29,17 @@ export function BidHistoryFeed({ rows, formatPrice, title = 'Bid History', class
                         <div
                             className={
                                 index === 0
-                                    ? 'rounded-xl border border-primary/40 bg-primary/10 p-3 motion-safe:animate-pulse'
-                                    : 'rounded-xl border border-border bg-muted/40 p-3'
+                                    ? 'rounded-xl border border-primary/40 bg-primary/10 p-3.5 motion-safe:animate-pulse'
+                                    : 'rounded-xl border border-border bg-muted/40 p-3.5'
                             }
                             key={`${row.id}-${index}`}
                         >
-                            <div className="flex min-w-0 items-center justify-between gap-3">
+                            <div className="flex min-w-0 items-center justify-between gap-4">
                                 <p className="inline-flex min-w-0 items-center gap-2 truncate font-semibold text-foreground" title={row.bidder_name}>
                                     {index === 0 && <Radio aria-hidden="true" className="size-4 text-primary" />}
                                     {row.bidder_name}
                                 </p>
-                                <PriceText className="max-w-[9rem] shrink-0 text-right text-foreground" prefixLabel="Bid amount" value={row.amount} />
+                                <PriceText className="max-w-[8rem] shrink-0 text-right text-foreground sm:max-w-[10rem]" prefixLabel="Bid amount" value={row.amount} />
                             </div>
                             <p className="mt-1 text-xs text-muted-foreground">{index === 0 ? 'Bid terbaru' : row.placed_at ?? 'Realtime bid'}</p>
                         </div>
