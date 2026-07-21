@@ -67,22 +67,24 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
         <AppShell>
             <Head title={`Live Room · ${auction.title}`} />
 
-            <section className="min-w-0 space-y-4 overflow-hidden">
+            <section className="min-w-0 space-y-5 overflow-hidden">
                 <BackLink href={`/auctions/${auction.id}`} />
 
                 <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={room.auctionStatus} />
 
-                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5">
                     <div className="min-w-0 space-y-4">
-                        <div className="min-w-0 rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm">
+                        <div className="min-w-0 space-y-4 rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm sm:p-5">
                             <div className="flex items-center justify-between gap-3">
                                 <StatusBadge status={room.auctionStatus} />
                                 <RealtimeConnectionBadge />
                             </div>
-                            <h1 className="mt-4 text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">{auction.title}</h1>
-                            <p className="mt-2 text-sm text-muted-foreground">
+                            <div className="space-y-2">
+                                <h1 className="text-2xl font-black leading-tight tracking-tight text-foreground sm:text-3xl">{auction.title}</h1>
+                                <p className="text-sm text-muted-foreground">
                                 {auction.green_bean.name} · {auction.green_bean.origin}
-                            </p>
+                                </p>
+                            </div>
                         </div>
                         <CurrentPriceCard
                             bidCount={room.bidHistory.length}
@@ -129,7 +131,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                     </div>
                 </div>
 
-                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-5 md:grid-cols-2">
                     <LeaderboardPanel formatPrice={formatRupiah} rows={room.leaderboard} />
                     <BidHistoryFeed formatPrice={formatRupiah} rows={room.bidHistory} />
                 </div>
