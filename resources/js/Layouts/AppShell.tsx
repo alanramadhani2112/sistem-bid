@@ -61,7 +61,7 @@ export function AppShell({ children }: AppShellProps) {
                     !isAdmin && 'md:left-1/2 md:right-auto md:w-[448px] md:-translate-x-1/2 md:rounded-b-2xl md:border-x md:shadow-md',
                 )}
             >
-                <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'max-w-6xl' : 'max-w-md')}>
+                <div className={cn('mx-auto flex h-full items-center justify-between px-4', isAdmin ? 'w-full' : 'max-w-md')}>
                     <div className={cn('flex items-center gap-3', isAdmin && 'md:hidden')}>
                         <Link className="flex items-center gap-2 font-semibold tracking-tight text-primary" href={isAdmin ? '/admin/dashboard' : '/'}>
                             <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
@@ -71,7 +71,7 @@ export function AppShell({ children }: AppShellProps) {
                         </Link>
                         <Badge variant={isAdmin ? 'secondary' : 'default'}>{isAdmin ? 'Admin Console' : 'Live Auction'}</Badge>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className={cn('flex items-center gap-2', isAdmin && 'ml-auto')}>
                         {!isAdmin && (
                             <Link
                                 aria-label="Notifikasi live auction"
@@ -82,7 +82,7 @@ export function AppShell({ children }: AppShellProps) {
                             </Link>
                         )}
                         <DarkModeToggle />
-                        {user && (
+                        {user && !isAdmin && (
                             <Link
                                 as="button"
                                 className={cn(buttonVariants({ size: 'sm', variant: 'outline' }), 'min-h-9')}
