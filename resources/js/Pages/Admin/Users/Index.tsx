@@ -3,13 +3,16 @@ import { ShieldCheck, User, Wallet } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { FilterPanel } from '@/components/app/FilterPanel';
+import { ListItemCard } from '@/components/app/ListItemCard';
 import { MetricCard } from '@/components/app/MetricCard';
+import { MetricGrid } from '@/components/app/MetricGrid';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../../Layouts/AppShell';
@@ -42,16 +45,16 @@ export default function AdminUsers({ stats, users }: UsersProps) {
         <AppShell>
             <Head title="Admin Users" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader accent="Admin" subtitle="Cari user, cek saldo, dan ubah role bila diperlukan." title="Users" />
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <MetricGrid columns="two">
                     {Object.entries(stats).map(([label, value]) => (
                         <MetricCard key={label} label={label} value={value} />
                     ))}
-                </div>
+                </MetricGrid>
 
-                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                <FilterPanel>
                     <Input
                         aria-label="Cari user"
                         className="min-h-11"
@@ -60,7 +63,7 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                         type="search"
                         value={query}
                     />
-                </div>
+                </FilterPanel>
 
                 <div className="space-y-3.5">
                     {filteredUsers.length === 0 && (
@@ -75,8 +78,7 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                         />
                     )}
                     {filteredUsers.map((user) => (
-                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={user.id}>
-                            <CardContent className="flex flex-col gap-3 p-5">
+                        <ListItemCard contentClassName="flex flex-col gap-3" key={user.id}>
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
                                         <h2 className="inline-flex items-center gap-2 font-semibold text-foreground">
@@ -124,11 +126,10 @@ export default function AdminUsers({ stats, users }: UsersProps) {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                            </CardContent>
-                        </Card>
+                        </ListItemCard>
                     ))}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

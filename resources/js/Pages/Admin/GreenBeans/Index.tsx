@@ -2,10 +2,11 @@ import { Head, Link } from '@inertiajs/react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button, buttonVariants } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { ListItemCard } from '@/components/app/ListItemCard';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { AppShell } from '../../../Layouts/AppShell';
 
@@ -29,7 +30,7 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
         <AppShell>
             <Head title="Admin Green Beans" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader
                     accent="Admin"
                     action={
@@ -43,8 +44,7 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
 
                 <div className="space-y-3.5">
                     {greenBeans.map((greenBean) => (
-                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={greenBean.id}>
-                            <CardContent className="flex flex-col gap-3 p-5">
+                        <ListItemCard contentClassName="flex flex-col gap-3" key={greenBean.id}>
                                 <div className="flex items-start gap-3">
                                     <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border/80 bg-muted shadow-sm">
                                         {greenBean.image_path ? (
@@ -85,8 +85,7 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                                         Hapus
                                      </Link>
                                 </div>
-                            </CardContent>
-                        </Card>
+                        </ListItemCard>
                     ))}
 
                     {greenBeans.length === 0 && (
@@ -101,7 +100,7 @@ export default function GreenBeansIndex({ greenBeans }: GreenBeansIndexProps) {
                         />
                     )}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

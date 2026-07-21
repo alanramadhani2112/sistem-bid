@@ -2,10 +2,11 @@ import { Head, Link } from '@inertiajs/react';
 import { Coffee, Radio, Trophy, User } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { ListItemCard } from '@/components/app/ListItemCard';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { AppShell } from '../../../Layouts/AppShell';
 
@@ -31,7 +32,7 @@ export default function AdminWinners({ winners }: WinnersProps) {
         <AppShell>
             <Head title="Admin Winners" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader
                     accent="Admin"
                     subtitle="Winner dibuat otomatis ketika auction ditutup dan ada bid valid."
@@ -51,8 +52,7 @@ export default function AdminWinners({ winners }: WinnersProps) {
                         />
                     )}
                     {winners.map((winner) => (
-                        <Card className="border-border/80 bg-card/95 shadow-sm transition-colors hover:bg-accent/20" key={winner.id}>
-                            <CardContent className="flex flex-col gap-3 p-5">
+                        <ListItemCard contentClassName="flex flex-col gap-3" key={winner.id}>
                                 <div className="flex min-w-0 items-start justify-between gap-3">
                                     <div className="min-w-0">
                                         <h2 className="inline-flex max-w-full items-center gap-2 truncate font-semibold text-foreground" title={winner.auction.title}>
@@ -74,11 +74,10 @@ export default function AdminWinners({ winners }: WinnersProps) {
                                 <Link href={`/admin/auctions/${winner.auction.id}/monitor`}>
                                     <Button size="sm" variant="outline"><Radio data-icon="inline-start" />Monitor auction</Button>
                                 </Link>
-                            </CardContent>
-                        </Card>
+                        </ListItemCard>
                     ))}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

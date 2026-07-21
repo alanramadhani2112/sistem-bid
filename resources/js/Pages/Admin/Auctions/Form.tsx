@@ -2,12 +2,10 @@ import { Head, useForm } from '@inertiajs/react';
 import type { FormEvent } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import { FormField } from '@/components/app/FormField';
-import { BackLink } from '@/components/app/BackLink';
-import { PageHeader } from '@/components/app/PageHeader';
+import { FormPageShell } from '@/components/app/FormPageShell';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBeanOption = {
@@ -61,17 +59,11 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
         <AppShell>
             <Head title={isEdit ? 'Edit Auction' : 'Tambah Auction'} />
 
-            <section className="space-y-4">
-                <BackLink href="/admin/auctions" />
-
-                <PageHeader
-                    accent="Admin"
-                    subtitle="Pilih bean, jadwal, dan status dengan hati-hati karena status mengatur akses bidder."
-                    title={isEdit ? 'Edit Auction' : 'Tambah Auction'}
-                />
-
-                <Card className="border-border/80 bg-card/95 shadow-sm">
-                    <CardContent className="p-5">
+            <FormPageShell
+                backHref="/admin/auctions"
+                subtitle="Pilih bean, jadwal, dan status dengan hati-hati karena status mengatur akses bidder."
+                title={isEdit ? 'Edit Auction' : 'Tambah Auction'}
+            >
                         <form className="space-y-4" onSubmit={submit}>
                             <FormField description="Bean menentukan harga awal dan increment bid." error={errors.green_bean_id} label="Green Bean" name="green_bean_id" required>
                                 <select
@@ -117,9 +109,7 @@ export default function AuctionsForm({ auction, greenBeans, statuses }: Auctions
                                 {processing ? 'Menyimpan...' : isEdit ? 'Update auction' : 'Buat auction'}
                             </Button>
                         </form>
-                    </CardContent>
-                </Card>
-            </section>
+            </FormPageShell>
         </AppShell>
     );
 }

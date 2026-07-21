@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 import { BackLink } from '@/components/app/BackLink';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
 import { AppShell } from '../../../Layouts/AppShell';
@@ -37,7 +38,7 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
         <AppShell>
             <Head title={`Wallet ${user.name}`} />
 
-            <section className="space-y-5">
+            <PageShell>
                 <BackLink href="/admin/users" label="Back to users" />
 
                 <PageHeader
@@ -74,7 +75,7 @@ export default function AdminUserWallet({ user, wallet, transactions }: WalletPr
                         ))}
                     </div>
                 </SectionCard>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

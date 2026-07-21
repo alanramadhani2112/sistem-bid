@@ -2,13 +2,11 @@ import { Head, useForm } from '@inertiajs/react';
 import { type FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
 import { FormField } from '@/components/app/FormField';
-import { BackLink } from '@/components/app/BackLink';
-import { PageHeader } from '@/components/app/PageHeader';
+import { FormPageShell } from '@/components/app/FormPageShell';
 import { AppShell } from '../../../Layouts/AppShell';
 
 type GreenBeanForm = {
@@ -69,17 +67,11 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
         <AppShell>
             <Head title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'} />
 
-            <section className="space-y-4">
-                <BackLink href="/admin/green-beans" />
-
-                <PageHeader
-                    accent="Admin"
-                    subtitle="Data ini muncul ke bidder, jadi isi origin, proses, harga, dan increment dengan jelas."
-                    title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}
-                />
-
-                <Card className="border-border/80 bg-card/95 shadow-sm">
-                    <CardContent className="p-5">
+            <FormPageShell
+                backHref="/admin/green-beans"
+                subtitle="Data ini muncul ke bidder, jadi isi origin, proses, harga, dan increment dengan jelas."
+                title={isEdit ? 'Edit Green Bean' : 'Tambah Green Bean'}
+            >
                         <form className="space-y-4" onSubmit={submit}>
                             <FormField description="Nama produk yang muncul di auction card." error={errors.name} label="Nama" name="name" required>
                                 <Input id="name" name="name" onChange={(e) => setData('name', e.target.value)} value={data.name} />
@@ -115,9 +107,7 @@ export default function GreenBeansForm({ greenBean }: GreenBeansFormProps) {
                                 {processing ? 'Menyimpan...' : isEdit ? 'Update green bean' : 'Simpan green bean'}
                             </Button>
                         </form>
-                    </CardContent>
-                </Card>
-            </section>
+            </FormPageShell>
         </AppShell>
     );
 }

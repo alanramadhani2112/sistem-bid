@@ -8,7 +8,9 @@ import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { ControlRoomCard } from '@/components/app/ControlRoomCard';
 import { EmptyState } from '@/components/app/EmptyState';
 import { MetricCard } from '@/components/app/MetricCard';
+import { MetricGrid } from '@/components/app/MetricGrid';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { SectionCard } from '@/components/app/SectionCard';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -64,7 +66,7 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
         <AppShell>
             <Head title="Admin Dashboard" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader
                     accent="Control Room"
                     subtitle="Pantau auction live dulu, lalu queue dan metrik operasional."
@@ -119,13 +121,13 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                     <BidHistoryFeed formatPrice={formatRupiah} rows={recentBids} title="Recent bid activity" />
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                <MetricGrid className="lg:grid-cols-5" columns="two">
                     {Object.entries(stats).map(([label, value]) => (
                         <Link className="block transition-transform hover:-translate-y-0.5" href={metricRoutes[label] ?? '/admin/dashboard'} key={label}>
                             <MetricCard icon={metricIcons[label as keyof typeof metricIcons]} label={label} value={value} />
                         </Link>
                     ))}
-                </div>
+                </MetricGrid>
 
                 <div className="grid gap-3 sm:grid-cols-4">
                     {Object.entries(auctionsByStatus).map(([status, count]) => (
@@ -168,7 +170,7 @@ export default function AdminDashboard({ auctionsByStatus, liveAuctions, recentA
                         )}
                     </div>
                 </SectionCard>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }
