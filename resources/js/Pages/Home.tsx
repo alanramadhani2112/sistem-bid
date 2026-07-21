@@ -8,6 +8,7 @@ import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { LiveAuctionHero } from '@/components/app/LiveAuctionHero';
 import { MarketStatusStrip } from '@/components/app/MarketStatusStrip';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuctionStatusFeed } from '@/Hooks/useAuctionStatusFeed';
@@ -93,7 +94,7 @@ export default function Home({ auctions, latestBids }: HomeProps) {
         <AppShell>
             <Head title="Home" />
 
-            <section className="min-w-0 space-y-5 overflow-hidden">
+            <PageShell>
                 <PageHeader
                     accent="Jawara Green Beans"
                     subtitle="Mulai dari sini: cek live lot, saldo, dan riwayat bid."
@@ -145,7 +146,7 @@ export default function Home({ auctions, latestBids }: HomeProps) {
                         <ActionTile description={item.description} href={item.href} icon={item.icon} key={item.href} title={item.title} />
                     ))}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

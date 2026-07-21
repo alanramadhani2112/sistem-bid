@@ -1,6 +1,7 @@
 import { Head, Link, usePage } from '@inertiajs/react';
 
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { SectionCard } from '@/components/app/SectionCard';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -30,7 +31,7 @@ export default function Dashboard() {
         <AppShell>
             <Head title="Dashboard" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader
                     accent="Bidder Dashboard"
                     subtitle="Akses cepat ke auction, wallet, dan riwayat bid."
@@ -55,7 +56,7 @@ export default function Dashboard() {
                         </SectionCard>
                     ))}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

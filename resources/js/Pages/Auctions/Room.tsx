@@ -9,6 +9,7 @@ import { BidHistoryFeed } from '@/components/app/BidHistoryFeed';
 import { CurrentPriceCard } from '@/components/app/CurrentPriceCard';
 import { LeaderboardPanel } from '@/components/app/LeaderboardPanel';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { PageShell } from '@/components/app/PageShell';
 import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
 import { RealtimeConnectionBadge } from '@/components/app/RealtimeConnectionBadge';
 import { StatusBadge } from '@/components/app/StatusBadge';
@@ -67,7 +68,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
         <AppShell>
             <Head title={`Live Room · ${auction.title}`} />
 
-            <section className="min-w-0 space-y-5 overflow-hidden">
+            <PageShell>
                 <BackLink href={`/auctions/${auction.id}`} />
 
                 <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={room.auctionStatus} />
@@ -135,7 +136,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                     <LeaderboardPanel formatPrice={formatRupiah} rows={room.leaderboard} />
                     <BidHistoryFeed formatPrice={formatRupiah} rows={room.bidHistory} />
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { EmptyState } from '@/components/app/EmptyState';
 import { FormField } from '@/components/app/FormField';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { Badge } from '@/components/ui/badge';
 import { useWalletFeed } from '../../Hooks/useWalletFeed';
@@ -65,7 +66,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
         <AppShell>
             <Head title="Wallet" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader accent="Bid Power" subtitle="Saldo ini menentukan kemampuan kamu ikut live auction." title="Bid Power" />
 
                 <Card className="overflow-hidden border-primary/30 bg-primary/5 shadow-[0_18px_44px_rgba(136,26,29,0.12)]">
@@ -123,7 +124,7 @@ export default function WalletIndex({ wallet }: WalletPageProps) {
                         </div>
                     </CardContent>
                 </Card>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

@@ -7,7 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { FilterPanel } from '@/components/app/FilterPanel';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { StatusBadge } from '@/components/app/StatusBadge';
 import { AppShell } from '../../Layouts/AppShell';
@@ -39,10 +41,10 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
         <AppShell>
             <Head title="History" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader accent="Bidder" subtitle="Riwayat bid kamu per auction." title="History" />
 
-                <div className="rounded-xl border border-border/80 bg-card/95 p-3 shadow-sm">
+                <FilterPanel>
                     <CategoryTab
                         onChange={setStatus}
                         options={[
@@ -54,7 +56,7 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
                         value={status}
                     />
                     <p className="mt-3 text-xs font-medium text-muted-foreground">Menampilkan {filteredBids.length} bid</p>
-                </div>
+                </FilterPanel>
 
                 <div className="relative space-y-3 pl-5 before:absolute before:bottom-0 before:left-2 before:top-0 before:w-px before:bg-border">
                     {filteredBids.map((bid) => (
@@ -86,7 +88,7 @@ export default function HistoryIndex({ bids }: HistoryIndexProps) {
                         />
                     )}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

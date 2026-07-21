@@ -5,6 +5,7 @@ import { AuctionHeroMedia } from '@/components/app/AuctionHeroMedia';
 import { AuctionStateBanner } from '@/components/app/AuctionStateBanner';
 import { BackLink } from '@/components/app/BackLink';
 import { LiveCountdownPanel } from '@/components/app/LiveCountdownPanel';
+import { PageShell } from '@/components/app/PageShell';
 import { PriceText } from '@/components/app/PriceText';
 import { ReadinessChecklist } from '@/components/app/ReadinessChecklist';
 import { SectionCard } from '@/components/app/SectionCard';
@@ -44,7 +45,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
         <AppShell>
             <Head title={auction.title} />
 
-            <section className="space-y-5">
+            <PageShell>
                 <BackLink href="/auctions" />
 
                 <AuctionHeroMedia
@@ -129,7 +130,7 @@ export default function AuctionShow({ auction }: AuctionShowProps) {
                         {auction.green_bean.description && <p className="mt-4 text-sm text-muted-foreground">{auction.green_bean.description}</p>}
                     </SectionCard>
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

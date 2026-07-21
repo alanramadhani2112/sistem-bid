@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BackLink } from '@/components/app/BackLink';
 import { FormField } from '@/components/app/FormField';
+import { PageShell } from '@/components/app/PageShell';
 
 import { AppShell } from '../../Layouts/AppShell';
 
@@ -23,7 +24,7 @@ export default function Login() {
         <AppShell>
             <Head title="Login" />
 
-                <section className="space-y-4">
+            <PageShell spacing="sm">
                 <BackLink href="/" />
 
                 <Card className="mx-auto max-w-md border-border/80 bg-card/95 shadow-sm">
@@ -71,7 +72,7 @@ export default function Login() {
                     </div>
                 </CardContent>
             </Card>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

@@ -3,6 +3,7 @@ import { Coffee, History, ShieldCheck, Wallet } from 'lucide-react';
 
 import { ActionTile } from '@/components/app/ActionTile';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
@@ -29,7 +30,7 @@ export default function ProfileShow({ user }: ProfileShowProps) {
         <AppShell>
             <Head title="Profile" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader accent="Account" subtitle="Identitas akun yang dipakai untuk live bidding." title="Profile" />
 
                 <Card className="overflow-hidden border-border/80 bg-card/95 shadow-sm">
@@ -62,7 +63,7 @@ export default function ProfileShow({ user }: ProfileShowProps) {
                         </div>
                     </CardContent>
                 </Card>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }

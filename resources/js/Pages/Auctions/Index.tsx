@@ -5,11 +5,12 @@ import { AuctionCard } from '@/components/app/AuctionCard';
 import { CategoryTab } from '@/components/app/CategoryTab';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 
 import { EmptyState } from '@/components/app/EmptyState';
+import { FilterPanel } from '@/components/app/FilterPanel';
 import { PageHeader } from '@/components/app/PageHeader';
+import { PageShell } from '@/components/app/PageShell';
 import { useAuctionStatusFeed } from '@/Hooks/useAuctionStatusFeed';
 import { formatRupiah } from '@/lib/format';
 import { AppShell } from '../../Layouts/AppShell';
@@ -70,11 +71,10 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
         <AppShell>
             <Head title="Auctions" />
 
-            <section className="space-y-5">
+            <PageShell>
                 <PageHeader accent="Auction Board" subtitle="Cari lot, cek harga, dan masuk room saat status live." title="Coffee lots" />
 
-                <Card className="sticky top-16 z-10 border-primary/20 bg-card/95 shadow-md backdrop-blur">
-                    <CardContent className="space-y-3 p-3">
+                <FilterPanel sticky>
                         <div className="flex items-center justify-between gap-3">
                             <Badge variant="secondary">{filteredAuctions.length} lot</Badge>
                             {hasFilter ? (
@@ -103,8 +103,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                             ]}
                             value={status}
                         />
-                    </CardContent>
-                </Card>
+                </FilterPanel>
 
                 <div className="space-y-3.5">
                     {filteredAuctions.map((auction) => (
@@ -123,7 +122,7 @@ export default function AuctionsIndex({ auctions }: AuctionsIndexProps) {
                         />
                     )}
                 </div>
-            </section>
+            </PageShell>
         </AppShell>
     );
 }
