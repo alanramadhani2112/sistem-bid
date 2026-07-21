@@ -34,6 +34,11 @@ final class AdminDashboardController
         return Inertia::render('Admin/Users/Index', $service->users());
     }
 
+    public function createUser(): Response
+    {
+        return Inertia::render('Admin/Users/Create');
+    }
+
     public function storeUser(StoreUserRequest $request): RedirectResponse
     {
         $user = User::query()->create([
@@ -46,7 +51,7 @@ final class AdminDashboardController
 
         $user->wallet()->create(['balance' => 0]);
 
-        return back()->with('success', "User {$user->name} created.");
+        return redirect()->route('admin.users.index')->with('success', "User {$user->name} created.");
     }
 
     public function winners(AdminDashboardService $service): Response

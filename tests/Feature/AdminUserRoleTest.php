@@ -7,11 +7,59 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Modules\Shared\Enums\UserRole;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
 final class AdminUserRoleTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_admin_can_open_create_user_page(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $this->actingAs($admin)
+            ->get('/admin/users/create')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Admin/Users/Create'));
+    }
+
+    public function test_bidder_cannot_open_create_user_page(): void
+    {
+        $bidder = User::factory()->create(['role' => UserRole::Bidder]);
+
+        $this->actingAs($bidder)
+            ->get('/admin/users/create')
+            ->assertForbidden();
+    }
+
+    public function test_admin_can_create_user_from_create_page(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        $response = $this->actingAs($admin)->post('/admin/users', [
+            'name' => 'Event Bidder',
+            'email' => 'event-bidder@example.test',
+            'password' => 'password123',
+            'role' => 'bidder',
+        ]);
+
+        $response->assertRedirect('/admin/users');
+        $response->assertSessionHas('success');
+
+        $user = User::query()->where('email', 'event-bidder@example.test')->firstOrFail();
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'name' => 'Event Bidder',
+            'role' => 'bidder',
+        ]);
+        $this->assertDatabaseHas('wallets', [
+            'user_id' => $user->id,
+            'balance' => 0,
+        ]);
+    }
 
     public function test_admin_can_change_user_role(): void
     {
