@@ -66,16 +66,16 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
         <AppShell>
             <Head title={`Live Room · ${auction.title}`} />
 
-            <section className="space-y-4">
+            <section className="min-w-0 space-y-4 overflow-hidden">
                 <Link className="text-sm font-medium text-muted-foreground hover:text-foreground" href={`/auctions/${auction.id}`}>
                     ← Kembali
                 </Link>
 
                 <AuctionStateBanner endsAt={auction.ends_at} startsAt={auction.starts_at} status={room.auctionStatus} />
 
-                <div className="grid gap-4">
-                    <div className="space-y-4">
-                        <div className="rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
+                    <div className="min-w-0 space-y-4">
+                        <div className="min-w-0 rounded-2xl border border-primary/30 bg-card/95 p-4 shadow-sm">
                             <div className="flex items-center justify-between gap-3">
                                 <StatusBadge status={room.auctionStatus} />
                                 <RealtimeConnectionBadge />
@@ -104,7 +104,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                         />
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="min-w-0 space-y-4">
                         <LiveCountdownPanel mode="ends" status={room.auctionStatus} target={auction.ends_at} />
                         <BidActionPanel
                             amount={data.amount}
@@ -130,7 +130,7 @@ export default function AuctionRoom({ auction, bidHistory, leaderboard, userHigh
                     </div>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4 md:grid-cols-2">
                     <LeaderboardPanel formatPrice={formatRupiah} rows={room.leaderboard} />
                     <BidHistoryFeed formatPrice={formatRupiah} rows={room.bidHistory} />
                 </div>
