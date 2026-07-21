@@ -16,7 +16,7 @@ export function AuctionImage({ alt, children, className, imagePath, overlay = fa
     const src = imagePath && !failed ? `/storage/${imagePath}` : null;
 
     return (
-        <div className={cn('relative overflow-hidden bg-primary text-primary-foreground', className)}>
+        <div className={cn('relative min-w-0 max-w-full overflow-hidden bg-primary text-primary-foreground', className)}>
             {src ? (
                 <img
                     alt={alt}

@@ -93,7 +93,7 @@ export default function Home({ auctions, latestBids }: HomeProps) {
         <AppShell>
             <Head title="Home" />
 
-            <section className="space-y-5">
+            <section className="min-w-0 space-y-5 overflow-hidden">
                 <PageHeader
                     accent="Jawara Green Beans"
                     subtitle="Mulai dari sini: cek live lot, saldo, dan riwayat bid."

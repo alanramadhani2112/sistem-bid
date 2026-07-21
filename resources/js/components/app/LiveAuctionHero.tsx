@@ -42,7 +42,7 @@ export function LiveAuctionHero({ auction, formatPrice, title = 'Live Now' }: Li
 
     return (
         <Card className="overflow-hidden rounded-xl border-primary/40 bg-primary/5 pt-0 shadow-[0_22px_58px_rgba(136,26,29,0.18)]">
-            <CardContent className="grid gap-3 p-0">
+            <CardContent className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 p-0">
                 <AuctionImage
                     alt={`${auction.green_bean.name} green beans`}
                     className="aspect-[1.6] w-full"
