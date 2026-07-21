@@ -121,7 +121,14 @@ export default function PublicLiveMonitor({ auction: initial, leaderboard: lb, b
                             </div>
                         </AuctionImage>
 
-                        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.5fr)]">
+                        <div className="grid gap-4">
+                            <LiveCountdownPanel
+                                className="rounded-3xl shadow-xl shadow-primary/10"
+                                mode={auctionStatus === 'published' ? 'starts' : 'ends'}
+                                status={auctionStatus}
+                                target={auctionStatus === 'published' ? initial.starts_at : initial.ends_at}
+                                variant="stage"
+                            />
                             <Card className="rounded-3xl border-primary/35 bg-primary/5 shadow-sm">
                                 <CardContent className="grid gap-4 p-5 sm:grid-cols-3 lg:p-6">
                                     <div className="min-w-0 space-y-1">
@@ -140,11 +147,6 @@ export default function PublicLiveMonitor({ auction: initial, leaderboard: lb, b
                                     </div>
                                 </CardContent>
                             </Card>
-                            <LiveCountdownPanel
-                                mode={auctionStatus === 'published' ? 'starts' : 'ends'}
-                                status={auctionStatus}
-                                target={auctionStatus === 'published' ? initial.starts_at : initial.ends_at}
-                            />
                         </div>
                     </section>
 

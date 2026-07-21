@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 
 type AuctionStatus = 'draft' | 'published' | 'live' | 'closed' | string;
 type CountdownMode = 'starts' | 'ends';
-type CountdownVariant = 'hero' | 'compact';
+type CountdownVariant = 'hero' | 'compact' | 'stage';
 
 type LiveCountdownPanelProps = {
     target: string;
@@ -76,37 +76,53 @@ export function LiveCountdownPanel({ target, status, mode = 'ends', variant = 'h
     const label = mode === 'starts' ? 'Mulai dalam' : 'Berakhir dalam';
     const isDone = status === 'closed' || timeLeft.total === 0;
     const value = isDone ? 'Auction selesai' : formatClock(timeLeft);
-    const progress = isDone ? 100 : Math.max(8, Math.min(100, Math.round((timeLeft.minutes * 60 + timeLeft.seconds) / 36)));
+    const progress = isDone ? 100 : Math.max(4, Math.min(100, Math.round(((timeLeft.seconds + 1) / 60) * 100)));
+    const isStage = variant === 'stage';
+    const showRing = variant === 'hero' || isStage;
 
     return (
-        <Card className={cn('border', toneClass(timeLeft, status), className)}>
-            <CardContent className={cn('p-4', variant === 'hero' && 'md:p-5')}>
-                <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_minmax(0,1fr)] md:items-center')}>
-                    {variant === 'hero' && (
+        <Card className={cn('relative overflow-hidden border', toneClass(timeLeft, status), className)}>
+            <CardContent className={cn('relative p-4', variant === 'hero' && 'md:p-5', isStage && 'p-5 sm:p-6 lg:p-8')}>
+                <div className={cn('grid gap-4', variant === 'hero' && 'md:grid-cols-[auto_minmax(0,1fr)] md:items-center', isStage && 'sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-6 lg:gap-8')}>
+                    {showRing && (
                         <div
                             aria-hidden="true"
-                            className="grid size-20 place-items-center rounded-full border bg-background/70 shadow-sm md:size-24"
+                            className={cn(
+                                'relative grid place-items-center rounded-full border bg-background/70 shadow-sm',
+                                isStage ? 'size-28 sm:size-32 lg:size-36' : 'size-20 md:size-24',
+                            )}
                             style={{
                                 background: `conic-gradient(currentColor ${progress}%, transparent ${progress}% 100%)`,
                             }}
                         >
-                            <div className="grid size-16 place-items-center rounded-full bg-card text-xs font-semibold uppercase tracking-[0.16em] md:size-20">
+                            <span className="absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,currentColor_0_18deg,transparent_18deg_360deg)] opacity-45 motion-safe:animate-spin [animation-duration:5s]" />
+                            <div className={cn('relative grid place-items-center rounded-full bg-card text-xs font-semibold uppercase tracking-[0.16em]', isStage ? 'size-24 sm:size-28 lg:size-32' : 'size-16 md:size-20')}>
                                 Live
                             </div>
                         </div>
                     )}
                     <div className="min-w-0">
-                        <p className="text-xs font-semibold uppercase tracking-[0.18em] opacity-80">{isDone ? 'Status waktu' : label}</p>
+                        <p className={cn('font-semibold uppercase tracking-[0.18em] opacity-80', isStage ? 'text-sm' : 'text-xs')}>{isDone ? 'Status waktu' : label}</p>
                         <p
                             aria-live="polite"
-                            className={cn('mt-2 truncate font-sans font-black tabular-nums leading-none', variant === 'hero' ? 'text-[clamp(2.25rem,7vw,3.25rem)]' : 'text-2xl')}
+                            className={cn(
+                                'mt-2 truncate font-sans font-black tabular-nums leading-none transition-transform duration-300 motion-safe:animate-pulse',
+                                variant === 'hero' && 'text-[clamp(2.25rem,7vw,3.25rem)]',
+                                variant === 'compact' && 'text-2xl',
+                                isStage && 'text-[clamp(3.5rem,10vw,7rem)] tracking-[-0.08em]',
+                            )}
                         >
                             {value}
                         </p>
-                        <p className="mt-2 text-xs font-medium opacity-80">{urgencyLabel(timeLeft, status)}</p>
+                        <p className={cn('mt-2 font-medium opacity-80', isStage ? 'text-sm sm:text-base' : 'text-xs')}>{urgencyLabel(timeLeft, status)}</p>
                     </div>
                 </div>
             </CardContent>
+            {!isDone && (
+                <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1 bg-current/10">
+                    <div className="h-full bg-current transition-[width] duration-1000 ease-linear" style={{ width: `${progress}%` }} />
+                </div>
+            )}
         </Card>
     );
 }
