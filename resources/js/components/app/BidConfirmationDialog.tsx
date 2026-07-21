@@ -3,15 +3,15 @@ import { useState } from 'react';
 import { PriceText } from '@/components/app/PriceText';
 import { Button } from '@/components/ui/button';
 import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from '@/components/ui/drawer';
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 
 type BidConfirmationDialogProps = {
     amount: number;
@@ -38,26 +38,27 @@ export function BidConfirmationDialog({
     const [confirmed, setConfirmed] = useState(false);
 
     return (
-        <Drawer showSwipeHandle>
-            <DrawerTrigger disabled={disabled || processing || isBelowNextBid} render={<Button className="min-h-11 w-full rounded-md" disabled={disabled || processing || isBelowNextBid} />}>
+        <Dialog>
+            <DialogTrigger disabled={disabled || processing || isBelowNextBid} render={<Button className="min-h-11 w-full rounded-md" disabled={disabled || processing || isBelowNextBid} />}>
                 {processing ? 'Memproses...' : 'Review bid sebelum kirim'}
-            </DrawerTrigger>
-            <DrawerContent className="mx-auto max-w-md rounded-t-xl md:bottom-auto md:left-1/2 md:right-auto md:top-1/2 md:w-[520px] md:max-w-[calc(100vw-2rem)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl md:border">
-                <DrawerHeader className="text-left">
-                    <DrawerTitle className="text-xl font-black">Konfirmasi bid</DrawerTitle>
-                    <DrawerDescription>{auctionTitle} · cek nominal sebelum dikirim.</DrawerDescription>
-                </DrawerHeader>
-                <div className="space-y-4 px-4 pb-4">
-                    <div className="rounded-lg border bg-primary/5 p-4">
+            </DialogTrigger>
+            <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] max-w-md grid-rows-[auto_auto_minmax(0,1fr)_auto] gap-0 overflow-hidden rounded-2xl border-border/80 bg-card p-0 shadow-2xl sm:max-w-md" showCloseButton={false}>
+                <div className="mx-auto mt-2 h-1 w-20 rounded-full bg-primary/15" />
+                <DialogHeader className="px-4 pt-5 text-center sm:px-5">
+                    <DialogTitle className="text-xl font-black tracking-tight">Konfirmasi bid</DialogTitle>
+                    <DialogDescription className="mx-auto max-w-sm leading-5">{auctionTitle} · cek nominal sebelum dikirim.</DialogDescription>
+                </DialogHeader>
+                <div className="min-w-0 space-y-3 overflow-y-auto px-4 py-4 sm:px-5">
+                    <div className="min-w-0 rounded-xl border border-primary/20 bg-primary/5 p-4">
                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">Bid amount</p>
-                        <PriceText className="mt-2 text-primary" prefixLabel="Bid amount" value={amount} variant="hero" />
+                        <PriceText className="mt-2 overflow-visible text-clip whitespace-normal break-all text-[clamp(1.9rem,9vw,2.5rem)] leading-tight text-primary" prefixLabel="Bid amount" value={amount} variant="hero" />
                     </div>
                     <div className="grid gap-3 text-sm sm:grid-cols-2">
-                        <div className="min-w-0 rounded-lg border bg-card p-3">
+                        <div className="min-w-0 rounded-xl border bg-background p-3">
                             <p className="text-muted-foreground">Harga saat ini</p>
                             <PriceText value={currentPrice} />
                         </div>
-                        <div className="min-w-0 rounded-lg border bg-card p-3">
+                        <div className="min-w-0 rounded-xl border bg-background p-3">
                             <p className="text-muted-foreground">Minimum berikutnya</p>
                             <PriceText value={nextBid} />
                         </div>
@@ -65,7 +66,7 @@ export function BidConfirmationDialog({
                     <p className="text-sm text-muted-foreground">
                         Bid akan dikirim ke live auction. Validasi saldo dan increment tetap dilakukan server.
                     </p>
-                    <label className="flex items-start gap-3 rounded-lg border bg-muted/30 p-3 text-sm">
+                    <label className="flex items-start gap-3 rounded-xl border bg-muted/30 p-3 text-sm">
                         <input
                             checked={confirmed}
                             className="mt-1 size-4 accent-primary"
@@ -77,13 +78,13 @@ export function BidConfirmationDialog({
                         </span>
                     </label>
                 </div>
-                <DrawerFooter className="gap-2 md:flex-row md:justify-end">
-                    <Button className="rounded-md md:order-2" disabled={processing || isBelowNextBid || !confirmed} onClick={onConfirm}>
+                <DialogFooter className="m-0 flex-col gap-2 rounded-none border-t bg-background/95 p-4 sm:flex-row sm:justify-end">
+                    <Button className="min-h-11 w-full rounded-md sm:w-auto" disabled={processing || isBelowNextBid || !confirmed} onClick={onConfirm}>
                         {processing ? 'Mengirim bid...' : 'Kirim bid'}
                     </Button>
-                    <DrawerClose render={<Button className="rounded-md md:order-1" variant="outline" />}>Batal</DrawerClose>
-                </DrawerFooter>
-            </DrawerContent>
-        </Drawer>
+                    <DialogClose render={<Button className="min-h-11 w-full rounded-md sm:w-auto" variant="outline" />}>Batal</DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }
