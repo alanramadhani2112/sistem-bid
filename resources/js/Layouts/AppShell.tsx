@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Bell, Coffee, Gavel, History, LayoutDashboard, Package, Radio, Trophy, User, Users, Wallet } from 'lucide-react';
+import { Bell, BookOpen, Coffee, Gavel, History, LayoutDashboard, Package, Radio, Trophy, User, Users, Wallet } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import { ActiveLink } from '@/components/app/ActiveLink';
@@ -26,6 +26,7 @@ const bidderNavItems = [
     { href: '/auctions', icon: Gavel, label: 'Auctions' },
     { href: '/wallet', icon: Wallet, label: 'Wallet' },
     { href: '/history', icon: History, label: 'History' },
+    { href: '/panduan-bidder', icon: BookOpen, label: 'Panduan' },
     { href: '/profile', icon: User, label: 'Profile' },
 ];
 
@@ -35,6 +36,7 @@ const adminNavItems = [
     { href: '/admin/green-beans', icon: Package, label: 'Beans' },
     { href: '/admin/users', icon: Users, label: 'Users' },
     { href: '/admin/winners', icon: Trophy, label: 'Winners' },
+    { href: '/panduan-admin', icon: BookOpen, label: 'Panduan' },
 ];
 
 export function AppShell({ children }: AppShellProps) {
